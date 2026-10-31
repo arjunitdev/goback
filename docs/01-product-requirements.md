@@ -27,5 +27,25 @@ In: desktop home/search/results/watch/profile/feed; top navigation, spacing, col
 ## 1.6 Milestones
 M0 evidence and legal feasibility; M1 framework + Google pilot; M2 YouTube; M3 Facebook; M4 stabilization; M5 store release. Order may change after evidence assessment.
 
+## 1.6.1 Requirement traceability (pilot, 2026-10-30)
+Status is what is actually covered by automated tests today; "gap" means not implemented or not measured.
+
+| Req | Owner | Severity | Automated evidence | Status |
+|---|---|---|---|---|
+| FR-001 opt-in + kill switch | Engine | P0 | `storage.test` (defaults off), `engine.test` kill switch, e2e opt-in and kill switch | covered |
+| FR-002 local prefs | Engine | P1 | `storage.test` migration/round-trip | covered |
+| FR-003 early styles | Engine | P1 | `registration.test`, e2e (computed colors after navigation) | covered (flash not measured) |
+| FR-004 route/async changes | Engine | P0 | `engine.test` route change, `observer.test` | covered (fixtures only) |
+| FR-005 preserve behaviour | Adapter | P0 | `engine.test` no DOM mutation, e2e ads/consent/form intact | covered (fixtures only) |
+| FR-006 modern-only fallbacks | Adapter | P1 | none | **gap** |
+| FR-007 health + safe disable | Engine | P0 | `health.test`, `engine.test` fail-open, e2e fail-open | covered |
+| FR-008 zoom 80–200%, 1024–2560px | QA | P1 | none | **gap** |
+| FR-009 reduced motion | Engine | P1 | `style-manager.test`, `base.css` | partial (no browser test) |
+| FR-010 authentic/compatibility | Adapter | P2 | `engine.test` mode attribute | partial (compatibility styling minimal) |
+| FR-011 never change search/outbound | Security | P0 | `routes.test`, manifest permission tests (no search overrides) | covered |
+| FR-012 skip auth/payment/CAPTCHA | Adapter | P0 | `routes.test`, `css-safety.test` | covered |
+| NFR perf/memory budgets | QA | P1 | none | **gap** (unmeasured) |
+| NFR no network, no analytics | Security | P0 | e2e request log, `audit-package.mjs` | covered |
+
 ## 1.7 Review gate G1
 Reviewer verifies every requirement has an owner, measurable acceptance test, and severity. Must approve scope and non-goals before architecture starts. Deliver signed checklist, unresolved questions, and change requests.

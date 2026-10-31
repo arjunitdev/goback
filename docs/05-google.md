@@ -15,6 +15,27 @@ Never modify query strings, ranking, sponsored labels, ads, result destinations,
 ## 5.5 Engineering details
 Prefer CSS token/style overrides and grid repositioning over DOM reparenting. Preserve search focus/autocomplete keyboard navigation, enter-to-submit, accessibility announcements, pagination, knowledge panel links, image preview and browser history. Scope selectors to `google.com` supported routes; locale and experiment variation require probes.
 
+## 5.5.1 Pilot design tokens (all confidence = `inferred`)
+Source of truth: `src/styles/tokens/google.tokens.css`. None of these were measured from a dated capture; G2 must verify or replace them before any fidelity claim.
+
+| Token | Value | Use |
+|---|---|---|
+| `--rw-font` | `arial, sans-serif` | Body and results text (authentic mode) |
+| `--rw-title` / visited | `#1122cc` / `#6611cc` | Result titles |
+| `--rw-url` | `#009933` | Result URL line |
+| `--rw-snippet` | `#545454` | Snippet text (not yet applied; hashed class names) |
+| `--rw-accent` | `#dd4b39` | Active vertical underline (3px) |
+| `--rw-btn-top/bottom/border` | `#4d90fe` / `#4787ed` / `#3079ed` | Results search button |
+| `--rw-tools-bg`, `--rw-border` | `#f8f8f8`, `#ebebeb` | Tools bar and dividers |
+| Sizes | title 18px, snippet/URL 13px | |
+
+Home-page buttons use the grey 2012 style (`#f2f2f2`, bold 11px). Home and results are separate routes, as required by §5.1.
+
+## 5.5.2 Selector probes (UNVERIFIED against the live site)
+`src/adapters/google/selectors.ts`. Required: a search box (`textarea[name=q]` or `input[name=q]`); on results also `#search`, `#rso` or `#center_col`. Optional (downgrade to *degraded* only): `#hdtb`, `#foot`, home form. Three consecutive failed probes (initial + 400/1200/3000 ms retries) trigger **fail-open**: the theme is removed and the native page is shown. Treat all of these as hypotheses until a human checks them on the live site.
+
+Exclusion zones (never targeted by CSS, enforced by `tests/unit/css-safety.test.ts`): `#tads`, `#tadsb`, `#bottomads`, consent forms, SafeSearch controls, password/CAPTCHA, dialogs.
+
 ## 5.6 Critical tests
 Submit query; autocomplete keyboard; sponsored result visibility; AI overview visibility if present; images and news navigation; SafeSearch; login boundary; accessibility; dynamic results expansion; zero changes to URL destination semantics.
 

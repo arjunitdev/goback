@@ -1,9 +1,19 @@
 # RetroWeb 2012 — Engineering documentation
 
-**Status:** planning baseline; implementation and archival capture not yet completed.  
+**Status:** M0–M1 pilot implemented (framework + Google Search, fixture-tested). Archival evidence, live-site selector verification, legal review and all review gates are **outstanding**; not releasable.  
 **Targets:** YouTube, Google Search, Facebook desktop experiences as seen during 2012.  
 **Product goal:** reproduce historical presentation while preserving current first-party website features and authentication.  
 **Release target:** Chrome Manifest V3 first; Chromium compatibility subsequently.
+
+## Quick start
+```
+npm install
+npm run verify        # typecheck, lint, unit+integration tests, dev and store builds, package audit
+npm run test:e2e      # builds the test flavor and runs Playwright against synthetic fixtures
+```
+Load `dist/` as an unpacked extension in Chrome (`chrome://extensions` → Developer mode → Load unpacked), open the popup, enable **Google Search**, grant access, then reload google.com. The `dist/` (dev) build includes the recreated look-alike wordmark; `dist-store/` does not (ADR-011). Selectors are unverified against the live site: if the page does not change, or reverts to native after a few seconds, the health monitor failed open by design (see popup → This tab, and Settings → Local diagnostics).
+
+Layout: `src/engine` (router, observer, style manager, health, bootstrap), `src/adapters/<site>`, `src/styles`, `src/background`, `src/popup`, `src/options`, `tests/{unit,integration,e2e,fixtures}`, `reviews/` (gate templates, all NOT REVIEWED).
 
 ## Reading order
 1. [Product requirements](docs/01-product-requirements.md)

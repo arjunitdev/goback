@@ -6,6 +6,9 @@ Product owner: scope/priorities. Researcher/designer: archive evidence and token
 ## 10.2 Indicative schedule (not a commitment)
 Weeks 1–2: discovery, historical source audit, legal feasibility, prototype selector tests. Weeks 3–4: extension framework, Google pilot, early CSS. Weeks 5–7: YouTube routes, loaders and feature parity. Weeks 8–11: Facebook routes and privacy-safe integration. Weeks 12–13: hardening, accessibility, performance, browser matrix. Weeks 14–15: closed beta and store preparation. Week 16+: review, release, monitoring. Complexity of site changes may extend this significantly.
 
+## 10.2.1 Iteration scope note
+The first implementation iteration covers only M0–M1 (framework + Google pilot). YouTube and Facebook adapters are stubs that never match. Nothing in this iteration is release-ready: archival evidence, legal review (ADR-010), live-site selector verification and independent gate sign-off are all outstanding.
+
 ## 10.3 Development workflow
 Issues linked to requirements and archive evidence; feature branches; PR templates include screenshots and feature crosswalk; two reviewers for sensitive code; CI required; release notes and migration plan. Never commit archived copyrighted assets into public repository without clearance. Use semantic versioning, adapter-specific version and changelog.
 
