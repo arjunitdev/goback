@@ -1,0 +1,18 @@
+/*
+ * Shared base rules for every adapter. Rules here must stay site-agnostic and
+ * must never hide, resize-to-zero or fade content (CSS lint test enforces this).
+ */
+html[data-retroweb][data-retroweb-motion='reduce'] *,
+html[data-retroweb][data-retroweb-motion='reduce'] *::before,
+html[data-retroweb][data-retroweb-motion='reduce'] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Visible keyboard focus is never removed (docs/07 §7.5). */
+html[data-retroweb] :focus-visible {
+  outline: 2px solid #4d90fe;
+  outline-offset: 1px;
+}

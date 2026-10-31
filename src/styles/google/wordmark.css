@@ -1,0 +1,24 @@
+/*
+ * DEV FLAVOR ONLY (ADR-011). Swaps the displayed image of the site's logo for a
+ * recreated look-alike wordmark. The <img> and its surrounding link stay in the
+ * DOM, so navigation, alt text and keyboard behaviour are untouched.
+ * Not included in the store build until legal review (ADR-010) passes.
+ * Selector is UNVERIFIED; if it misses, the live logo simply stays.
+ */
+html[data-retroweb='google'][data-retroweb-wordmark='on'][data-retroweb-route='home']
+  img[alt='Google'] {
+  content: url('chrome-extension://__MSG_@@extension_id__/assets/google-2012.svg');
+  width: 272px;
+  height: 92px;
+  object-fit: contain;
+}
+
+html[data-retroweb='google'][data-retroweb-wordmark='on'][data-retroweb-route='results']
+  img[alt='Google'],
+html[data-retroweb='google'][data-retroweb-wordmark='on'][data-retroweb-route='images']
+  img[alt='Google'] {
+  content: url('chrome-extension://__MSG_@@extension_id__/assets/google-2012.svg');
+  width: 92px;
+  height: 31px;
+  object-fit: contain;
+}

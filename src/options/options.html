@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RetroWeb 2012 settings</title>
+    <link rel="stylesheet" href="ui.css" />
+    <style>
+      body {
+        margin: 0 auto;
+        max-width: 640px;
+        padding: 24px 16px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="head">
+      <h1>RetroWeb 2012 settings</h1>
+      <span class="badge">Unofficial</span>
+    </div>
+
+    <h2>Accessibility</h2>
+    <div class="row">
+      <label for="motion">Motion</label>
+      <select id="motion">
+        <option value="system">Follow system setting</option>
+        <option value="reduce">Always reduce motion</option>
+      </select>
+    </div>
+    <div class="row">
+      <label for="contrast"
+        >High-contrast colors (overrides the authentic low-contrast palette)</label
+      >
+      <input id="contrast" type="checkbox" />
+    </div>
+
+    <h2>Site access</h2>
+    <p class="muted">
+      Access is requested when you enable a site. You can withdraw it here at any time.
+    </p>
+    <div id="access"></div>
+
+    <h2>Local diagnostics</h2>
+    <p class="muted">
+      Event counts only, stored on this device. They never include URLs, searches, page text or
+      account details, and are never sent anywhere.
+    </p>
+    <dl id="diag"></dl>
+    <div class="row"><button id="reset" type="button">Reset counters</button></div>
+
+    <h2>Privacy</h2>
+    <p class="muted">
+      This extension stores only your on/off choices, display mode and accessibility options. It
+      makes no network requests, loads no remote code and collects no analytics. It is unofficial
+      and not affiliated with or endorsed by Google, YouTube or Meta.
+    </p>
+
+    <div id="notice" class="notice" role="status" aria-live="polite"></div>
+    <script src="options.js"></script>
+  </body>
+</html>

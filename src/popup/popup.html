@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RetroWeb 2012</title>
+    <link rel="stylesheet" href="ui.css" />
+    <style>
+      body {
+        width: 320px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="head">
+      <h1>RetroWeb 2012</h1>
+      <span class="badge">Unofficial</span>
+    </div>
+    <p class="muted">Not affiliated with or endorsed by Google, YouTube or Meta.</p>
+
+    <div class="row">
+      <label for="kill">Pause everywhere (kill switch)</label>
+      <input id="kill" type="checkbox" />
+    </div>
+
+    <div id="sites"></div>
+
+    <div id="notice" class="notice" role="status" aria-live="polite"></div>
+
+    <h2>This tab</h2>
+    <dl id="status"></dl>
+
+    <div class="row">
+      <button id="settings" type="button">Settings</button>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>

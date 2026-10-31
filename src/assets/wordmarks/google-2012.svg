@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="272" height="92" viewBox="0 0 272 92" role="img" aria-label="Look-alike wordmark (unofficial recreation)">
+  <!-- Independently authored look-alike; NOT an archived or official asset. See src/assets/LEDGER.md (ADR-011). -->
+  <text x="136" y="68" text-anchor="middle" font-family="Catull, Georgia, 'Times New Roman', serif" font-size="74" font-weight="bold" letter-spacing="-2">
+    <tspan fill="#3369e8">G</tspan><tspan fill="#d50f25">o</tspan><tspan fill="#eeb211">o</tspan><tspan fill="#3369e8">g</tspan><tspan fill="#009925">l</tspan><tspan fill="#d50f25">e</tspan>
+  </text>
+</svg>

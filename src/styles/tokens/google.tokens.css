@@ -1,0 +1,38 @@
+/*
+ * Google 2012 design tokens. Confidence for EVERY value: inferred (docs/02 §2.3).
+ * Basis: contemporaneous recollection of the Nov 2012 desktop results redesign
+ * (docs/05 §5.1). Not measured from dated captures; G2 review must verify before
+ * any "accurate" claim. Replace with measured values + evidence ledger ids.
+ */
+html[data-retroweb='google'] {
+  --rw-font: arial, sans-serif;
+  --rw-bg: #fff;
+  --rw-text: #222;
+  --rw-snippet: #545454;
+  --rw-title: #1122cc;
+  --rw-title-visited: #6611cc;
+  --rw-url: #009933;
+  --rw-border: #ebebeb;
+  --rw-tools-bg: #f8f8f8;
+  --rw-accent: #dd4b39; /* active vertical underline */
+  --rw-btn-top: #4d90fe;
+  --rw-btn-bottom: #4787ed;
+  --rw-btn-border: #3079ed;
+  --rw-input-border: #d9d9d9;
+  --rw-input-border-top: #c0c0c0;
+  --rw-size-snippet: 13px;
+  --rw-size-title: 18px;
+  --rw-size-url: 13px;
+  --rw-line-snippet: 1.4;
+}
+
+html[data-retroweb='google'][data-retroweb-contrast='high'] {
+  --rw-text: #000;
+  --rw-snippet: #1a1a1a;
+  --rw-title: #0000cc;
+  --rw-title-visited: #551a8b;
+  --rw-url: #006400;
+  --rw-border: #767676;
+  --rw-input-border: #767676;
+  --rw-input-border-top: #767676;
+}

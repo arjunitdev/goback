@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>query - Google Search (synthetic fixture)</title>
+  </head>
+  <body>
+    <header>
+      <a href="/" id="logo-link"
+        ><img alt="Google" src="data:image/gif;base64,R0lGODlhAQABAAAAACw=" width="92" height="30"
+      /></a>
+      <form action="/search" method="get">
+        <textarea name="q" aria-label="Search">query</textarea>
+        <button type="submit" aria-label="Search">Search</button>
+      </form>
+    </header>
+    <div id="hdtb">
+      <div role="navigation">
+        <a href="/search?q=query" aria-current="page">All</a>
+        <a href="/search?q=query&amp;tbm=isch">Images</a>
+        <a href="/search?q=query&amp;tbm=nws">News</a>
+      </div>
+    </div>
+    <div id="center_col">
+      <div id="tads">
+        <div data-text-ad="1">
+          <a href="https://ads.example/x"><h3>Sponsored result</h3></a><cite>ads.example</cite>
+        </div>
+      </div>
+      <div id="search">
+        <div id="rso">
+          <div>
+            <a href="https://example.org/a"><h3>Example A</h3></a><cite>example.org</cite>
+            <div>Snippet A</div>
+          </div>
+          <div>
+            <a href="https://example.net/b"><h3>Example B</h3></a><cite>example.net</cite>
+            <div>Snippet B</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <form action="https://consent.example/save" data-consent="1">
+      <button type="submit">Accept all</button>
+    </form>
+    <div id="foot"><a href="/preferences">Settings</a></div>
+  </body>
+</html>
