@@ -1,0 +1,11 @@
+node_modules/
+dist/
+dist-*/
+playwright-report/
+test-results/
+*.zip
+*.log
+.DS_Store
+# Evidence vault and user-supplied assets are never committed or packaged
+evidence-vault/
+src/assets/private/

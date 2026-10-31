@@ -1,0 +1,25 @@
+# 04 — YouTube 2012 implementation specification
+
+## 4.1 Historical baseline
+Provisional early-2012 post-December-2011 redesign; official YouTube blog documents a cleaner homepage/watch page, consistent background and larger thumbnails. Archive-led verification required before exact visual values are frozen.
+
+## 4.2 Route inventory
+Home `/`; watch `/watch?v=...`; search `/results?search_query=...`; channel `/@...` and `/channel/...`; subscriptions; playlists; Shorts; live; settings; history; notifications; sign-in boundaries. Account for A/B experiments, localization and logged-out states.
+
+## 4.3 Component inventory
+Global header, logo region, search field/button, upload/create, account menu, sidebar/navigation, feed tiles, thumbnails, metadata, watch video/player boundary, title/description, engagement buttons, channel badge, subscribe button, comments/replies, recommendations, progress indicators, pagination/infinite scroll, skeleton loaders, toast/dialog, dropdown, tooltip, empty/error states.
+
+## 4.4 Feature crosswalk
+Keep current player, playback speed, captions, chapters, theater/fullscreen, casting, miniplayer, live chat, memberships, Shorts, playlists, notifications, creator tools, search suggestions, moderation and safety notices. Modern features absent in 2012 receive 'compatibility' visual wrappers matching 2012 palette and shape; never fabricate legacy functionality.
+
+## 4.5 Implementation sequence
+A. Header and global color/typography tokens. B. Home grid and navigation. C. Search results. D. Watch layout without replacing player. E. Channel and playlists. F. Shorts/live compatibility. G. Modal/menu/loading states. H. Responsive and keyboard audit. For each: snapshot reference, selectors/probes, CSS, behavioral tests, visual diff, peer review.
+
+## 4.6 Critical test cases
+Video plays, pauses, seeks, captions and fullscreen; ads and consent remain functional; autoplay toggles; login/logout unaffected; comment posting/replies; subscribe/unsubscribe; playlist actions; search suggestions; browser back/forward; Shorts and live chat; no blank player after route transitions. Test signed-in/signed-out where authorized.
+
+## 4.7 Loading design
+Style skeletons and spinner containers when exposed by stable DOM. Avoid fake indefinite spinners, blocked interactions, or intercepting requests. When historical loader not evidenced, use explicitly documented approximation.
+
+## 4.8 Review gate G4
+Engineer verifies visual annotations against 2012 evidence, all P0 playback workflows, no ad/consent bypass, no leaked listeners, route transition recovery, and fallback for unsupported experiments.
