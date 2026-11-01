@@ -503,9 +503,10 @@ html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-rout
   align-content: start;
   /* Height budget: 60px masthead + ~105px title and owner rows + ~80px button/view-count row = 245px, so the
    * whole player and its buttons fit one screen. (YouTube's own formula ignores the rows above.)
-   * Never narrower than the player's own 640px minimum, or the player spills out of the column
+   * The shape is width-ratio:height-ratio (16:9 widescreen stores 16 and 9, 4:3 stores 1 and 0.758),
+   * so BOTH variables are needed. Never narrower than the player's own 640px minimum, or the player spills out of the column
    * and everything else is crushed (short windows, e.g. 150% display scaling). */
-  width: min(100%, max(640px, calc((100vh - 250px) / var(--ytd-watch-flexy-height-ratio))));
+  width: min(100%, max(640px, calc((100vh - 250px) * var(--ytd-watch-flexy-width-ratio) / var(--ytd-watch-flexy-height-ratio))));
   margin: 0;
 }
 
