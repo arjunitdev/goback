@@ -11,7 +11,8 @@ export function matchesGoogle(url: URL): boolean {
 export function routeFromUrl(url: URL): GoogleRoute | null {
   if (!matchesGoogle(url)) return null;
   const path = url.pathname.replace(/\/+$/, '') || '/';
-  if (path === '/') return 'home';
+  // /webhp is the home page too: it is where the results page's "Google" link goes.
+  if (path === '/' || path === '/webhp') return 'home';
   if (path === '/search') {
     // tbm=isch is the Images vertical; other verticals (news, shopping, video) use
     // the results layout until they are researched separately.
