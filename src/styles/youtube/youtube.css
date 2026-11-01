@@ -481,6 +481,140 @@ html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-rout
   order: 6;
 }
 
+/* ===== Watch column: everything shares the player's width, like the 2012 640px column ======
+ * YouTube centres the (height-limited) player inside a wider column, so the title, buttons and
+ * description floated away from the video. Giving the column the player's own width formula
+ * (YouTube's --ytd-watch-flexy-max-player-width) puts them all on one left and right edge
+ * without touching the player. The column becomes a two-track grid: full-width rows, plus one
+ * row where the action buttons (left) sit beside the view count and like bar (right). */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch']
+  ytd-watch-flexy
+  #primary-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 230px;
+  align-content: start;
+  width: min(100%, var(--ytd-watch-flexy-max-player-width));
+  margin: 0;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch']
+  ytd-watch-flexy
+  #primary-inner
+  > *,
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch']
+  ytd-watch-flexy
+  :is(#title-row, #owner) {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+/* The description wrappers are flattened so the view count can sit beside the buttons. */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch']
+  ytd-watch-flexy
+  :is(#bottom-row, #description, #description-inner) {
+  display: contents;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch']
+  ytd-watch-flexy
+  :is(#bottom-row, #description, #description-inner)
+  > * {
+  order: 5;
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch']
+  ytd-watch-flexy
+  #actions {
+  grid-column: 1;
+}
+
+/* View count (2012: 22px, top right of the action row) with the like-bar placeholder below it. */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch']
+  ytd-watch-flexy
+  #description-inner
+  > ytd-watch-info-text {
+  order: 4;
+  grid-column: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justify-content: flex-end;
+  margin: 10px 0 8px;
+  text-align: right;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch']
+  ytd-watch-flexy
+  ytd-watch-info-text
+  #info-container {
+  width: 100%;
+  font-size: 11px !important;
+  line-height: 15px !important;
+}
+
+/* YouTube fades the right edge of this one-line text; with wrapping that only clips the numbers. */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch']
+  ytd-watch-flexy
+  ytd-watch-info-text
+  :is(#info-container, #info, #view-count, #date-text),
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch']
+  ytd-watch-flexy
+  ytd-watch-info-text {
+  -webkit-mask-image: none !important;
+  mask-image: none !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+}
+
+/* "317M views" is the big 22px figure; the age and hashtags wrap beneath it in small type. */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch']
+  ytd-watch-flexy
+  ytd-watch-info-text
+  #info {
+  display: flex !important;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch']
+  ytd-watch-flexy
+  ytd-watch-info-text
+  #info
+  > span:first-child {
+  flex: 0 0 100%;
+  font-size: 22px !important;
+  line-height: 28px !important;
+}
+
+/* Green/red like-bar placeholder. YouTube no longer exposes dislike counts, so this is a
+ * decorative stand-in for the 2012 bar (about 90/10), not real data. Pure CSS, no node added. */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch']
+  ytd-watch-flexy
+  ytd-watch-info-text::after {
+  content: '';
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 4px;
+  margin-top: 6px;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light'][data-retroweb-route='watch']
+  ytd-watch-flexy
+  ytd-watch-info-text::after {
+  background: linear-gradient(to right, #060 0, #060 90%, #c00 90%, #c00 100%);
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  ytd-watch-flexy
+  ytd-watch-info-text
+  #info-container {
+  color: var(--rw-yt-text) !important;
+}
+
 /* Description: plain 13px text under the uploader line, not a rounded card (2012 #eow-description). */
 html[data-retroweb='youtube'][data-retroweb-mode='authentic']
   ytd-watch-metadata

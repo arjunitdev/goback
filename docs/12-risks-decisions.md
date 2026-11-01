@@ -38,6 +38,8 @@
 
 | ADR-019 | The engine keeps the theme painted across same-site route changes for CSS-only adapters (`keepOnRouteChange`, YouTube) and runs DOM-mutation work (scheme measurement, probes) at most once per second while healthy; unhealthy pages are still checked every batch. The first mount no longer clears and re-sets the attributes the early script already applied. | Measured live on YouTube (search, then click a video): the extension added ~110ms style and ~100ms layout per navigation and ~700ms of long tasks, because every click rebuilt the theme and every DOM batch forced a style flush. After the change the navigation cost matches a no-extension baseline. The page-wide font rule was measured and is NOT a cost. |
 
+| ADR-020 | The YouTube watch column is one grid sized by YouTube's own player-width formula (`--ytd-watch-flexy-max-player-width`), so title, owner row, buttons, view count and description share the player's left and right edge. The view count sits top-right of the action row with a green/red bar under it. The bar is a **decorative placeholder** drawn with `::after` (about 90/10), not data: YouTube no longer exposes dislike counts. | The owner asked for the 2012 alignment and a placeholder bar. The player itself is never styled (exclusion guard); alignment comes from sizing its siblings. A bar showing a made-up ratio could mislead, so it is documented as non-data here and in the evidence ledger. |
+
 Still pending: ADR-001 (exact reference month per route), ADR-002 (original vs reconstructed icon licensing), ADR-007 (labeling modern-only components), ADR-009 (compatibility break thresholds), ADR-010 (trademark review outcome).
 
 ## Decisions pending

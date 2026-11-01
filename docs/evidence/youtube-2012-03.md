@@ -60,3 +60,5 @@ Sources: the same archived stylesheets (`www-guide-vfliVgOjz.css`, `www-refresh-
 | Home composition | 970px column: 200px dark guide + 465px feed + ~300px right panel (Spotlight / Featured) | screenshot |
 
 **Not reproduced:** the Spotlight/Featured right panel, the banner ad area, the footer, and the "Browse | Movies | Upload" and "Create Account | Sign In" links (no honest modern equivalent; adding invented links was not done).
+
+**Placeholder, not data:** the green/red like bar under the view count is a CSS-only stand-in (fixed ~90/10 split). The 2012 bar showed real like/dislike counts; modern YouTube does not expose dislikes, so no real ratio exists to draw.
