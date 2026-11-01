@@ -310,13 +310,6 @@ html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-watch-flexy #c
   margin: 0;
 }
 
-/* YouTube centres a height-limited player inside the wider column (auto side margins), which
- * leaves it floating away from the title. The 2012 player sat flush left under the title. */
-html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-watch-flexy #player-container-outer {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-}
-
 /* Related videos: 120x90 thumbnails, as measured in the 2012 sidebar. */
 html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-compact-video-renderer {
   --ytd-watch-compact-thumbnail-width: 120px;
