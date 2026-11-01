@@ -209,11 +209,19 @@ html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-app {
   color: var(--rw-yt-text);
 }
 
-/* The 2012 masthead has no bar: it sits directly on the page paper. */
+/* The 2012 masthead had no bar and scrolled away with the page. Modern YouTube keeps it fixed
+ * (#masthead-container, z-index 2020), so that wrapper needs the page colour behind it or
+ * scrolled content shows through and overlaps the logo, title and buttons. YouTube's own
+ * #background layer sits at z-index -1, behind the page, so it cannot do this job. */
 html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-masthead #background {
   background: transparent !important;
   border-bottom: 0;
   box-shadow: none !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] #masthead-container {
+  background-color: var(--rw-yt-page) !important;
+  border-bottom: 1px solid #dcdcdc;
 }
 
 /* Search field: white, 1px #ccc border, inset shadow, 3px left corners (measured). */
