@@ -186,10 +186,33 @@ html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-route
   width: 514px;
   max-width: 514px;
   min-height: 34px;
-  height: 34px;
+  height: auto;
   margin: 0 auto;
   border-radius: 0;
   box-shadow: none;
+}
+
+/* Newer layouts put a "+" button, voice/lens icons and an "AI Mode" pill inside the box. They are
+ * 36-50px tall, so a fixed 34px box lets them spill out of its bottom edge: every row inside is
+ * held to 38px and centred, and the box grows to fit whatever is there. */
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-route='home'] form[role='search'] div:has(> div > textarea[name='q']) {
+  align-items: center;
+  height: 38px;
+}
+
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-route='home'] form[role='search'] div:has(> div > textarea[name='q']) > div {
+  display: flex;
+  align-items: center;
+  align-self: center;
+  height: 38px;
+  max-height: 38px;
+}
+
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-route='home'] form[role='search'] div:has(> div > textarea[name='q']) > div > div {
+  display: flex;
+  align-items: center;
+  height: 38px;
+  max-height: 38px;
 }
 
 html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-route='home'] form[role='search'] textarea[name='q'] {
@@ -222,6 +245,14 @@ html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-route
 html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light'][data-retroweb-route='home'] form[role='search'] div:has(> div > div > textarea[name='q']):focus-within {
   border-color: #4d90fe;
   box-shadow: 0 0 0 1px #4d90fe;
+}
+
+/* The "AI Mode" pill (the button in the box's last group; the "+" is a button too, so no wider) keeps a fixed dark background but takes its text colour from the light pin,
+ * which left dark text on a dark pill (contrast 1.2). White restores it. */
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light'][data-retroweb-route='home'] form[role='search'] div:has(> div > textarea[name='q']) > div:last-child button,
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light'][data-retroweb-route='home'] form[role='search'] div:has(> div > textarea[name='q']) > div:last-child button * {
+  color: #fff !important;
+  fill: #fff !important;
 }
 
 /* -- Buttons: the 2013 grey bevel -- */
