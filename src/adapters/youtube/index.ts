@@ -22,6 +22,10 @@ export const youtubeAdapter: SiteAdapter = {
   forceLightAttr: 'dark',
   // Pure-CSS adapter: a click on a video must not drop and rebuild the theme.
   keepOnRouteChange: true,
+  // YouTube inserts thousands of nodes per page; watching them all costs more than it tells us.
+  // Page swaps happen in <ytd-page-manager> and are also announced by yt-navigate-finish.
+  observeRoot: (doc) => doc.querySelector('ytd-page-manager') ?? doc.body ?? doc.documentElement,
+  observeShallow: true,
   mount() {},
   refresh() {},
   unmount() {},

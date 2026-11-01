@@ -6,8 +6,8 @@ export interface BatchInfo {
 }
 
 export interface BatchedObserver {
-  /** Observe a (new) root; disconnects any previous root first. */
-  observe(root: Node): void;
+  /** Observe a (new) root; disconnects any previous root first. `init` overrides the default options. */
+  observe(root: Node, init?: MutationObserverInit): void;
   disconnect(): void;
 }
 
@@ -79,10 +79,10 @@ export function createBatchedObserver(
   };
 
   return {
-    observe(next: Node) {
+    observe(next: Node, override?: MutationObserverInit) {
       this.disconnect();
       observer = new MutationObserver(handle);
-      observer.observe(next, init);
+      observer.observe(next, override ?? init);
     },
     disconnect() {
       observer?.disconnect();

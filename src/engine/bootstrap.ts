@@ -267,7 +267,7 @@ export function createEngine(deps: EngineDeps): Engine {
       { schedule: deps.schedule },
     );
     const root = adapter.observeRoot?.(doc) ?? doc.body ?? doc.documentElement;
-    observer.observe(root);
+    observer.observe(root, adapter.observeShallow ? { childList: true } : undefined);
   }
 
   // Document events some sites fire on client-side navigation (e.g. yt-navigate-finish).

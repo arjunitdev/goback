@@ -425,6 +425,14 @@ html[data-retroweb='youtube'][data-retroweb-scheme='light']
   background-color: #000;
 }
 
+/* ===== Loading feedback: YouTube's navigation bar is 2px, easy to miss on pale paper ======
+ * A click takes about a second while YouTube fetches the next page; a 4px bar makes it obvious
+ * that something is happening the moment you click. Only the size changes, not the bar's colour. */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] yt-page-navigation-progress,
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] yt-page-navigation-progress #progress {
+  height: 4px !important;
+}
+
 /* ===== Watch page order: title + subscribe row ABOVE the player (2012 template) ==========
  * Modern: player, then title/owner/actions/description. 2012: title, subscribe row, player,
  * then actions, uploader/description, comments. The wrappers are flattened with

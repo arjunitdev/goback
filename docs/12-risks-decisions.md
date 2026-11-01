@@ -40,6 +40,8 @@
 
 | ADR-020 | The YouTube watch column is one grid sized by YouTube's own player-width formula (`--ytd-watch-flexy-max-player-width`), so title, owner row, buttons, view count and description share the player's left and right edge. The view count sits top-right of the action row with a green/red bar under it. The bar is a **decorative placeholder** drawn with `::after` (about 90/10), not data: YouTube no longer exposes dislike counts. | The owner asked for the 2012 alignment and a placeholder bar. The player itself is never styled (exclusion guard); alignment comes from sizing its siblings. A bar showing a made-up ratio could mislead, so it is documented as non-data here and in the evidence ledger. |
 
+| ADR-021 | YouTube click latency: the engine watches only the direct children of `ytd-page-manager` (`observeShallow`), not the whole page subtree, and the navigation progress bar is 4px instead of 2px. Preloading/prerendering the next video was evaluated and rejected. | A click on YouTube costs about 1s, of which the extension was a small share (A/B on the live site, results->watch and watch->watch). A subtree observer pays a record per node YouTube inserts. Prerender needs a full document load (~4s measured) while YouTube's own in-page navigation takes ~1s, and prefetching videos the user has not opened would add network requests and tracking-visible traffic that PRIVACY.md and the "no unexpected requests" test rule out. |
+
 Still pending: ADR-001 (exact reference month per route), ADR-002 (original vs reconstructed icon licensing), ADR-007 (labeling modern-only components), ADR-009 (compatibility break thresholds), ADR-010 (trademark review outcome).
 
 ## Decisions pending

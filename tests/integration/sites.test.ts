@@ -1,5 +1,6 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ADAPTERS } from '../../src/adapters';
+import { youtubeAdapter } from '../../src/adapters/youtube';
 import { createEngine, type Engine } from '../../src/engine/bootstrap';
 import { ATTR } from '../../src/engine/style-manager';
 import { DEFAULT_PREFS } from '../../src/shared/flags';
@@ -109,6 +110,40 @@ describe('youtube adapter on fixtures', () => {
     expect(h.engine.status()).toMatchObject({ route: 'results', health: 'healthy' });
   });
 
+  it('watches only the route container, so deep page rendering costs the engine nothing', async () => {
+    const dom = loadPage('youtube-watch.html', 'https://www.youtube.com/watch?v=abc');
+    const win = dom.window as unknown as Window;
+    const refresh = vi.spyOn(youtubeAdapter, 'refresh');
+    try {
+      const engine = createEngine({
+        window: win,
+        adapters: ADAPTERS,
+        loadPrefs: async () => enabled('youtube'),
+        report: () => undefined,
+        retryDelaysMs: [1, 1, 1],
+        schedule: (f) => queueMicrotask(f),
+        healthyThrottleMs: 0,
+      });
+      engines.push(engine);
+      await engine.start();
+      await sleep(10);
+      refresh.mockClear();
+
+      // Deep inserts (what YouTube does thousands of times while rendering): no engine work.
+      const deep = win.document.querySelector('#movie_player') ?? win.document.body;
+      for (let i = 0; i < 50; i += 1) deep.append(win.document.createElement('span'));
+      await sleep(20);
+      expect(refresh).not.toHaveBeenCalled();
+
+      // A swap in the route container (ytd-page-manager's direct children) is still noticed.
+      win.document.querySelector('ytd-page-manager')!.append(win.document.createElement('div'));
+      await sleep(20);
+      expect(refresh).toHaveBeenCalled();
+    } finally {
+      refresh.mockRestore();
+    }
+  });
+
   it('throttles DOM-driven work while healthy but still reacts afterwards', async () => {
     const dom = loadPage('youtube-watch.html', 'https://www.youtube.com/watch?v=abc');
     const win = dom.window as unknown as Window;
@@ -126,13 +161,15 @@ describe('youtube adapter on fixtures', () => {
     const root = win.document.documentElement;
     expect(root.getAttribute(ATTR.scheme)).toBe('light');
 
+    // YouTube is watched shallowly: only direct children of <ytd-page-manager> (the route container).
+    const pm = win.document.querySelector('ytd-page-manager')!;
     // The first batch after mount runs straight away and opens the throttle window.
-    win.document.body.append(win.document.createElement('div'));
+    pm.append(win.document.createElement('div'));
     await sleep(5);
     // A change inside the window is not measured yet; once the window passes, the deferred
     // check catches it.
     win.document.body.style.backgroundColor = 'rgb(20, 20, 20)';
-    win.document.body.append(win.document.createElement('div'));
+    pm.append(win.document.createElement('div'));
     await sleep(5);
     expect(root.getAttribute(ATTR.scheme)).toBe('light');
     await sleep(80);

@@ -54,6 +54,12 @@ export interface SiteAdapter {
   /** Document events that signal a client-side navigation (e.g. YouTube's yt-navigate-finish). */
   navigationEvents?: readonly string[];
   /**
+   * Watch only the direct children of the observe root (no subtree). For single-page apps that
+   * announce navigation with an event, a subtree watch costs a record per inserted node while the
+   * page renders; the direct children (the route container) are enough to notice a page swap.
+   */
+  observeShallow?: boolean;
+  /**
    * Route changes inside this site keep the theme in place (only the route attribute and probes
    * change) instead of tearing everything down and re-applying it. Safe for CSS-only adapters.
    */
