@@ -499,11 +499,13 @@ html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-rout
   ytd-watch-flexy
   #primary-inner {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 230px;
+  grid-template-columns: minmax(0, 1fr) clamp(150px, 30%, 230px);
   align-content: start;
   /* Height budget: 60px masthead + ~105px title and owner rows + ~80px button/view-count row = 245px, so the
-   * whole player and its buttons fit one screen. (YouTube's own formula ignores the rows above.) */
-  width: min(100%, calc((100vh - 250px) / var(--ytd-watch-flexy-height-ratio)));
+   * whole player and its buttons fit one screen. (YouTube's own formula ignores the rows above.)
+   * Never narrower than the player's own 640px minimum, or the player spills out of the column
+   * and everything else is crushed (short windows, e.g. 150% display scaling). */
+  width: min(100%, max(640px, calc((100vh - 250px) / var(--ytd-watch-flexy-height-ratio))));
   margin: 0;
 }
 
@@ -513,7 +515,7 @@ html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-rout
   > *,
 html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch']
   ytd-watch-flexy
-  :is(#title-row, #owner) {
+  :is(#title-row, #owner, #below > *, #below > .box > *) {
   grid-column: 1 / -1;
   min-width: 0;
 }
@@ -595,7 +597,7 @@ html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-rout
   #info
   > span:first-child {
   flex: 0 0 100%;
-  font-size: 22px !important;
+  font-size: clamp(15px, 1.4vw, 22px) !important;
   line-height: 28px !important;
 }
 

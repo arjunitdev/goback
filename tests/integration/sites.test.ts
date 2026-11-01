@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { ADAPTERS } from '../../src/adapters';
-import { youtubeAdapter } from '../../src/adapters/youtube';
+import { SCROLL_SETTLE_MS, youtubeAdapter } from '../../src/adapters/youtube';
 import { createEngine, type Engine } from '../../src/engine/bootstrap';
 import { ATTR } from '../../src/engine/style-manager';
 import { DEFAULT_PREFS } from '../../src/shared/flags';
@@ -174,6 +174,34 @@ describe('youtube adapter on fixtures', () => {
     expect(root.getAttribute(ATTR.scheme)).toBe('light');
     await sleep(80);
     expect(root.getAttribute(ATTR.scheme)).toBe('dark');
+  });
+
+  it('puts a watch page back at the top if it jumped by itself, but never after the person scrolls', async () => {
+    const run = async (input: boolean) => {
+      const dom = loadPage('youtube-watch.html', 'https://www.youtube.com/watch?v=abc');
+      const win = dom.window as unknown as Window;
+      const scrollTo = vi.fn();
+      Object.defineProperty(win, 'scrollY', { value: 120, configurable: true });
+      win.scrollTo = scrollTo as unknown as typeof win.scrollTo;
+      const engine = createEngine({
+        window: win,
+        adapters: ADAPTERS,
+        loadPrefs: async () => enabled('youtube'),
+        report: () => undefined,
+        retryDelaysMs: [1, 1, 1],
+        schedule: (f) => queueMicrotask(f),
+      });
+      engines.push(engine);
+      await engine.start();
+      if (input) win.dispatchEvent(new (dom.window as unknown as typeof globalThis).Event('wheel'));
+      await sleep(SCROLL_SETTLE_MS[0]! + 150);
+      engine.stop();
+      return scrollTo;
+    };
+    const jumped = await run(false);
+    expect(jumped).toHaveBeenCalledWith(0, 0);
+    const scrolledByPerson = await run(true);
+    expect(scrolledByPerson).not.toHaveBeenCalled();
   });
 
   it('fails open on unrecognised markup', async () => {
