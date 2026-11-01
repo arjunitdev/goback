@@ -18,6 +18,8 @@ export const youtubeAdapter: SiteAdapter = {
   detectRoute: (_doc, url) => routeFromUrl(url),
   probe: (doc, route) => evaluateProbes(doc, PROBES[route as YoutubeRoute]),
   navigationEvents: ['yt-navigate-finish'],
+  // YouTube's dark theme is the `dark` attribute on <html>; the 2012 site had no dark theme.
+  forceLightAttr: 'dark',
   mount() {},
   refresh() {},
   unmount() {},

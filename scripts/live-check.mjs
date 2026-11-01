@@ -28,6 +28,12 @@ const ctx = await chromium.launchPersistentContext(profile, {
 });
 
 try {
+  // LIVE_DARK=1 reproduces a dark-theme YouTube (the theme is a server-side cookie, f6=400).
+  if (process.env.LIVE_DARK) {
+    await ctx.addCookies([
+      { name: 'PREF', value: 'f6=400&tz=UTC', domain: '.youtube.com', path: '/', secure: true },
+    ]);
+  }
   const sw = ctx.serviceWorkers()[0] ?? (await ctx.waitForEvent('serviceworker'));
   const site = { enabled: true, mode: 'authentic', theme: 2012 };
   await sw.evaluate(

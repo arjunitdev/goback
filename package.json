@@ -6,6 +6,7 @@
   "description": "Unofficial Chrome extension that restyles supported sites to a researched 2012-era appearance.",
   "scripts": {
     "icons": "node scripts/make-icons.mjs",
+    "gen:yt-theme": "node scripts/gen-youtube-theme.mjs",
     "build": "node scripts/build.mjs dev",
     "build:store": "node scripts/build.mjs store",
     "build:test": "node scripts/build.mjs test --fast",

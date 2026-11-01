@@ -85,9 +85,16 @@ const sites = manifestModule.IMPLEMENTED_SITES;
 mkdirSync(join(outDir, 'styles'), { recursive: true });
 const cat = (...files) => files.map((f) => readFileSync(src(f), 'utf8')).join('\n');
 for (const site of sites) {
+  // Optional generated light-theme pin (YouTube only today); see scripts/gen-youtube-theme.mjs.
+  const generated = `styles/${site}/theme-light.generated.css`;
   writeFileSync(
     join(outDir, `styles/${site}.css`),
-    cat(`styles/tokens/${site}.tokens.css`, 'styles/base/base.css', `styles/${site}/${site}.css`),
+    cat(
+      `styles/tokens/${site}.tokens.css`,
+      'styles/base/base.css',
+      `styles/${site}/${site}.css`,
+      ...(existsSync(src(generated)) ? [generated] : []),
+    ),
   );
 }
 

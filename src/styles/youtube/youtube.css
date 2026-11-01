@@ -415,3 +415,411 @@ html[data-retroweb='youtube'][data-retroweb-scheme='light']
   [class*='ThumbnailViewModelImage'] {
   background-color: #000;
 }
+
+/* ===== Watch page order: title + subscribe row ABOVE the player (2012 template) ==========
+ * Modern: player, then title/owner/actions/description. 2012: title, subscribe row, player,
+ * then actions, uploader/description, comments. The wrappers are flattened with
+ * display:contents and their children re-ordered; no node is moved, hidden or removed. */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch']
+  ytd-watch-flexy
+  #primary-inner {
+  display: flex;
+  flex-direction: column;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch']
+  ytd-watch-flexy
+  :is(#below, #below > .box, ytd-watch-metadata, #above-the-fold, #top-row) {
+  display: contents;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch']
+  ytd-watch-flexy
+  #title-row {
+  order: 1;
+  margin-bottom: 5px;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch']
+  ytd-watch-flexy
+  #owner {
+  order: 2;
+  margin-bottom: 8px;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch']
+  ytd-watch-flexy
+  #player {
+  order: 3;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch']
+  ytd-watch-flexy
+  #actions {
+  order: 4;
+  margin: 10px 0 8px;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch']
+  ytd-watch-flexy
+  #bottom-row {
+  order: 5;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch']
+  ytd-watch-flexy
+  ytd-comments#comments {
+  order: 6;
+}
+
+/* Description: plain 13px text under the uploader line, not a rounded card (2012 #eow-description). */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  ytd-watch-metadata
+  #description-inner {
+  font-size: 13px !important;
+  line-height: 18.3px !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  ytd-watch-metadata
+  #description
+  yt-interaction {
+  background: transparent !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-watch-metadata #description {
+  background: transparent !important;
+  border-radius: 0 !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-watch-metadata #description-inner {
+  color: var(--rw-yt-text) !important;
+}
+
+/* Related list: top-aligned rows, thumbnail and text share the same top edge. */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  yt-lockup-view-model
+  [class*='LockupViewModelHorizontal'] {
+  align-items: flex-start !important;
+}
+
+/* Related thumbnails use a padding-top aspect-ratio box with an absolutely centred image.
+ * Neutralise that so the 120x90 box is exactly the image box and shares the row's top edge. */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  yt-lockup-view-model
+  [class*='LockupViewModelHorizontal']
+  yt-thumbnail-view-model {
+  padding-top: 0 !important;
+  height: 90px !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  yt-lockup-view-model
+  [class*='LockupViewModelHorizontal']
+  [class*='ThumbnailViewModelImage'] {
+  top: 0 !important;
+  left: 0 !important;
+  transform: none !important;
+}
+
+/* ===== Browse pages (home, results, channels): guide + feed inside the 970px column ======
+ * 2012: a 200px dark guide on the left, a 465px white feed beside it. Measured from the
+ * archived stylesheet: .guide #272727, .guide-item 11px #999 with a 4px right border,
+ * selected #1c1c1c / #c4302b, .feed-item-container border-bottom #ededed. */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']:not([data-retroweb-route='watch'])
+  ytd-app[guide-persistent-and-visible]
+  tp-yt-app-drawer#guide {
+  left: calc(50% - 485px) !important;
+  top: 60px !important;
+  width: 200px !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']:not([data-retroweb-route='watch'])
+  ytd-app[guide-persistent-and-visible]
+  tp-yt-app-drawer#guide
+  #contentContainer {
+  width: 200px !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']:not([data-retroweb-route='watch'])
+  ytd-app[guide-persistent-and-visible]
+  ytd-page-manager {
+  margin-left: calc(50% - 485px + 200px) !important;
+  margin-top: 60px !important;
+  width: 770px !important;
+}
+
+/* Guide items: 11px, #999, 36px rows (measured in the 2012 template screenshot). */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-guide-entry-renderer a#endpoint {
+  border-right: 4px solid transparent;
+  border-radius: 0 !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  ytd-guide-entry-renderer
+  tp-yt-paper-item {
+  min-height: 36px;
+  padding: 0 5px 0 10px;
+  border-radius: 0 !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  ytd-guide-entry-renderer
+  :is(.title, yt-formatted-string) {
+  font-size: 11px !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  tp-yt-app-drawer#guide
+  #contentContainer {
+  background-color: #272727 !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  ytd-guide-renderer
+  :is(yt-formatted-string, .title, #guide-section-title, h3, span) {
+  color: #999 !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-guide-renderer yt-icon,
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-guide-renderer yt-icon svg {
+  color: #999 !important;
+  fill: #999 !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-guide-entry-renderer a#endpoint {
+  background-image: linear-gradient(to bottom, #292929 0, #252525 100%);
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  ytd-guide-entry-renderer
+  a#endpoint:hover {
+  background: #1c1c1c;
+  border-right-color: #666;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  ytd-guide-entry-renderer:is([active], [selected])
+  a#endpoint {
+  background: #1c1c1c;
+  border-right-color: #c4302b;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  ytd-guide-entry-renderer:is([active], [selected])
+  :is(yt-formatted-string, .title, span) {
+  color: #fff !important;
+  font-weight: bold !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-guide-renderer #guide-inner-content,
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-guide-section-renderer {
+  background-color: #272727;
+}
+
+/* Sign-in promo: the 2012 #guide-builder-promo (#6a6a6a, bold white heading). */
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-guide-signin-promo-renderer {
+  background-color: #6a6a6a;
+  padding: 10px !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  ytd-guide-signin-promo-renderer
+  :is(yt-formatted-string, span, #message) {
+  color: #fff !important;
+  font-weight: bold !important;
+}
+
+/* ===== Feed rows: thumbnail left, text right, #ededed dividers (2012 .feed-item-main) ===== */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-rich-grid-renderer #contents {
+  display: block !important;
+  width: 100% !important;
+  padding: 0 !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-rich-item-renderer {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 15px;
+  box-sizing: border-box;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  ytd-rich-item-renderer
+  [class*='LockupViewModelVertical'] {
+  flex-direction: row !important;
+  align-items: flex-start !important;
+  gap: 14px;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  ytd-rich-item-renderer
+  [class*='LockupViewModelContentImage'] {
+  flex: none;
+  width: 106px !important;
+  height: 80px !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  ytd-rich-item-renderer
+  yt-thumbnail-view-model {
+  padding-top: 0 !important;
+  width: 106px !important;
+  height: 80px !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  ytd-rich-item-renderer
+  [class*='ThumbnailViewModelImage'] {
+  top: 0 !important;
+  left: 0 !important;
+  width: 106px !important;
+  height: 80px !important;
+  transform: none !important;
+  object-fit: contain;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  ytd-rich-item-renderer
+  [class*='LockupViewModelMetadata'] {
+  flex: 1;
+  min-width: 0;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  ytd-rich-item-renderer
+  a[class*='LockupMetadataViewModelTitle'] {
+  font-size: 15px !important;
+  font-weight: bold !important;
+  line-height: 1.2em !important;
+  max-height: 2.4em;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-rich-item-renderer {
+  background-color: #fff;
+  border-bottom: 1px solid #ededed;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  ytd-rich-item-renderer
+  a[class*='LockupMetadataViewModelTitle'] {
+  color: var(--rw-yt-text) !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  ytd-rich-item-renderer
+  [class*='ContentMetadataViewModel'] {
+  color: var(--rw-yt-meta) !important;
+  font-size: 11px !important;
+}
+
+/* The page containers carry fixed widths sized for the modern 1200px area; make them fill the
+ * 770px area so nothing is centred underneath the guide. */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']:not([data-retroweb-route='watch'])
+  ytd-app[guide-persistent-and-visible]
+  :is(
+    ytd-browse,
+    ytd-search,
+    ytd-two-column-browse-results-renderer,
+    ytd-two-column-search-results-renderer,
+    ytd-rich-grid-renderer,
+    ytd-browse #primary
+  ) {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  box-sizing: border-box;
+}
+
+/* Guide section headings (Explore, More from YouTube, You): 11px bold, like the 2012 .guide-item. */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  ytd-guide-section-renderer
+  :is(h3, #guide-section-title, #header)
+  :is(yt-formatted-string, a, span) {
+  font-size: 11px !important;
+  font-weight: bold !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  ytd-guide-section-renderer
+  :is(h3, #guide-section-title, #header)
+  :is(yt-formatted-string, a, span) {
+  color: #eee !important;
+}
+
+/* Guide: everything inside the 200px panel is exactly 200px wide, rows run edge to edge. */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']:not([data-retroweb-route='watch'])
+  ytd-app[guide-persistent-and-visible]
+  :is(
+    ytd-guide-renderer,
+    #guide-inner-content,
+    ytd-guide-section-renderer,
+    ytd-guide-signin-promo-renderer
+  ) {
+  width: 200px !important;
+  max-width: 200px !important;
+  box-sizing: border-box;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-guide-section-renderer {
+  padding: 0 !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-guide-entry-renderer,
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-guide-entry-renderer a#endpoint {
+  width: 100% !important;
+  box-sizing: border-box;
+}
+
+/* Search results and other list rows: 120x90 thumbnails, bold 15px titles, 11px meta. */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-video-renderer {
+  padding: 15px;
+  box-sizing: border-box;
+  margin: 0 !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-video-renderer ytd-thumbnail {
+  flex: none;
+  width: 120px !important;
+  min-width: 120px !important;
+  max-width: 120px !important;
+  height: 90px !important;
+  margin-right: 14px;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-video-renderer #video-title {
+  font-size: 15px !important;
+  font-weight: bold !important;
+  line-height: 1.2em !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  ytd-video-renderer
+  :is(#metadata-line, ytd-video-meta-block, ytd-channel-name, .metadata-snippet-text) {
+  font-size: 11px !important;
+  line-height: 14px !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-video-renderer {
+  background-color: #fff;
+  border-bottom: 1px solid #ededed;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-video-renderer #video-title {
+  color: var(--rw-yt-text) !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  ytd-video-renderer
+  :is(#metadata-line, ytd-video-meta-block, ytd-channel-name) {
+  color: var(--rw-yt-meta) !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  ytd-video-renderer
+  .metadata-snippet-text {
+  color: #999 !important;
+}

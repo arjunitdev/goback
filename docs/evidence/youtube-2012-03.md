@@ -42,3 +42,21 @@ Results-page layout and typography, channel pages, playlists, shorts (did not ex
 - Modern YouTube serves different layouts to different visitors (A/B tests), for example comments moved to a side panel. CSS can restyle what is present but cannot restore the 2012 page structure for every variant.
 - Several 2012 elements have no modern equivalent (the Browse / Movies / Upload links, the green-red like bar, the "Show more" description toggle). They are not fabricated.
 - The player and its controls are deliberately left untouched.
+
+## Added 2026-11-01: guide, feed and user-supplied references
+Sources: the same archived stylesheets (`www-guide-vfliVgOjz.css`, `www-refresh-vflgmBNbk.css`) plus three full-page 2012 YouTube screenshots supplied by the project owner (home, watch "The Dictator Official Trailer #1", and a Videos browse page). Those screenshots are not stored in the repository; values below were read from them or from the stylesheets.
+
+| Element | Value | Source |
+|---|---|---|
+| Guide panel | `#272727`; items min-height 28px (36px rows in the supplied screenshots), 11px `#999`, padding `0 5px 0 10px`, `border-right: 4px solid transparent` | guide CSS + screenshot |
+| Guide hover | background `#1c1c1c`, right border `#666` | guide CSS |
+| Guide selected | background `#1c1c1c`, right border `#c4302b`, text white bold | guide CSS + screenshot |
+| Sign-in promo | background `#6a6a6a`, padding 10px, heading 20px bold white; two stacked full-width buttons (default dark, primary blue) | guide CSS + screenshot |
+| Feed panel | white, 465px; header bar `#303030 → #282828` | screenshot (sampled) |
+| Feed row | `border-bottom 1px solid #ededed`; 106×80 thumbnail left; title `h4` 15px `#333`, line-height 1.2em, max 2 lines; 11px description; time `9px #999` top-right | refresh CSS + screenshot |
+| Page | `#eee`-ish paper texture (sampled `#eeeeee`) over measured `#ebebeb` | screenshot + computed style |
+| Watch order | title → subscribe row → player → actions/view count → uploader/description → Top Comments → Video Responses → All Comments → pager; related list in a 310px right column on a shadowed panel | screenshot |
+| Related item | 120×90 letterboxed thumbnail, black duration badge bottom-right, bold 13px title up to 3 lines, `by user` 11px `#666`, views 11px | screenshot + computed style |
+| Home composition | 970px column: 200px dark guide + 465px feed + ~300px right panel (Spotlight / Featured) | screenshot |
+
+**Not reproduced:** the Spotlight/Featured right panel, the banner ad area, the footer, and the "Browse | Movies | Upload" and "Create Account | Sign In" links (no honest modern equivalent; adding invented links was not done).

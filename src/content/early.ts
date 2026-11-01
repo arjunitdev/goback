@@ -20,7 +20,12 @@ if (adapter && route && adapter.earlyStyle !== false) {
   const systemReduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   // <body> does not exist yet, so guess the page scheme from the system; the engine
   // measures the real page background after load and corrects it.
-  const scheme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  // Authentic mode on a site that supports the light pin (YouTube) optimistically assumes light;
+  // the engine measures the real page and corrects it if the pin did not take.
+  const scheme =
+    !adapter.forceLightAttr && matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light';
   applyStyleState(
     root,
     {
@@ -31,6 +36,8 @@ if (adapter && route && adapter.earlyStyle !== false) {
       highContrast: false,
       wordmark: __WORDMARK__,
       scheme,
+      // Authentic is the default until prefs load: hold the dark theme off from the first paint.
+      lockLightAttr: adapter.forceLightAttr,
     },
     systemReduce,
   );
@@ -51,6 +58,8 @@ if (adapter && route && adapter.earlyStyle !== false) {
           highContrast: prefs.highContrast,
           wordmark: __WORDMARK__,
           scheme,
+          lockLightAttr:
+            prefs.sites[adapter.id].mode === 'authentic' ? adapter.forceLightAttr : undefined,
         },
         systemReduce,
       );

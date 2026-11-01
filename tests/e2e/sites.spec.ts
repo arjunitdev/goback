@@ -78,6 +78,31 @@ test.describe('YouTube', () => {
     await expect(page.locator('html')).toHaveAttribute('data-retroweb-route', 'results');
     await page.close();
   });
+
+  test('holds a dark-theme account on the light 2012 look, then gives dark back when switched off', async () => {
+    await enable(['youtube']);
+    const page = await h.ctx.newPage();
+    // A dark-theme YouTube: the site marks <html dark> and re-adds it when its script runs.
+    await stub(page, YT, pick, (html) => html.replace('<html lang="en">', '<html lang="en" dark>'));
+    await page.goto(`${YT}/watch?v=abc`);
+    const html = page.locator('html');
+    await expect(html).toHaveAttribute('data-retroweb', 'youtube');
+    await expect(html).not.toHaveAttribute('dark', /.*/);
+    await expect(html).toHaveAttribute('data-retroweb-had-dark', 'dark');
+    await expect(html).toHaveAttribute('data-retroweb-scheme', 'light');
+
+    // The site's own script flips it back on: it is stripped again.
+    await page.evaluate(() => document.documentElement.setAttribute('dark', ''));
+    await expect(html).not.toHaveAttribute('dark', /.*/);
+
+    // Kill switch: the extension stands down and the user's dark theme returns.
+    await setPrefs(h, prefs(['youtube'], { killSwitch: true }));
+    await expect(html).not.toHaveAttribute('data-retroweb', /.+/);
+    await expect(html).toHaveAttribute('dark', '');
+    await expect(html).not.toHaveAttribute('data-retroweb-had-dark', /.*/);
+    await page.close();
+    await setPrefs(h, prefs(['youtube']));
+  });
 });
 
 test.describe('Facebook', () => {

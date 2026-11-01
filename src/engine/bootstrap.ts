@@ -88,6 +88,7 @@ export function createEngine(deps: EngineDeps): Engine {
         highContrast: ctx.prefs.highContrast,
         wordmark: deps.wordmark === true,
         scheme: detectScheme(doc, systemDark()),
+        lockLightAttr: ctx.site.mode === 'authentic' ? adapter.forceLightAttr : undefined,
       },
       systemReduce(),
     );

@@ -10,6 +10,8 @@ export const ATTR = {
   contrast: 'data-retroweb-contrast',
   wordmark: 'data-retroweb-wordmark',
   scheme: 'data-retroweb-scheme',
+  /** Holds the NAME of the site's dark-theme attribute while we have removed it, so any bundle can restore it. */
+  hadDark: 'data-retroweb-had-dark',
 } as const;
 
 export interface StyleState {
@@ -26,6 +28,51 @@ export interface StyleState {
    * dark page (or the reverse) makes content unreadable.
    */
   scheme: ColorScheme;
+  /**
+   * If set, the site's dark-theme attribute (e.g. `dark`) is held off <html>, so the
+   * page renders its own light theme and `scheme` is reported as light.
+   */
+  lockLightAttr?: string;
+}
+
+const LIGHT_LOCKS = new WeakMap<HTMLElement, MutationObserver>();
+
+/**
+ * Holds a dark-theme attribute off <html> (Authentic mode: the 2012 sites had no dark
+ * theme). The site's own script may re-add it, so a small observer strips it again. The
+ * observer ends by itself once our site attribute is gone, and the attribute NAME is kept
+ * on <html> so unlockLight() (from any content-script bundle) can restore it exactly.
+ */
+export function lockLight(root: HTMLElement, attr: string): void {
+  const strip = () => {
+    if (root.hasAttribute(attr)) {
+      root.setAttribute(ATTR.hadDark, attr);
+      root.removeAttribute(attr);
+    }
+  };
+  strip();
+  if (LIGHT_LOCKS.has(root)) return;
+  const obs = new MutationObserver(() => {
+    if (!root.hasAttribute(ATTR.site)) {
+      obs.disconnect();
+      LIGHT_LOCKS.delete(root);
+      return;
+    }
+    strip();
+  });
+  obs.observe(root, { attributes: true, attributeFilter: [attr, ATTR.site] });
+  LIGHT_LOCKS.set(root, obs);
+}
+
+/** Puts the dark-theme attribute back if (and only if) we removed it. */
+export function unlockLight(root: HTMLElement): void {
+  LIGHT_LOCKS.get(root)?.disconnect();
+  LIGHT_LOCKS.delete(root);
+  const attr = root.getAttribute(ATTR.hadDark);
+  if (attr) {
+    root.setAttribute(attr, '');
+    root.removeAttribute(ATTR.hadDark);
+  }
 }
 
 /** Motion is reduced if the user asked for it OR the system prefers it (FR-009). */
@@ -87,6 +134,10 @@ export function applyStyleState(root: HTMLElement, state: StyleState, systemRedu
   root.setAttribute(ATTR.site, state.site);
   root.setAttribute(ATTR.route, state.route);
   root.setAttribute(ATTR.mode, state.mode);
+  // The scheme is whatever the caller measured (or optimistically guessed at document_start):
+  // holding the dark attribute off is not proof the page turned light, so it is never forced.
+  if (state.lockLightAttr) lockLight(root, state.lockLightAttr);
+  else unlockLight(root);
   root.setAttribute(ATTR.scheme, state.scheme);
   setFlag(root, ATTR.motion, effectiveReducedMotion(state.motion, systemReduce) ? 'reduce' : null);
   setFlag(root, ATTR.contrast, state.highContrast ? 'high' : null);
@@ -94,6 +145,9 @@ export function applyStyleState(root: HTMLElement, state: StyleState, systemRedu
 }
 
 export function clearStyleState(root: HTMLElement): void {
+  // Restore the site's dark-theme attribute FIRST, while our site attribute is still present,
+  // so every light-lock observer sees the site attribute vanish and stands down (no re-strip).
+  unlockLight(root);
   for (const name of Object.values(ATTR)) root.removeAttribute(name);
 }
 

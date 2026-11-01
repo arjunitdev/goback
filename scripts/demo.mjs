@@ -21,6 +21,13 @@ const ctx = await chromium.launchPersistentContext(profile, {
   args: [`--disable-extensions-except=${ext}`, `--load-extension=${ext}`, '--start-maximized'],
 });
 
+// DEMO_DARK=1 reproduces a dark-theme YouTube account (theme is a server-side cookie, f6=400).
+if (process.env.DEMO_DARK) {
+  await ctx.addCookies([
+    { name: 'PREF', value: 'f6=400&tz=UTC', domain: '.youtube.com', path: '/', secure: true },
+  ]);
+}
+
 const sw = ctx.serviceWorkers()[0] ?? (await ctx.waitForEvent('serviceworker'));
 const on = { enabled: true, mode: 'authentic', theme: 2012 };
 await sw.evaluate(
@@ -39,7 +46,8 @@ await sw.evaluate(
 await new Promise((r) => setTimeout(r, 1500)); // let the background register the scripts
 
 const urls = [
-  'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+  'https://www.youtube.com/watch?v=jNQXAC9IVRw',
+  'https://www.youtube.com/results?search_query=music',
   'https://www.youtube.com/',
   'https://www.google.com/',
   'https://www.facebook.com/',

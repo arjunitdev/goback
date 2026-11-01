@@ -45,6 +45,12 @@ export interface SiteAdapter {
    * then applied only after the first probe passes.
    */
   earlyStyle?: boolean;
+  /**
+   * Name of the <html> attribute the site uses to switch to its dark theme (YouTube: `dark`).
+   * In Authentic mode the engine holds it off, because the 2012 sites had no dark theme;
+   * Compatibility mode and teardown restore it.
+   */
+  forceLightAttr?: string;
   /** Document events that signal a client-side navigation (e.g. YouTube's yt-navigate-finish). */
   navigationEvents?: readonly string[];
   mount(ctx: AdapterContext): Promise<void> | void;

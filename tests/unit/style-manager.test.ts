@@ -74,3 +74,63 @@ describe('detectScheme', () => {
     expect(detectScheme(document, false)).toBe('light');
   });
 });
+
+describe('light lock (dark-theme attribute held off in Authentic mode)', () => {
+  const tick = () => new Promise<void>((r) => setTimeout(r, 0));
+  const lockState = {
+    site: 'youtube' as const,
+    route: 'watch',
+    mode: 'authentic' as const,
+    motion: 'system' as const,
+    highContrast: false,
+    wordmark: false,
+    scheme: 'light' as const,
+    lockLightAttr: 'dark',
+  };
+
+  it('removes the dark attribute, remembers its name, and restores it on clear', () => {
+    const root = document.createElement('html');
+    root.setAttribute('dark', '');
+    applyStyleState(root, lockState, false);
+    expect(root.hasAttribute('dark')).toBe(false);
+    expect(root.getAttribute(ATTR.hadDark)).toBe('dark');
+    clearStyleState(root);
+    expect(root.hasAttribute('dark')).toBe(true);
+    expect(root.hasAttribute(ATTR.hadDark)).toBe(false);
+    expect(root.getAttributeNames()).toEqual(['dark']);
+  });
+
+  it('strips the attribute again if the site script re-adds it, then stands down after clear', async () => {
+    const root = document.createElement('html');
+    applyStyleState(root, lockState, false);
+    root.setAttribute('dark', ''); // the site's own script
+    await tick();
+    expect(root.hasAttribute('dark')).toBe(false);
+
+    // The site wanted dark, so clearing gives it back.
+    clearStyleState(root);
+    expect(root.hasAttribute('dark')).toBe(true);
+
+    // And the lock observer is gone: the site is free to toggle the attribute again.
+    root.removeAttribute('dark');
+    await tick();
+    root.setAttribute('dark', '');
+    await tick();
+    expect(root.hasAttribute('dark')).toBe(true);
+  });
+
+  it('Compatibility mode does not lock and puts a removed attribute back', () => {
+    const root = document.createElement('html');
+    root.setAttribute('dark', '');
+    applyStyleState(root, lockState, false);
+    expect(root.hasAttribute('dark')).toBe(false);
+    applyStyleState(root, { ...lockState, mode: 'compatibility', lockLightAttr: undefined }, false);
+    expect(root.hasAttribute('dark')).toBe(true);
+  });
+
+  it('never forces the scheme: it reports what the caller measured', () => {
+    const root = document.createElement('html');
+    applyStyleState(root, { ...lockState, scheme: 'dark' }, false);
+    expect(root.getAttribute(ATTR.scheme)).toBe('dark');
+  });
+});
