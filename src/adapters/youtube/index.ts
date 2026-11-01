@@ -20,6 +20,8 @@ export const youtubeAdapter: SiteAdapter = {
   navigationEvents: ['yt-navigate-finish'],
   // YouTube's dark theme is the `dark` attribute on <html>; the 2012 site had no dark theme.
   forceLightAttr: 'dark',
+  // Pure-CSS adapter: a click on a video must not drop and rebuild the theme.
+  keepOnRouteChange: true,
   mount() {},
   refresh() {},
   unmount() {},

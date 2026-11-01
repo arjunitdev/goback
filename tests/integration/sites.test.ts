@@ -85,6 +85,60 @@ describe('youtube adapter on fixtures', () => {
     expect(h.events).toContain('route-change');
   });
 
+  it('keeps the theme painted through a click: the site attribute is never dropped or re-set', async () => {
+    const h = setup('youtube-home.html', 'https://www.youtube.com/', 'youtube');
+    await h.engine.start();
+    const seen: Array<string | null> = [];
+    new h.jsdom.MutationObserver((records) => {
+      for (const r of records) seen.push(`${r.attributeName}=${h.root.getAttribute(r.attributeName!)}`);
+    }).observe(h.root, { attributes: true });
+
+    h.win.history.pushState({}, '', '/results?search_query=cats');
+    h.doc.body.innerHTML = new DOMParser().parseFromString(
+      fixture('youtube-results.html'),
+      'text/html',
+    ).body.innerHTML;
+    h.doc.dispatchEvent(new h.jsdom.CustomEvent('yt-navigate-finish'));
+    await sleep(20);
+
+    expect(h.root.getAttribute(ATTR.route)).toBe('results');
+    expect(h.root.getAttribute(ATTR.site)).toBe('youtube');
+    // Nothing was ever removed (a removal reads back as null), so no native frame can paint.
+    expect(seen).not.toContain(`${ATTR.site}=null`);
+    expect(seen).not.toContain(`${ATTR.scheme}=null`);
+    expect(h.engine.status()).toMatchObject({ route: 'results', health: 'healthy' });
+  });
+
+  it('throttles DOM-driven work while healthy but still reacts afterwards', async () => {
+    const dom = loadPage('youtube-watch.html', 'https://www.youtube.com/watch?v=abc');
+    const win = dom.window as unknown as Window;
+    const engine = createEngine({
+      window: win,
+      adapters: ADAPTERS,
+      loadPrefs: async () => enabled('youtube'),
+      report: () => undefined,
+      retryDelaysMs: [1, 1, 1],
+      schedule: (f) => queueMicrotask(f),
+      healthyThrottleMs: 40,
+    });
+    engines.push(engine);
+    await engine.start();
+    const root = win.document.documentElement;
+    expect(root.getAttribute(ATTR.scheme)).toBe('light');
+
+    // The first batch after mount runs straight away and opens the throttle window.
+    win.document.body.append(win.document.createElement('div'));
+    await sleep(5);
+    // A change inside the window is not measured yet; once the window passes, the deferred
+    // check catches it.
+    win.document.body.style.backgroundColor = 'rgb(20, 20, 20)';
+    win.document.body.append(win.document.createElement('div'));
+    await sleep(5);
+    expect(root.getAttribute(ATTR.scheme)).toBe('light');
+    await sleep(80);
+    expect(root.getAttribute(ATTR.scheme)).toBe('dark');
+  });
+
   it('fails open on unrecognised markup', async () => {
     const h = setup('google-unknown.html', 'https://www.youtube.com/watch?v=abc', 'youtube');
     await h.engine.start();

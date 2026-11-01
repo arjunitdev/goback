@@ -53,6 +53,11 @@ export interface SiteAdapter {
   forceLightAttr?: string;
   /** Document events that signal a client-side navigation (e.g. YouTube's yt-navigate-finish). */
   navigationEvents?: readonly string[];
+  /**
+   * Route changes inside this site keep the theme in place (only the route attribute and probes
+   * change) instead of tearing everything down and re-applying it. Safe for CSS-only adapters.
+   */
+  keepOnRouteChange?: boolean;
   mount(ctx: AdapterContext): Promise<void> | void;
   refresh(ctx: AdapterContext): void;
   unmount(ctx: AdapterContext): void;

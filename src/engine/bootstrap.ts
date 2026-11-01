@@ -16,6 +16,12 @@ export interface EngineDeps {
   retryDelaysMs?: readonly number[];
   schedule?: (flush: () => void) => void;
   failThreshold?: number;
+  /**
+   * While healthy, DOM-mutation work (scheme measurement, probes) runs at most this often.
+   * Measuring the scheme forces a style flush, which on a busy single-page app is paid every
+   * frame otherwise. Unhealthy pages are still checked on every batch.
+   */
+  healthyThrottleMs?: number;
 }
 
 export interface Engine {
@@ -51,6 +57,9 @@ export function createEngine(deps: EngineDeps): Engine {
   let generation = 0;
   let latched: string | null = null; // "site:route" that failed open; stays native until nav/prefs change
   let retryTimer: ReturnType<typeof setTimeout> | null = null;
+  let throttleTimer: ReturnType<typeof setTimeout> | null = null;
+  let lastWork = 0;
+  const throttleMs = deps.healthyThrottleMs ?? 1000;
   let retryIndex = 0;
   let observer: BatchedObserver | null = null;
   let watcher: RouteWatcher | null = null;
@@ -63,6 +72,8 @@ export function createEngine(deps: EngineDeps): Engine {
   function clearRetry(): void {
     if (retryTimer !== null) clearTimeout(retryTimer);
     retryTimer = null;
+    if (throttleTimer !== null) clearTimeout(throttleTimer);
+    throttleTimer = null;
   }
 
   function systemReduce(): boolean {
@@ -104,7 +115,8 @@ export function createEngine(deps: EngineDeps): Engine {
     }
   }
 
-  function teardown(): void {
+  /** `keepStyle`: the caller re-applies the full state straight away, so skip the clear/re-set churn. */
+  function teardown(keepStyle = false): void {
     clearRetry();
     observer?.disconnect();
     if (mounted) {
@@ -115,7 +127,7 @@ export function createEngine(deps: EngineDeps): Engine {
       }
       deps.report('unmounted');
     }
-    clearStyleState(doc.documentElement);
+    if (!keepStyle) clearStyleState(doc.documentElement);
     mounted = null;
     health.reset();
     retryIndex = 0;
@@ -201,10 +213,23 @@ export function createEngine(deps: EngineDeps): Engine {
       return;
     }
 
-    teardown();
+    // Same site, new route, CSS-only adapter: keep the theme painted, swap the route attribute.
+    if (mounted && mounted.adapter === adapter && adapter.keepOnRouteChange && mounted.styled) {
+      clearRetry();
+      health.reset();
+      retryIndex = 0;
+      mounted.route = route;
+      mounted.ctx = ctx;
+      style(ctx, adapter);
+      adapter.refresh(ctx);
+      probeNow();
+      return;
+    }
+
+    const early = adapter.earlyStyle !== false;
+    teardown(early);
     health.reset();
     retryIndex = 0;
-    const early = adapter.earlyStyle !== false;
     const next: Mounted = { adapter, route, ctx, styled: early };
     mounted = next;
     if (early) style(ctx, adapter);
@@ -225,11 +250,19 @@ export function createEngine(deps: EngineDeps): Engine {
       (info) => {
         if (info.capped) deps.report('observer-cap');
         if (watcher?.check()) return; // route change triggers a full reconcile
-        const m = mounted;
-        if (!m) return;
-        refreshScheme();
-        m.adapter.refresh(m.ctx);
-        probeNow();
+        if (!mounted) return;
+        const work = () => {
+          throttleTimer = null;
+          lastWork = Date.now();
+          const m = mounted;
+          if (!m) return;
+          refreshScheme();
+          m.adapter.refresh(m.ctx);
+          probeNow();
+        };
+        const wait = lastWork + throttleMs - Date.now();
+        if (health.state !== 'healthy' || wait <= 0) work();
+        else throttleTimer ??= setTimeout(work, wait);
       },
       { schedule: deps.schedule },
     );

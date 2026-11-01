@@ -36,6 +36,8 @@
 
 | ADR-018 | YouTube Authentic mode fills the window instead of reproducing the 970px column: the masthead spans the screen, the 200px dark guide is fixed to the left edge for the full window height, and the home/results content and the watch player use the remaining width. The home feed keeps YouTube's own grid. Colours, fonts, button shapes, logo and the dark guide stay 2012. | The owner found the 970px column wasted most of a modern screen and preferred the full-width grid layout. Layout fidelity to the 2012 column is traded for usability; typography and palette fidelity are unchanged. |
 
+| ADR-019 | The engine keeps the theme painted across same-site route changes for CSS-only adapters (`keepOnRouteChange`, YouTube) and runs DOM-mutation work (scheme measurement, probes) at most once per second while healthy; unhealthy pages are still checked every batch. The first mount no longer clears and re-sets the attributes the early script already applied. | Measured live on YouTube (search, then click a video): the extension added ~110ms style and ~100ms layout per navigation and ~700ms of long tasks, because every click rebuilt the theme and every DOM batch forced a style flush. After the change the navigation cost matches a no-extension baseline. The page-wide font rule was measured and is NOT a cost. |
+
 Still pending: ADR-001 (exact reference month per route), ADR-002 (original vs reconstructed icon licensing), ADR-007 (labeling modern-only components), ADR-009 (compatibility break thresholds), ADR-010 (trademark review outcome).
 
 ## Decisions pending
