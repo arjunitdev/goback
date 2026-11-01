@@ -31,7 +31,13 @@ export const PROBES: Record<YoutubeRoute, readonly Probe[]> = {
   watch: [
     APP,
     SEARCH_BOX,
-    { name: 'watch-page', any: ['ytd-watch-flexy'], required: true },
+    // YouTube A/B-tests its watch container; accept every variant seen so far (observed live
+    // 2026-10-31: some loads render ytd-watch-flexy, others do not).
+    {
+      name: 'watch-page',
+      any: ['ytd-watch-flexy', 'ytd-watch-grid', 'ytd-watch-metadata', '#movie_player'],
+      required: true,
+    },
     { name: 'player', any: ['#movie_player', '#player'], required: false },
     MASTHEAD,
   ],

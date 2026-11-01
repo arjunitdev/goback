@@ -1,5 +1,10 @@
 import { IMPLEMENTED_SITES, SITE_ORIGINS } from './shared/flags';
-import { includesWordmark, type Flavor } from './shared/registration';
+import {
+  includesWordmark,
+  privateAllowed,
+  type BuildAssets,
+  type Flavor,
+} from './shared/registration';
 
 export { IMPLEMENTED_SITES };
 
@@ -16,7 +21,7 @@ const originsOf = (): string[] => IMPLEMENTED_SITES.flatMap((s) => [...SITE_ORIG
  *  - test:  dev + host access granted at install so Playwright can run without a prompt.
  *           NEVER publish a test build.
  */
-export function buildManifest(flavor: Flavor, version: string): Manifest {
+export function buildManifest(flavor: Flavor, version: string, assets: BuildAssets = {}): Manifest {
   const manifest: Manifest = {
     manifest_version: 3,
     name:
@@ -37,10 +42,17 @@ export function buildManifest(flavor: Flavor, version: string): Manifest {
   if (flavor === 'test') manifest.host_permissions = originsOf();
 
   if (includesWordmark(flavor)) {
-    manifest.web_accessible_resources = IMPLEMENTED_SITES.map((site) => ({
+    const war = IMPLEMENTED_SITES.map((site) => ({
       resources: [`assets/${site}-2012.svg`],
       matches: [...SITE_ORIGINS[site]],
     }));
+    if (privateAllowed(flavor, assets).youtubePrivate) {
+      war.push({
+        resources: ['assets/youtube-private/*'],
+        matches: [...SITE_ORIGINS.youtube],
+      });
+    }
+    manifest.web_accessible_resources = war;
   }
   return manifest;
 }

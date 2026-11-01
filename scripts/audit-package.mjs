@@ -55,6 +55,12 @@ for (const f of referenced) if (!files.includes(f)) fail(`manifest references mi
 for (const f of files) {
   if (/wordmark|google-2012|\.svg$/i.test(f)) fail(`asset must not ship in store build: ${f}`);
 }
+// Private / archive-derived assets are for the user's own machine only (ADR-011/016).
+for (const f of files) {
+  if (/private|^assets\//i.test(f))
+    fail(`private or non-icon asset must not ship in store build: ${f}`);
+  if (f.endsWith('.png') && !f.startsWith('icons/')) fail(`only icons/*.png may ship: ${f}`);
+}
 const allowedExt = new Set(['.js', '.css', '.html', '.json', '.png']);
 for (const f of files) {
   const ext = f.slice(f.lastIndexOf('.'));

@@ -14,6 +14,7 @@ import {
 } from 'node:fs';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { PNG } from 'pngjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const flavor = process.argv[2] ?? 'dev';
@@ -25,6 +26,14 @@ const wordmark = flavor !== 'store';
 const version = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')).version;
 const src = (p) => join(root, 'src', p);
 
+// PRIVATE assets (archive-derived, git-ignored) are for the user's own machine only.
+// They are never read for the store flavor, so a store build cannot contain them.
+const privYoutube = join(root, 'src', 'assets', 'private', 'youtube');
+const youtubePrivate =
+  flavor !== 'store' &&
+  existsSync(join(privYoutube, 'sprite.png')) &&
+  existsSync(join(privYoutube, 'bg.png'));
+
 rmSync(outDir, { recursive: true, force: true });
 mkdirSync(outDir, { recursive: true });
 
@@ -34,7 +43,12 @@ const common = {
   target: 'chrome120',
   legalComments: 'none',
   logLevel: 'warning',
-  define: { __FLAVOR__: JSON.stringify(flavor), __WORDMARK__: String(wordmark) },
+  define: {
+    __FLAVOR__: JSON.stringify(flavor),
+    __WORDMARK__: String(wordmark),
+    __YT_PRIVATE__: String(youtubePrivate),
+    __FAST_RETRIES__: String(flavor === 'test' && process.argv.includes('--fast')),
+  },
 };
 
 await build({
@@ -63,7 +77,7 @@ const manifestModule = await import(
 );
 writeFileSync(
   join(outDir, 'manifest.json'),
-  JSON.stringify(manifestModule.buildManifest(flavor, version), null, 2) + '\n',
+  JSON.stringify(manifestModule.buildManifest(flavor, version, { youtubePrivate }), null, 2) + '\n',
 );
 
 // Styles: tokens + base + site rules, concatenated per implemented site.
@@ -90,6 +104,28 @@ if (wordmark) {
     cpSync(src(`styles/${site}/wordmark.css`), join(outDir, `styles/${site}-wordmark.css`));
     cpSync(src(`assets/wordmarks/${site}-2012.svg`), join(outDir, `assets/${site}-2012.svg`));
   }
+}
+
+// Private YouTube assets: crop what the stylesheet needs out of the sprite sheet.
+if (youtubePrivate) {
+  const outAssets = join(outDir, 'assets', 'youtube-private');
+  mkdirSync(outAssets, { recursive: true });
+  const sprite = PNG.sync.read(readFileSync(join(privYoutube, 'sprite.png')));
+  const crop = (name, x, y, w, h) => {
+    if (x + w > sprite.width || y + h > sprite.height) {
+      throw new Error(
+        `crop ${name} (${x},${y} ${w}x${h}) is outside the ${sprite.width}x${sprite.height} sprite`,
+      );
+    }
+    const out = new PNG({ width: w, height: h });
+    PNG.bitblt(sprite, out, x, y, w, h, 0, 0);
+    writeFileSync(join(outAssets, name), PNG.sync.write(out));
+  };
+  // Offsets are the background-positions from the archived 2012 stylesheet (docs/evidence).
+  crop('logo.png', 114, 146, 100, 40); // #logo
+  crop('search.png', 163, 102, 14, 14); // search button magnifier
+  cpSync(join(privYoutube, 'bg.png'), join(outAssets, 'bg.png'));
+  cpSync(src('styles/youtube/private.css'), join(outDir, 'styles/youtube-private.css'));
 }
 
 function listFiles(dir) {

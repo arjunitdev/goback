@@ -12,9 +12,9 @@ const engine = createEngine({
   loadPrefs: () => loadPrefs(area),
   report: reportEvent,
   wordmark: __WORDMARK__,
-  // Only the Playwright build shortens the (~20s) production retry window, so the
-  // fail-open path can be exercised quickly. dev and store use the engine default.
-  retryDelaysMs: __FLAVOR__ === 'test' ? [150, 150, 150] : undefined,
+  // Only the Playwright build (`build:test`, which passes --fast) shortens the ~20s
+  // production retry window, so the fail-open path can be exercised quickly.
+  retryDelaysMs: __FAST_RETRIES__ ? [150, 150, 150] : undefined,
 });
 
 void engine.start();

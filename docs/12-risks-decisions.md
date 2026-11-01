@@ -30,6 +30,8 @@
 | ADR-014 | Probe retry window is ~20s (0.4, 1.2, 3, 6, 10s) before failing open. The Playwright build uses 3×150ms. | Found live: YouTube rendered a route after ~5s on a cold load, and the earlier ~4.6s window wrongly dropped the theme. |
 | ADR-015 | Site access is a per-site optional host permission for `www.google.com`, `www.youtube.com`, `www.facebook.com` only (no regional or sub-domains). | Least privilege (R08). Regional domains need separate research (ADR-006). |
 
+| ADR-016 | Archive-derived assets (the real 2012 YouTube logo and paper texture) are allowed **only** as private, git-ignored files in `src/assets/private/`, used by non-store builds on the owner's machine. They are never committed, pushed or packaged for the store; the build, registration logic and store audit each enforce this independently, and tests pin it. | The owner asked for the exact logo. Distributing it would infringe trademark/copyright (ADR-010), so personal use is the only safe form. |
+
 Still pending: ADR-001 (exact reference month per route), ADR-002 (original vs reconstructed icon licensing), ADR-007 (labeling modern-only components), ADR-009 (compatibility break thresholds), ADR-010 (trademark review outcome).
 
 ## Decisions pending

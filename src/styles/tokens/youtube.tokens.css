@@ -1,22 +1,35 @@
 /*
- * YouTube early-2012 design tokens. Confidence for EVERY value: inferred.
- * Basis: recollection of the post-December-2011 redesign (docs/04 §4.1). Not
- * measured from dated captures; G2 must verify before any fidelity claim.
- * Whether the 2012 masthead was light or dark is an open question (ADR-001), so
- * the light variant is used: it keeps every native icon and label readable.
+ * YouTube March-2012 design tokens.
+ *
+ * Confidence: `measured` = read from the archived page's computed styles and original
+ * stylesheet (Wayback captures 2012-03-13/14/15; docs/evidence/youtube-2012-03.md).
+ * `extrapolated` = not in the captures, derived from measured neighbours.
  */
 html[data-retroweb='youtube'] {
-  --rw-yt-font: arial, sans-serif;
-  --rw-yt-page: #f1f1f1;
-  --rw-yt-masthead-top: #fcfcfc;
-  --rw-yt-masthead-bottom: #f1f1f1;
-  --rw-yt-border: #d3d3d3;
-  --rw-yt-radius: 2px;
+  --rw-yt-font: arial, sans-serif; /* measured */
+  --rw-yt-page: #ebebeb; /* measured: body background-color */
+  --rw-yt-text: #333; /* measured */
+  --rw-yt-meta: #666; /* measured: .stat, .yt-user-name, uploader line */
+  --rw-yt-link: #1c62b9; /* measured: a */
+  --rw-yt-btn-top: #fff; /* measured: .yt-uix-button-default gradient */
+  --rw-yt-btn-bottom: #e0e0e0;
+  --rw-yt-btn-border: #ccc;
+  --rw-yt-btn-border-bottom: #aaa;
+  --rw-yt-btn-border-hover: #999;
+  --rw-yt-btn-text: #555;
+  --rw-yt-input-border: #ccc; /* measured: #masthead-search-terms, unfocused */
+  --rw-yt-input-shadow: #eee; /* measured: inset 0 1px 2px */
+  --rw-yt-radius: 3px; /* measured */
+  --rw-yt-badge-opacity: 0.75; /* measured: .video-time */
 }
 
 html[data-retroweb='youtube'][data-retroweb-contrast='high'] {
   --rw-yt-page: #fff;
-  --rw-yt-masthead-top: #fff;
-  --rw-yt-masthead-bottom: #fff;
-  --rw-yt-border: #606060;
+  --rw-yt-text: #000;
+  --rw-yt-meta: #333;
+  --rw-yt-link: #0033a0;
+  --rw-yt-btn-border: #666;
+  --rw-yt-btn-border-bottom: #333;
+  --rw-yt-btn-text: #000;
+  --rw-yt-input-border: #666;
 }

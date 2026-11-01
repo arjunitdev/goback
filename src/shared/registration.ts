@@ -8,10 +8,27 @@ export function includesWordmark(flavor: Flavor): boolean {
   return flavor !== 'store';
 }
 
-/** Per-site stylesheets, relative to the extension root. */
-export function siteCss(site: SiteId, flavor: Flavor): string[] {
+/**
+ * Build-time facts about optional PRIVATE assets (user-supplied or archive-derived,
+ * for the user's own machine only). Never true for the store flavor: see
+ * `privateAllowed` and the store audit.
+ */
+export interface BuildAssets {
+  youtubePrivate?: boolean;
+}
+
+/** Private assets are limited to non-store flavors, whatever the caller asks for. */
+export function privateAllowed(flavor: Flavor, assets: BuildAssets = {}): BuildAssets {
+  return flavor === 'store' ? {} : assets;
+}
+
+/** Per-site stylesheets, relative to the extension root. Order matters: later rules win ties. */
+export function siteCss(site: SiteId, flavor: Flavor, assets: BuildAssets = {}): string[] {
   const css = [`styles/${site}.css`];
   if (includesWordmark(flavor)) css.push(`styles/${site}-wordmark.css`);
+  if (site === 'youtube' && privateAllowed(flavor, assets).youtubePrivate) {
+    css.push('styles/youtube-private.css');
+  }
   return css;
 }
 
@@ -29,14 +46,18 @@ export interface ScriptRegistration {
  * Two registrations per active site: the early one carries the stylesheet so it
  * paints before first render; the main one runs the engine once the DOM is ready.
  */
-export function registrationsFor(site: SiteId, flavor: Flavor): ScriptRegistration[] {
+export function registrationsFor(
+  site: SiteId,
+  flavor: Flavor,
+  assets: BuildAssets = {},
+): ScriptRegistration[] {
   const matches = [...SITE_ORIGINS[site]];
   return [
     {
       id: `rw-${site}-early`,
       matches,
       js: ['content/early.js'],
-      css: siteCss(site, flavor),
+      css: siteCss(site, flavor, assets),
       runAt: 'document_start',
       persistAcrossSessions: true,
       allFrames: false,

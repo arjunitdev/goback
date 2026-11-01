@@ -44,7 +44,8 @@ test.describe('YouTube', () => {
     await expect(html).toHaveAttribute('data-retroweb', 'youtube');
     await expect(html).toHaveAttribute('data-retroweb-route', 'watch');
 
-    expect(await color(page, 'ytd-app', 'background-color')).toBe('rgb(241, 241, 241)');
+    // Measured 2012 body background: #ebebeb.
+    expect(await color(page, 'ytd-app', 'background-color')).toBe('rgb(235, 235, 235)');
     expect(await color(page, 'ytd-guide-renderer', 'font-family')).toContain('arial');
 
     // The player subtree keeps its native look: our font rule is fenced away from it.

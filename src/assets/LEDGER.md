@@ -9,6 +9,11 @@ Every asset in the package, its provenance and rights status (docs/07 §7.2, doc
 | A-003 | `wordmarks/youtube-2012.svg`  | `styles/youtube/wordmark.css`  | Independently authored look-alike ("You" text + red rounded box). Colours inferred.                                                                                 | **Unresolved**, same as A-002 (ADR-010).                                                                                        | dev, test only   | unreviewed |
 | A-004 | `wordmarks/facebook-2012.svg` | `styles/facebook/wordmark.css` | Independently authored look-alike (lowercase white text).                                                                                                           | **Unresolved**, same as A-002 (ADR-010).                                                                                        | dev, test only   | unreviewed |
 
+| A-005 | `private/youtube/sprite.png` → built into `assets/youtube-private/logo.png`, `search.png` | `styles/youtube/private.css` | **Archive-derived**: the real March-2012 YouTube logo, cropped from the 2012 CSS sprite (Wayback, 2012-03-15). | **Trademark + copyright, third party.** Supplied by the user for personal use on their own machine only. | **never `store`**; non-store builds only, local only | n/a |
+| A-006 | `private/youtube/bg.png` → `assets/youtube-private/bg.png` | `styles/youtube/private.css` | **Archive-derived**: the 2012 page paper texture (Wayback, 2012-03-15). | Same as A-005. | **never `store`** | n/a |
+
+A-005/A-006 are in `src/assets/private/` (git-ignored, never committed or pushed). `scripts/build.mjs` does not read that folder for the `store` flavor, `src/shared/registration.ts` refuses to register it for `store`, and `scripts/audit-package.mjs` fails the store build if any private or non-icon asset appears.
+
 Rules
 
 - Archived captures (Wayback etc.) are never copied into `src/`. They belong in `evidence-vault/` (git-ignored).

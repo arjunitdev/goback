@@ -131,7 +131,15 @@ describe('stylesheet safety (docs/03 §3.6, docs/05 §5.4, R10)', () => {
           .replace(/:not\((?:[^()]|\([^()]*\))*\)/g, '')
           .replace(/'/g, '"');
         for (const frag of fragments) {
-          expect(withoutNot, `${f.name}: ${selector} targets ${frag}`).not.toContain(frag);
+          const message = `${f.name}: ${selector} targets ${frag}`;
+          if (/^[a-z][a-z0-9-]*$/i.test(frag)) {
+            // A bare tag name (e.g. `video`): match it as a whole selector token only, so
+            // `ytd-compact-video-renderer` is not mistaken for the <video> element.
+            const asToken = new RegExp(String.raw`(^|[\s>+~(,])${frag}(?![\w-])`);
+            expect(withoutNot, message).not.toMatch(asToken);
+          } else {
+            expect(withoutNot, message).not.toContain(frag);
+          }
         }
       }
     }
@@ -146,7 +154,7 @@ describe('stylesheet safety (docs/03 §3.6, docs/05 §5.4, R10)', () => {
 
   it('only wordmark stylesheets may reference extension URLs', () => {
     for (const f of files) {
-      if (f.name.endsWith('/wordmark.css')) continue;
+      if (f.name.endsWith('/wordmark.css') || f.name.endsWith('/private.css')) continue;
       expect(f.text, f.name).not.toMatch(/chrome-extension:/);
     }
   });

@@ -1,0 +1,35 @@
+/*
+ * PRIVATE ASSET STYLES. Registered only when private archive-derived assets were found
+ * at build time AND the flavor is not `store` (see scripts/build.mjs, src/shared/registration.ts).
+ * It references image files that are NOT in the repository (src/assets/private/ is git-ignored).
+ * Offsets/sizes come from the archived 2012-03 stylesheet (docs/evidence/youtube-2012-03.md).
+ * Loaded after youtube.css and wordmark.css, so equal-specificity rules here win.
+ */
+
+/* ---- Logo: the real 100x40 sprite cell ---------------------------------------------- */
+html[data-retroweb='youtube'][data-retroweb-wordmark][data-retroweb-mode]
+  ytd-masthead
+  ytd-topbar-logo-renderer
+  > a#logo
+  ytd-logo
+  yt-icon#logo-icon,
+html[data-retroweb='youtube'][data-retroweb-mode][data-retroweb-route]
+  ytd-masthead
+  ytd-topbar-logo-renderer
+  > a#logo
+  ytd-logo
+  yt-icon#logo-icon {
+  content: url('chrome-extension://__MSG_@@extension_id__/assets/youtube-private/logo.png');
+  box-sizing: border-box;
+  width: 100px;
+  height: 40px;
+  padding: 0;
+  margin: 0;
+}
+
+/* ---- Page paper texture over the measured #ebebeb base (light pages only) ------------ */
+html[data-retroweb='youtube'][data-retroweb-scheme='light'],
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-app {
+  background-image: url('chrome-extension://__MSG_@@extension_id__/assets/youtube-private/bg.png');
+  background-repeat: repeat;
+}

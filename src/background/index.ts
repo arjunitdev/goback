@@ -19,7 +19,9 @@ async function syncRegistrations(): Promise<void> {
   for (const site of IMPLEMENTED_SITES) {
     if (!isSiteActive(prefs, site)) continue;
     const granted = await chrome.permissions.contains({ origins: [...SITE_ORIGINS[site]] });
-    if (granted) desired.push(...registrationsFor(site, __FLAVOR__));
+    if (granted) {
+      desired.push(...registrationsFor(site, __FLAVOR__, { youtubePrivate: __YT_PRIVATE__ }));
+    }
   }
 
   const existing = (await chrome.scripting.getRegisteredContentScripts())

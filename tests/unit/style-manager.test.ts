@@ -57,7 +57,7 @@ describe('detectScheme', () => {
   it('classifies the page background, not the system preference', () => {
     expect(page('rgb(32, 33, 36)')).toBe('dark'); // Google dark
     expect(page('rgb(255, 255, 255)')).toBe('light');
-    expect(page('rgb(241, 241, 241)')).toBe('light'); // YouTube 2012 grey
+    expect(page('rgb(235, 235, 235)')).toBe('light'); // YouTube 2012 grey (#ebebeb, measured)
     expect(page('rgb(15, 15, 15)')).toBe('dark'); // YouTube dark
     expect(page('#18191a')).toBe('dark'); // Facebook dark
   });

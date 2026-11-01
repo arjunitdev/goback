@@ -1,21 +1,19 @@
 /*
- * YouTube pilot styles. Everything is scoped to html[data-retroweb='youtube'].
+ * YouTube March-2012 styles. Everything is scoped to html[data-retroweb='youtube'].
  *
- * Colour rules apply only on LIGHT pages (data-retroweb-scheme='light'); dark
- * pages keep the user's theme and get only shape/typography changes.
- * The player, ads, consent and dialogs are never targeted (see
- * EXCLUDED_SELECTOR_FRAGMENTS); the stylesheet-safety test enforces it.
- * Selectors are custom-element tag names, checked on the live logged-out home
- * page on 2026-10-31.
+ * Values come from the archived 2012 page (see tokens/youtube.tokens.css).
+ * Colour/gradient rules apply only on LIGHT pages (data-retroweb-scheme='light');
+ * dark pages keep the user's theme and get shape/typography/layout only.
+ * The player, ads, consent and dialogs are never targeted (EXCLUDED_SELECTOR_FRAGMENTS);
+ * the stylesheet-safety test enforces it. Nothing is hidden, collapsed or removed.
+ *
+ * Layout targets the 970px column of the 2012 site. Modern YouTube has no equivalent
+ * of some 2012 elements (e.g. the Browse/Movies/Upload links), which are not faked.
  */
 
-/*
- * YouTube sets its own typography under html[typography] and via hashed classes, so
- * font and radius overrides need !important to win. They are fenced away from the
- * player, ads and dialogs, and never hide or resize anything.
- */
-
-/* ---- Typography (any scheme, authentic mode) ------------------------------------- */
+/* ===== Typography (any scheme, authentic mode) =========================================
+ * YouTube sets its own typography under html[typography] and via hashed classes, so the
+ * font override needs !important. Fenced away from the player, popups and SVG. */
 html[data-retroweb='youtube'][data-retroweb-mode='authentic']
   ytd-app
   :not(svg, svg *, #movie_player, #movie_player *, ytd-player, ytd-player *, ytd-popup-container *),
@@ -24,7 +22,127 @@ html[data-retroweb='youtube'][data-retroweb-mode='authentic'] body {
   font-family: var(--rw-yt-font) !important;
 }
 
-/* ---- Shape: square thumbnails, small radii (any scheme) --------------------------- */
+/* ===== Masthead: 970px column, 60px tall (10px padding + 40px row) ===================== */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-masthead #container {
+  position: relative;
+  box-sizing: border-box;
+  width: 970px;
+  max-width: 100%;
+  height: 60px;
+  margin: 0 auto;
+  padding: 10px 0;
+}
+
+/* The hamburger has no 2012 equivalent but stays fully usable: parked beside the column. */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-masthead #guide-button {
+  position: absolute;
+  top: 10px;
+  right: 100%;
+  margin-right: 8px;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-masthead #start {
+  flex: none;
+  width: 100px;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-masthead ytd-topbar-logo-renderer,
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  ytd-masthead
+  ytd-topbar-logo-renderer
+  a#logo,
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  ytd-masthead
+  ytd-topbar-logo-renderer
+  a#logo
+  > div {
+  box-sizing: border-box;
+  width: 100px;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+}
+
+/* Search sits 16px right of the logo: x=271 in the 970px column (logo ends at 255). */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-masthead #center {
+  flex: none;
+  width: auto;
+  max-width: none;
+  margin: 0 0 0 16px;
+  padding: 0;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-masthead yt-searchbox {
+  width: 414px; /* measured: 379px field + 35px button */
+  max-width: none;
+  height: 32px;
+  margin: 0;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  ytd-masthead
+  yt-searchbox
+  [class*='SearchboxComponentInputWrapper'],
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  ytd-masthead
+  yt-searchbox
+  [class*='SearchboxComponentInputContainer'] {
+  width: 414px;
+  height: 32px;
+  margin: 0;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  ytd-masthead
+  yt-searchbox
+  [class*='SearchboxComponentInputBox'] {
+  box-sizing: border-box;
+  width: 379px;
+  height: 32px;
+  border-radius: 3px 0 0 3px !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  ytd-masthead
+  yt-searchbox
+  input:not([type='file']) {
+  font-size: 13px;
+  height: 30px;
+  padding: 2px 4px 3px;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  ytd-masthead
+  yt-searchbox
+  [class*='SearchboxComponentSearchButton'] {
+  box-sizing: border-box;
+  width: 35px; /* measured */
+  height: 32px;
+  padding: 0;
+  border-radius: 0 3px 3px 0 !important;
+}
+
+/* Right side: plain 13px text links, like "Create Account | Sign In". */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-masthead #end {
+  margin-left: auto;
+  padding: 0;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  ytd-masthead
+  #end
+  ytd-button-renderer
+  a {
+  font-size: 13px;
+  font-weight: normal;
+  border-radius: 0 !important;
+  padding: 6px 10px;
+}
+
+/* ===== Shape: square thumbnails, 3px controls (any scheme, authentic mode) ============ */
 html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-thumbnail,
 html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-thumbnail a,
 html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-thumbnail img,
@@ -36,25 +154,264 @@ html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytm-shorts-lockup-
   border-radius: 0 !important;
 }
 
-html[data-retroweb='youtube'][data-retroweb-mode='authentic'] yt-button-shape button,
-html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-masthead yt-searchbox div,
-html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-masthead yt-searchbox input,
-html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-masthead yt-searchbox button {
+/* Duration badge: measured from .video-time (black, 3px radius, 11px bold, 0 4px). */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  ytd-thumbnail-overlay-time-status-renderer
+  :is(.badge-shape-wiz, #text, yt-formatted-string),
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  ytd-thumbnail
+  yt-thumbnail-badge-view-model
+  * {
+  font-size: 11px !important;
+  font-weight: bold !important;
+  line-height: 14px !important;
+  border-radius: 3px !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  :is(yt-button-shape, ytd-subscribe-button-renderer, ytd-menu-renderer, like-button-view-model)
+  button:not(ytd-popup-container *) {
   border-radius: var(--rw-yt-radius) !important;
 }
 
-/* ---- Colours (light pages only) --------------------------------------------------- */
+/* ===== Text sizes and weights (any scheme, authentic mode) ============================ */
+/* Measured on the 2012 watch sidebar: titles 13px bold, meta 11px. */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  ytd-compact-video-renderer
+  #video-title {
+  font-size: 13px !important;
+  font-weight: bold !important;
+  line-height: 15px !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  :is(ytd-compact-video-renderer, ytd-video-renderer, ytd-rich-item-renderer)
+  :is(ytd-video-meta-block, #metadata-line, ytd-channel-name) {
+  font-size: 11px !important;
+  line-height: 15.4px !important;
+}
+
+/* Watch headline: 22px bold, 25px line (measured #watch-headline-title). */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-watch-metadata #title h1,
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-watch-metadata h1 {
+  font-size: 22px !important;
+  font-weight: bold !important;
+  line-height: 25px !important;
+}
+
+/* ===== Colours (light pages only) ===================================================== */
 html[data-retroweb='youtube'][data-retroweb-scheme='light'],
 html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-app {
   background-color: var(--rw-yt-page);
+  color: var(--rw-yt-text);
 }
 
+/* The 2012 masthead has no bar: it sits directly on the page paper. */
 html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-masthead #background {
-  background-color: var(--rw-yt-masthead-bottom);
+  background: transparent !important;
+  border-bottom: 0;
+  box-shadow: none !important;
+}
+
+/* Search field: white, 1px #ccc border, inset shadow, 3px left corners (measured). */
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  ytd-masthead
+  yt-searchbox
+  [class*='SearchboxComponentInputBox'] {
+  background-color: #fff !important;
+  border: 1px solid var(--rw-yt-input-border) !important;
+  box-shadow: inset 0 1px 2px var(--rw-yt-input-shadow) !important;
+}
+
+/* Search button: the default 2012 button gradient, square on the left (measured). */
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  ytd-masthead
+  yt-searchbox
+  [class*='SearchboxComponentSearchButton'] {
+  background-color: var(--rw-yt-btn-bottom) !important;
   background-image: linear-gradient(
     to bottom,
-    var(--rw-yt-masthead-top),
-    var(--rw-yt-masthead-bottom)
-  );
-  border-bottom: 1px solid var(--rw-yt-border);
+    var(--rw-yt-btn-top) 0,
+    var(--rw-yt-btn-bottom) 100%
+  ) !important;
+  border: 1px solid var(--rw-yt-btn-border) !important;
+  border-left: 0 !important;
+  border-bottom-color: var(--rw-yt-btn-border-bottom) !important;
+  box-shadow: inset 0 0 1px #fff !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-masthead #end a {
+  color: var(--rw-yt-text) !important;
+  background: none !important;
+  border: 0 !important;
+}
+
+/* Default button: gradient #fff -> #e0e0e0, #ccc border (bottom #aaa), #555 bold 11px text. */
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  :is(yt-button-shape, ytd-subscribe-button-renderer, ytd-menu-renderer, like-button-view-model)
+  button:not(ytd-popup-container *, ytd-masthead *) {
+  background-color: var(--rw-yt-btn-bottom) !important;
+  background-image: linear-gradient(
+    to bottom,
+    var(--rw-yt-btn-top) 0,
+    var(--rw-yt-btn-bottom) 100%
+  ) !important;
+  border: 1px solid var(--rw-yt-btn-border) !important;
+  border-bottom-color: var(--rw-yt-btn-border-bottom) !important;
+  box-shadow: inset 0 0 1px #fff !important;
+  color: var(--rw-yt-btn-text) !important;
+  text-shadow: 0 1px 0 #fff;
+  font-size: 11px !important;
+  font-weight: bold !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  :is(yt-button-shape, ytd-subscribe-button-renderer, ytd-menu-renderer, like-button-view-model)
+  button:not(ytd-popup-container *, ytd-masthead *):hover {
+  border-color: var(--rw-yt-btn-border-hover) !important;
+  box-shadow:
+    0 1px 2px rgb(0 0 0 / 25%),
+    inset 0 0 3px #fff !important;
+}
+
+/* Meta text 11px #666; headings and titles #333 (measured). */
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  :is(ytd-compact-video-renderer, ytd-video-renderer, ytd-rich-item-renderer)
+  :is(ytd-video-meta-block, #metadata-line, ytd-channel-name) {
+  color: var(--rw-yt-meta) !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  ytd-compact-video-renderer
+  #video-title {
+  color: var(--rw-yt-text) !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-watch-metadata #title h1 {
+  color: var(--rw-yt-text) !important;
+}
+
+/* ===== Watch page: 970px column = 640px player + 20px gap + 310px sidebar (measured) ===== */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-watch-flexy {
+  --ytd-watch-flexy-sidebar-width: 310px !important;
+  --ytd-watch-flexy-sidebar-min-width: 310px !important;
+  --ytd-watch-flexy-horizontal-page-margin: 0px !important;
+  --ytd-watch-flexy-min-player-width: 640px !important;
+  --ytd-watch-flexy-min-player-height: 390px !important; /* measured: 640x390 player */
+  --ytd-watch-flexy-max-player-width: 640px !important;
+  --ytd-watch-flexy-max-player-width-wide-screen: 640px !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-watch-flexy #columns {
+  box-sizing: border-box;
+  width: 970px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+/* Related videos: 120x90 thumbnails, as measured in the 2012 sidebar. */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-compact-video-renderer {
+  --ytd-watch-compact-thumbnail-width: 120px;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  ytd-compact-video-renderer
+  ytd-thumbnail {
+  width: 120px !important;
+  height: 90px !important;
+  min-width: 120px;
+}
+
+/* Logo host: the 2012 mark is exactly 100x40; modern yt-icon adds its own padding. */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  ytd-masthead
+  ytd-topbar-logo-renderer
+  ytd-logo {
+  display: block;
+  width: 100px;
+  height: 40px;
+  margin: 0;
+  padding: 0;
+}
+
+/* Related videos in the newer 'lockup' markup: 120x90 thumbnail beside the text. */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  yt-lockup-view-model
+  [class*='LockupViewModelHorizontal']
+  [class*='LockupViewModelContentImage'] {
+  flex: none;
+  width: 120px !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  yt-lockup-view-model
+  [class*='LockupViewModelHorizontal']
+  :is(
+    yt-thumbnail-view-model,
+    [class*='ThumbnailViewModelImage'],
+    [class*='ThumbnailViewModelImage'] img
+  ) {
+  width: 120px !important;
+  height: 90px !important;
+  object-fit: contain;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  yt-lockup-view-model
+  a[class*='LockupMetadataViewModelTitle'] {
+  font-size: 13px !important;
+  font-weight: bold !important;
+  line-height: 15px !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  yt-lockup-view-model
+  [class*='ContentMetadataViewModel'] {
+  font-size: 11px !important;
+  line-height: 15.4px !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  yt-lockup-view-model
+  a[class*='LockupMetadataViewModelTitle'] {
+  color: var(--rw-yt-text) !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  yt-lockup-view-model
+  [class*='ContentMetadataViewModel'] {
+  color: var(--rw-yt-meta) !important;
+}
+
+/* Duration badge: measured black at 75% opacity (rgba here so the digits stay crisp), 3px radius. */
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] yt-thumbnail-badge-view-model {
+  background-color: rgb(0 0 0 / 75%) !important;
+}
+
+/* Row geometry: 90px thumbnail, rows sized by their content (modern rows keep a 16:9 height). */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] yt-lockup-view-model,
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  yt-lockup-view-model
+  [class*='LockupViewModelHorizontal'],
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  yt-lockup-view-model
+  [class*='LockupViewModelHorizontal']
+  [class*='LockupViewModelMetadata'] {
+  height: auto !important;
+  min-height: 90px;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  yt-lockup-view-model
+  [class*='LockupViewModelHorizontal']
+  [class*='LockupViewModelContentImage'] {
+  height: 90px !important;
+  margin-bottom: 5px;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  yt-lockup-view-model
+  [class*='LockupViewModelHorizontal']
+  [class*='ThumbnailViewModelImage'] {
+  background-color: #000;
 }

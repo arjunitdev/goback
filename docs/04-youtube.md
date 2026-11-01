@@ -21,8 +21,11 @@ Video plays, pauses, seeks, captions and fullscreen; ads and consent remain func
 ## 4.7 Loading design
 Style skeletons and spinner containers when exposed by stable DOM. Avoid fake indefinite spinners, blocked interactions, or intercepting requests. When historical loader not evidenced, use explicitly documented approximation.
 
-## 4.7.1 Pilot design tokens (all confidence = `inferred`)
-Source of truth: `src/styles/tokens/youtube.tokens.css`.
+## 4.7.0 Evidence update (2026-10-31)
+The tokens below were first written from memory and were wrong (a dark/light gradient masthead, `#f1f1f1` page). They were replaced with values **measured** from March-2012 Wayback captures; see [evidence/youtube-2012-03.md](evidence/youtube-2012-03.md) for sources, timestamps and the full table. The tokens file labels each value `measured` or `extrapolated`. The superseded table follows for history only.
+
+## 4.7.1 (superseded) First-pass tokens, all `inferred`
+Source of truth was `src/styles/tokens/youtube.tokens.css`; it now holds the measured values.
 
 | Token | Value | Use |
 |---|---|---|

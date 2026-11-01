@@ -12,6 +12,9 @@ html[data-retroweb='youtube'][data-retroweb-wordmark='on']
   ytd-logo
   yt-icon#logo-icon {
   content: url('chrome-extension://__MSG_@@extension_id__/assets/youtube-2012.svg');
+  box-sizing: border-box;
   width: 90px;
   height: 20px;
+  padding: 0;
+  margin: 0;
 }
