@@ -21,5 +21,27 @@ Video plays, pauses, seeks, captions and fullscreen; ads and consent remain func
 ## 4.7 Loading design
 Style skeletons and spinner containers when exposed by stable DOM. Avoid fake indefinite spinners, blocked interactions, or intercepting requests. When historical loader not evidenced, use explicitly documented approximation.
 
+## 4.7.1 Pilot design tokens (all confidence = `inferred`)
+Source of truth: `src/styles/tokens/youtube.tokens.css`.
+
+| Token | Value | Use |
+|---|---|---|
+| `--rw-yt-font` | `arial, sans-serif` | All text outside the player/popups (authentic mode) |
+| `--rw-yt-page` | `#f1f1f1` | Page background (light pages only) |
+| `--rw-yt-masthead-top/bottom` | `#fcfcfc` → `#f1f1f1` | Masthead gradient |
+| `--rw-yt-border` | `#d3d3d3` | Masthead bottom border |
+| `--rw-yt-radius` | `2px` | Buttons and search box; thumbnails are square (0) |
+
+**Open question (ADR-001):** whether the early-2012 masthead was light or dark could not be settled from memory. The light variant is used because it keeps every native icon and label readable. Do not call it "accurate" until G2 resolves this from dated captures.
+
+## 4.7.2 Live verification record (2026-10-31, logged out, one page load each)
+| Route | Result |
+|---|---|
+| Home | Probes pass, `healthy`. Grey page, Arial, square thumbnails/search box, masthead gradient, look-alike wordmark applied. |
+| Results `/results?search_query=music` | `healthy`. A sponsored result was present and remained intact and labelled. |
+| Watch `/watch?v=…` | `healthy`. The player kept its own font and shape; the video loaded (`readyState` 4). |
+
+Defect found: on a cold, slow load YouTube rendered `ytd-search` after the original ~4.6s retry window and the engine wrongly failed open. The window is now ~20s (ADR-014). Not verified: signed-in pages, Shorts, live chat, channel/playlist/feed routes, consent screens, any non-US locale, or ad playback on watch pages.
+
 ## 4.8 Review gate G4
 Engineer verifies visual annotations against 2012 evidence, all P0 playback workflows, no ad/consent bypass, no leaked listeners, route transition recovery, and fallback for unsupported experiments.

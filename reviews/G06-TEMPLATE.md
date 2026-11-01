@@ -6,7 +6,7 @@ This file is a template. The author must not mark it PASS. An independent review
 Gate definition: docs/06 §6.7
 
 ## Author notes (state at time of writing, 2026-10-30)
-Not started (M3).
+Implemented against synthetic fixtures only. Login wall verified native on the live site. No signed-in verification at all (no approved test account); this gate cannot pass until a human checks a signed-in session.
 
 ## Review record
 ```

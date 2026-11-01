@@ -6,7 +6,7 @@ This file is a template. The author must not mark it PASS. An independent review
 Gate definition: docs/04 §4.8
 
 ## Author notes (state at time of writing, 2026-10-30)
-Not started (M2).
+Implemented. Live-verified logged out (docs/04 §4.7.2): home, results, watch, player untouched. Not verified: signed in, Shorts, live chat, channel/playlist/feed, consent, ad playback, other locales.
 
 ## Review record
 ```

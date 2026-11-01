@@ -6,7 +6,7 @@ This file is a template. The author must not mark it PASS. An independent review
 Gate definition: docs/05 §5.7
 
 ## Author notes (state at time of writing, 2026-10-30)
-Pilot implemented. Selectors unverified on the live site. Fidelity unmeasured.
+Implemented. Home live-verified (docs/05 §5.5.3). Results page NOT verified: Google serves a CAPTCHA to automation; a human must check. Fidelity unmeasured.
 
 ## Review record
 ```

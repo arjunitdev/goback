@@ -6,7 +6,7 @@ This file is a template. The author must not mark it PASS. An independent review
 Gate definition: docs/01 §1.7
 
 ## Author notes (state at time of writing, 2026-10-30)
-Requirement traceability table in docs/01 §1.6.1; open gaps FR-006, FR-008, perf budgets.
+Traceability table in docs/01 §1.6.1 (updated 2026-10-31). Open gaps: FR-006 (modern-only fallbacks), real browser zoom, Chrome perf/memory measurement.
 
 ## Review record
 ```

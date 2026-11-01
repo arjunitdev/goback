@@ -6,7 +6,7 @@ This file is a template. The author must not mark it PASS. An independent review
 Gate definition: docs/10 §10.7
 
 ## Author notes (state at time of writing, 2026-10-30)
-Blocked until G01–G09 pass. Not releasable.
+Blocked until G01–G09 pass. Not releasable. Checklist status in docs/14-store-listing.md.
 
 ## Review record
 ```

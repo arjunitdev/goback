@@ -6,7 +6,7 @@ This file is a template. The author must not mark it PASS. An independent review
 Gate definition: docs/09 §9.7
 
 ## Author notes (state at time of writing, 2026-10-30)
-Unit, integration and e2e on fixtures pass. No live-site, zoom, performance or accessibility audit evidence.
+78 unit/integration and 16 Playwright tests pass on fixtures, plus axe scan of extension UI. Not done: signed-in accounts, Chrome performance traces, memory, real browser zoom, screen-reader testing, beta channel matrix.
 
 ## Review record
 ```

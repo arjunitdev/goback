@@ -6,7 +6,7 @@ This file is a template. The author must not mark it PASS. An independent review
 Gate definition: docs/07 §7.6
 
 ## Author notes (state at time of writing, 2026-10-30)
-Asset ledger at src/assets/LEDGER.md. A-002 (look-alike wordmark) rights unresolved. No loaders/motion implemented.
+Asset ledger at src/assets/LEDGER.md. A-002..A-004 (look-alike wordmarks) rights unresolved, excluded from the store build. No loaders/motion implemented.
 
 ## Review record
 ```

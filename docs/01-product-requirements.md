@@ -27,7 +27,7 @@ In: desktop home/search/results/watch/profile/feed; top navigation, spacing, col
 ## 1.6 Milestones
 M0 evidence and legal feasibility; M1 framework + Google pilot; M2 YouTube; M3 Facebook; M4 stabilization; M5 store release. Order may change after evidence assessment.
 
-## 1.6.1 Requirement traceability (pilot, 2026-10-30)
+## 1.6.1 Requirement traceability (updated 2026-10-31, all three adapters)
 Status is what is actually covered by automated tests today; "gap" means not implemented or not measured.
 
 | Req | Owner | Severity | Automated evidence | Status |
@@ -39,13 +39,15 @@ Status is what is actually covered by automated tests today; "gap" means not imp
 | FR-005 preserve behaviour | Adapter | P0 | `engine.test` no DOM mutation, e2e ads/consent/form intact | covered (fixtures only) |
 | FR-006 modern-only fallbacks | Adapter | P1 | none | **gap** |
 | FR-007 health + safe disable | Engine | P0 | `health.test`, `engine.test` fail-open, e2e fail-open | covered |
-| FR-008 zoom 80–200%, 1024–2560px | QA | P1 | none | **gap** |
-| FR-009 reduced motion | Engine | P1 | `style-manager.test`, `base.css` | partial (no browser test) |
+| FR-008 zoom 80–200%, 1024–2560px | QA | P1 | e2e viewport matrix 512–2560px (512/720 stand in for 200%/140% zoom): attributes persist, no horizontal overflow | partial (fixtures; real browser zoom not driven) |
+| FR-009 reduced motion | Engine | P1 | `style-manager.test`, e2e (system emulation and forced pref) | covered |
 | FR-010 authentic/compatibility | Adapter | P2 | `engine.test` mode attribute | partial (compatibility styling minimal) |
 | FR-011 never change search/outbound | Security | P0 | `routes.test`, manifest permission tests (no search overrides) | covered |
-| FR-012 skip auth/payment/CAPTCHA | Adapter | P0 | `routes.test`, `css-safety.test` | covered |
-| NFR perf/memory budgets | QA | P1 | none | **gap** (unmeasured) |
+| FR-012 skip auth/payment/CAPTCHA | Adapter | P0 | `routes.test`, `routes-sites.test`, `css-safety.test`, `sites.test` (login never styled), e2e (no attribute write on a login fixture), live logged-out facebook.com and Google CAPTCHA page left native | covered |
+| NFR perf/memory budgets | QA | P1 | `perf.test` sanity checks only (jsdom, loose thresholds) | **gap**: no Chrome traces, no memory measurement |
 | NFR no network, no analytics | Security | P0 | e2e request log, `audit-package.mjs` | covered |
+| NFR keyboard/a11y of extension UI | QA | P1 | e2e axe scan (WCAG 2.0/2.1 A/AA) of popup and options | covered (themed sites not audited) |
+| Live-site selector validity | Adapter | P0 | `scripts/live-check.mjs`, manual, logged out | partial: Google home, YouTube home/results/watch, Facebook login wall verified; Google results and all signed-in pages **not** verified |
 
 ## 1.7 Review gate G1
 Reviewer verifies every requirement has an owner, measurable acceptance test, and severity. Must approve scope and non-goals before architecture starts. Deliver signed checklist, unresolved questions, and change requests.

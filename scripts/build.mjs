@@ -106,7 +106,9 @@ if (wantZip) {
   for (const f of listFiles(outDir)) {
     files[relative(outDir, f).split('\\').join('/')] = [
       readFileSync(f),
-      { mtime: new Date('1980-01-01T00:00:00Z') },
+      // Local components, not a UTC string: the zip format stores local DOS time and rejects
+      // anything before 1980, which a UTC midnight becomes in negative-offset timezones.
+      { mtime: new Date(1980, 0, 1, 12, 0, 0) },
     ];
   }
   const zip = zipSync(files, { level: 9 });

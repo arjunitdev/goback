@@ -6,7 +6,7 @@ This file is a template. The author must not mark it PASS. An independent review
 Gate definition: docs/02 §2.7
 
 ## Author notes (state at time of writing, 2026-10-30)
-No evidence ledger exists yet. All design tokens are `inferred`. Blocks any "accurate" claim.
+No evidence ledger exists. Every design token is `inferred` from memory. YouTube masthead light-vs-dark is unresolved (ADR-001). Blocks any "accurate" claim.
 
 ## Review record
 ```

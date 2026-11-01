@@ -6,7 +6,7 @@ This file is a template. The author must not mark it PASS. An independent review
 Gate definition: docs/08 §8.6
 
 ## Author notes (state at time of writing, 2026-10-30)
-Permissions minimal and audited by script. Terms-risk memo, trademark review (ADR-010) and privacy policy not done.
+Permissions minimal and audited by script; PRIVACY.md drafted (needs contact + counsel review). Terms-risk memo and trademark review (ADR-010) not done.
 
 ## Review record
 ```

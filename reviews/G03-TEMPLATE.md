@@ -6,7 +6,7 @@ This file is a template. The author must not mark it PASS. An independent review
 Gate definition: docs/03 §3.9
 
 ## Author notes (state at time of writing, 2026-10-30)
-Proof of concept exists for Google only (fixtures + Chromium). YouTube and Facebook PoC outstanding, so this gate cannot fully pass yet.
+Adapters for all three sites exist. Proof of concept ran on the live logged-out sites for Google home, YouTube (home/results/watch) and the Facebook login wall. Facebook signed-in PoC is outstanding, so this gate cannot fully pass yet.
 
 ## Review record
 ```

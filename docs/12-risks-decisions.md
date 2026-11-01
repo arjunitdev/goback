@@ -25,6 +25,10 @@
 | ADR-006 | Pilot supports `https://www.google.com` only. Regional domains are native until separately researched. | Avoids unverified locale layouts and broad host patterns. |
 | ADR-008 | Minimum Chrome version 120. | Dynamic content-script registration, `:not()` complex selectors and the new headless test mode are all available. |
 | ADR-011 | Two build flavors. `dev`/`test` include a recreated look-alike wordmark (independent artwork, CSS-only swap). `store` excludes it and `scripts/audit-package.mjs` fails the build if it appears. | The user wants logos; trademark/copyright exposure of look-alike marks is unresolved (ADR-010), so they must not reach a public package without legal review. |
+| ADR-012 | The 2012 colour palette applies only when the engine measures a **light** page (`data-retroweb-scheme='light'`, from the page's own background). Dark pages get shape/typography only. | Found live: a forced white body made Google's light-on-dark header unreadable. A test requires every colour rule to be scheme-gated. |
+| ADR-013 | Adapters may set `earlyStyle: false` and declare `forbidden` probes. Facebook does both. | The first paint at `/` may be a login wall, which FR-012 forbids restyling. |
+| ADR-014 | Probe retry window is ~20s (0.4, 1.2, 3, 6, 10s) before failing open. The Playwright build uses 3×150ms. | Found live: YouTube rendered a route after ~5s on a cold load, and the earlier ~4.6s window wrongly dropped the theme. |
+| ADR-015 | Site access is a per-site optional host permission for `www.google.com`, `www.youtube.com`, `www.facebook.com` only (no regional or sub-domains). | Least privilege (R08). Regional domains need separate research (ADR-006). |
 
 Still pending: ADR-001 (exact reference month per route), ADR-002 (original vs reconstructed icon licensing), ADR-007 (labeling modern-only components), ADR-009 (compatibility break thresholds), ADR-010 (trademark review outcome).
 

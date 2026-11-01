@@ -36,6 +36,17 @@ Home-page buttons use the grey 2012 style (`#f2f2f2`, bold 11px). Home and resul
 
 Exclusion zones (never targeted by CSS, enforced by `tests/unit/css-safety.test.ts`): `#tads`, `#tadsb`, `#bottomads`, consent forms, SafeSearch controls, password/CAPTCHA, dialogs.
 
+## 5.5.3 Live verification record (2026-10-31, logged out, one page load each)
+Tool: `npm run build:test && node scripts/live-check.mjs <dir> <url>` (manual only; never CI).
+
+| Route | Result |
+|---|---|
+| Home `/` | Probes pass, health `healthy`. Grey-button typography applied. The day's Doodle was left untouched (the swap selector targets `img[alt="Google"]`; seasonal logos use other alt text, which is the desired behaviour). |
+| Results `/search?q=…` | **Not verified.** Google served its "unusual traffic" CAPTCHA to the automated browser. The extension correctly left that interstitial native (its path is not a themed route). No attempt was made to bypass it. A human must check results pages manually. |
+| Images / other verticals | Not verified (same reason). |
+
+Defect found and fixed by this check: forcing a white `<body>` made light header links unreadable on Google's dark theme. Colour rules are now gated on the measured page scheme (`data-retroweb-scheme='light'`, ADR-012).
+
 ## 5.6 Critical tests
 Submit query; autocomplete keyboard; sponsored result visibility; AI overview visibility if present; images and news navigation; SafeSearch; login boundary; accessibility; dynamic results expansion; zero changes to URL destination semantics.
 
