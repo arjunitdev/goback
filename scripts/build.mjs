@@ -66,13 +66,16 @@ writeFileSync(
   JSON.stringify(manifestModule.buildManifest(flavor, version), null, 2) + '\n',
 );
 
-// Styles: tokens + base + site rules, concatenated per site.
+// Styles: tokens + base + site rules, concatenated per implemented site.
+const sites = manifestModule.IMPLEMENTED_SITES;
 mkdirSync(join(outDir, 'styles'), { recursive: true });
 const cat = (...files) => files.map((f) => readFileSync(src(f), 'utf8')).join('\n');
-writeFileSync(
-  join(outDir, 'styles/google.css'),
-  cat('styles/tokens/google.tokens.css', 'styles/base/base.css', 'styles/google/google.css'),
-);
+for (const site of sites) {
+  writeFileSync(
+    join(outDir, `styles/${site}.css`),
+    cat(`styles/tokens/${site}.tokens.css`, 'styles/base/base.css', `styles/${site}/${site}.css`),
+  );
+}
 
 // Pages and shared UI.
 cpSync(src('popup/popup.html'), join(outDir, 'popup.html'));
@@ -83,8 +86,10 @@ cpSync(src('assets/icons'), join(outDir, 'icons'), { recursive: true });
 // Recreated wordmark: excluded from the store flavor (ADR-011).
 if (wordmark) {
   mkdirSync(join(outDir, 'assets'), { recursive: true });
-  cpSync(src('styles/google/wordmark.css'), join(outDir, 'styles/google-wordmark.css'));
-  cpSync(src('assets/wordmarks/google-2012.svg'), join(outDir, 'assets/google-2012.svg'));
+  for (const site of sites) {
+    cpSync(src(`styles/${site}/wordmark.css`), join(outDir, `styles/${site}-wordmark.css`));
+    cpSync(src(`assets/wordmarks/${site}-2012.svg`), join(outDir, `assets/${site}-2012.svg`));
+  }
 }
 
 function listFiles(dir) {

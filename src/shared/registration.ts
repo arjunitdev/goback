@@ -11,7 +11,7 @@ export function includesWordmark(flavor: Flavor): boolean {
 /** Per-site stylesheets, relative to the extension root. */
 export function siteCss(site: SiteId, flavor: Flavor): string[] {
   const css = [`styles/${site}.css`];
-  if (site === 'google' && includesWordmark(flavor)) css.push('styles/google-wordmark.css');
+  if (includesWordmark(flavor)) css.push(`styles/${site}-wordmark.css`);
   return css;
 }
 

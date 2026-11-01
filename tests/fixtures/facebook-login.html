@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Log in - Facebook (synthetic login fixture)</title>
+  </head>
+  <body>
+    <!-- Even with landmark roles present, a password field must keep the page native. -->
+    <div role="banner">banner</div>
+    <div role="main">
+      <form action="/login/?next=x" method="post">
+        <input type="text" name="email" aria-label="Email" />
+        <input type="password" name="pass" aria-label="Password" />
+        <button type="submit">Log in</button>
+      </form>
+    </div>
+  </body>
+</html>

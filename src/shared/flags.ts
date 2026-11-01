@@ -2,8 +2,8 @@ import type { DisplayMode, Prefs, SiteId } from './types';
 
 export const SITE_IDS: readonly SiteId[] = ['youtube', 'google', 'facebook'];
 
-/** Sites that have a working adapter in this iteration (pilot: Google only). */
-export const IMPLEMENTED_SITES: readonly SiteId[] = ['google'];
+/** Sites that have a working adapter. Drives the popup, manifest, registrations and build. */
+export const IMPLEMENTED_SITES: readonly SiteId[] = ['google', 'youtube', 'facebook'];
 
 export const SITE_LABELS: Record<SiteId, string> = {
   youtube: 'YouTube',

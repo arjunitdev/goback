@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Synthetic watch page - YouTube (fixture)</title>
+    <style>
+      /* The real player sets its own font stack; mirror that so inheritance doesn't mask the fence. */
+      #movie_player {
+        font-family: 'YouTube Noto', serif;
+      }
+    </style>
+  </head>
+  <body>
+    <ytd-app>
+      <ytd-masthead>
+        <div id="background"></div>
+        <yt-searchbox><input name="search_query" aria-label="Search" /></yt-searchbox>
+      </ytd-masthead>
+      <ytd-guide-renderer>guide</ytd-guide-renderer>
+      <ytd-page-manager>
+        <ytd-watch-flexy>
+          <div id="player">
+            <div id="movie_player" class="html5-video-player" data-keep="1">
+              <video src="data:video/mp4;base64,AAAA"></video>
+              <div class="ytp-ad-module">player ad overlay</div>
+            </div>
+          </div>
+          <ytd-ad-slot-renderer data-keep="1">Sponsored</ytd-ad-slot-renderer>
+        </ytd-watch-flexy>
+      </ytd-page-manager>
+      <ytd-popup-container>
+        <ytd-consent-bump-v2-lightbox data-keep="1"
+          ><button>Accept all</button></ytd-consent-bump-v2-lightbox
+        >
+      </ytd-popup-container>
+    </ytd-app>
+  </body>
+</html>

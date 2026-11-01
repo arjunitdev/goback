@@ -39,6 +39,14 @@ export interface SiteAdapter {
   probe(document: Document, route: string): { supported: boolean; missing: string[] };
   /** Stable subtree the mutation coordinator watches; defaults to <body>. */
   observeRoot?(document: Document): Node | null;
+  /**
+   * Apply attributes at document_start (default true). Set false when the first
+   * paint may be a page that must stay native (e.g. a login wall): styles are
+   * then applied only after the first probe passes.
+   */
+  earlyStyle?: boolean;
+  /** Document events that signal a client-side navigation (e.g. YouTube's yt-navigate-finish). */
+  navigationEvents?: readonly string[];
   mount(ctx: AdapterContext): Promise<void> | void;
   refresh(ctx: AdapterContext): void;
   unmount(ctx: AdapterContext): void;

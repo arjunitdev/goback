@@ -1,5 +1,7 @@
 import type { DisplayMode, MotionPref, SiteId } from '../shared/types';
 
+export type ColorScheme = 'light' | 'dark';
+
 export const ATTR = {
   site: 'data-retroweb',
   route: 'data-retroweb-route',
@@ -7,6 +9,7 @@ export const ATTR = {
   motion: 'data-retroweb-motion',
   contrast: 'data-retroweb-contrast',
   wordmark: 'data-retroweb-wordmark',
+  scheme: 'data-retroweb-scheme',
 } as const;
 
 export interface StyleState {
@@ -17,11 +20,62 @@ export interface StyleState {
   highContrast: boolean;
   /** Dev flavor only: recreated look-alike wordmark (ADR-011). */
   wordmark: boolean;
+  /**
+   * Whether the host page is currently rendered light or dark. The 2012 colour
+   * palette is only applied on light pages: forcing light text colours onto a
+   * dark page (or the reverse) makes content unreadable.
+   */
+  scheme: ColorScheme;
 }
 
 /** Motion is reduced if the user asked for it OR the system prefers it (FR-009). */
 export function effectiveReducedMotion(pref: MotionPref, systemPrefersReduce: boolean): boolean {
   return pref === 'reduce' || systemPrefersReduce;
+}
+
+interface Rgba {
+  r: number;
+  g: number;
+  b: number;
+  a: number;
+}
+
+function parseColor(value: string): Rgba | null {
+  const m =
+    /^rgba?\(\s*(\d+(?:\.\d+)?)[ ,]+(\d+(?:\.\d+)?)[ ,]+(\d+(?:\.\d+)?)(?:[ ,/]+(\d*\.?\d+%?))?\s*\)$/.exec(
+      value.trim(),
+    );
+  if (!m) return null;
+  const alphaRaw = m[4];
+  let a = 1;
+  if (alphaRaw !== undefined)
+    a = alphaRaw.endsWith('%') ? parseFloat(alphaRaw) / 100 : parseFloat(alphaRaw);
+  return { r: Number(m[1]), g: Number(m[2]), b: Number(m[3]), a };
+}
+
+/** Relative luminance, 0 (black) to 1 (white). */
+function luminance({ r, g, b }: Rgba): number {
+  const lin = (c: number) => {
+    const s = c / 255;
+    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+  };
+  return 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+}
+
+/**
+ * Reads the page's own background (body, then <html>) and classifies it. If
+ * neither paints a background, the browser canvas shows through, which is light
+ * unless the system scheme says otherwise.
+ */
+export function detectScheme(doc: Document, systemDark: boolean): ColorScheme {
+  const view = doc.defaultView;
+  if (!view) return 'light';
+  for (const el of [doc.body, doc.documentElement]) {
+    if (!el) continue;
+    const color = parseColor(view.getComputedStyle(el).backgroundColor);
+    if (color && color.a >= 0.5) return luminance(color) < 0.18 ? 'dark' : 'light';
+  }
+  return systemDark ? 'dark' : 'light';
 }
 
 /**
@@ -33,6 +87,7 @@ export function applyStyleState(root: HTMLElement, state: StyleState, systemRedu
   root.setAttribute(ATTR.site, state.site);
   root.setAttribute(ATTR.route, state.route);
   root.setAttribute(ATTR.mode, state.mode);
+  root.setAttribute(ATTR.scheme, state.scheme);
   setFlag(root, ATTR.motion, effectiveReducedMotion(state.motion, systemReduce) ? 'reduce' : null);
   setFlag(root, ATTR.contrast, state.highContrast ? 'high' : null);
   setFlag(root, ATTR.wordmark, state.wordmark ? 'on' : null);

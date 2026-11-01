@@ -88,6 +88,27 @@ describe('engine on a supported Google results page', () => {
     expect(h.doc.body.getAttributeNames()).toEqual([]);
   });
 
+  it('measures the page scheme: light by default, dark when the page paints dark', async () => {
+    const light = setup('google-results.html', url, prefs());
+    await light.engine.start();
+    expect(light.root.getAttribute(ATTR.scheme)).toBe('light');
+
+    const dark = setup('google-results.html', url, prefs());
+    dark.doc.body.style.backgroundColor = 'rgb(32, 33, 36)';
+    await dark.engine.start();
+    expect(dark.root.getAttribute(ATTR.scheme)).toBe('dark');
+  });
+
+  it('re-measures the scheme when the page theme changes after mount', async () => {
+    const h = setup('google-results.html', url, prefs());
+    await h.engine.start();
+    expect(h.root.getAttribute(ATTR.scheme)).toBe('light');
+    h.doc.body.style.backgroundColor = 'rgb(20, 20, 20)';
+    h.doc.body.append(h.doc.createElement('div')); // a DOM change triggers a refresh
+    await sleep(20);
+    expect(h.root.getAttribute(ATTR.scheme)).toBe('dark');
+  });
+
   it('applies mode, high contrast and forced reduced motion from prefs', async () => {
     const p = prefs({ highContrast: true, motion: 'reduce' });
     p.sites.google.mode = 'compatibility';

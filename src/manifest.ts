@@ -1,14 +1,18 @@
-import { SITE_ORIGINS } from './shared/flags';
+import { IMPLEMENTED_SITES, SITE_ORIGINS } from './shared/flags';
 import { includesWordmark, type Flavor } from './shared/registration';
+
+export { IMPLEMENTED_SITES };
 
 export interface Manifest {
   [key: string]: unknown;
 }
 
+const originsOf = (): string[] => IMPLEMENTED_SITES.flatMap((s) => [...SITE_ORIGINS[s]]);
+
 /**
  * Builds manifest.json. Flavors:
  *  - store: no wordmark assets, host access only via optional permissions.
- *  - dev:   store + recreated wordmark (ADR-011).
+ *  - dev:   store + recreated wordmarks (ADR-011).
  *  - test:  dev + host access granted at install so Playwright can run without a prompt.
  *           NEVER publish a test build.
  */
@@ -24,19 +28,19 @@ export function buildManifest(flavor: Flavor, version: string): Manifest {
     icons: { '16': 'icons/icon-16.png', '48': 'icons/icon-48.png', '128': 'icons/icon-128.png' },
     permissions: ['storage', 'scripting'],
     // Site access is requested on activation, never at install (ADR-003).
-    // Pilot scope: Google only. YouTube/Facebook origins are added with their adapters.
-    optional_host_permissions: [SITE_ORIGINS.google[0]],
+    optional_host_permissions: originsOf(),
     background: { service_worker: 'background.js' },
     action: { default_title: 'RetroWeb 2012', default_popup: 'popup.html' },
     options_ui: { page: 'options.html', open_in_tab: true },
   };
 
-  if (flavor === 'test') manifest.host_permissions = [SITE_ORIGINS.google[0]];
+  if (flavor === 'test') manifest.host_permissions = originsOf();
 
   if (includesWordmark(flavor)) {
-    manifest.web_accessible_resources = [
-      { resources: ['assets/google-2012.svg'], matches: [SITE_ORIGINS.google[0]] },
-    ];
+    manifest.web_accessible_resources = IMPLEMENTED_SITES.map((site) => ({
+      resources: [`assets/${site}-2012.svg`],
+      matches: [...SITE_ORIGINS[site]],
+    }));
   }
   return manifest;
 }

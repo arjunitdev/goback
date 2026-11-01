@@ -1,0 +1,15 @@
+/*
+ * DEV FLAVOR ONLY (ADR-011). Swaps the displayed image of the site's header logo
+ * for a recreated look-alike wordmark via `content: url()`; the link and its
+ * accessible name stay in the DOM. Not included in the store build until legal
+ * review (ADR-010) passes. UNVERIFIED selector: if it misses, the live logo stays.
+ */
+html[data-retroweb='facebook'][data-retroweb-wordmark='on']
+  [role='banner']
+  a[aria-label='Facebook']
+  svg {
+  content: url('chrome-extension://__MSG_@@extension_id__/assets/facebook-2012.svg');
+  width: 112px;
+  height: 28px;
+  filter: none;
+}

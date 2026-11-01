@@ -1,24 +1,25 @@
 /*
  * Google pilot styles. Everything is scoped to html[data-retroweb='google'].
- * Selectors are semantic/structural and UNVERIFIED against the live site; if they
- * miss, the page simply stays native and the health monitor reports it.
+ *
+ * Colour rules apply only when the engine measured a LIGHT page
+ * (data-retroweb-scheme='light'). On dark pages the user's theme is kept so text
+ * never ends up unreadable; only shape/typography rules apply there.
+ *
+ * Selectors are structural. The home page was checked against the live
+ * logged-out site on 2026-10-31; the results page could not be (Google serves a
+ * CAPTCHA to automated browsers), so its selectors remain unverified.
  * Ads, consent, SafeSearch, auth and dialogs are never targeted. Where a broad
  * selector could reach them it is fenced with :not() (see EXCLUDED_SELECTOR_FRAGMENTS).
  */
 
-/* ---- Global typography & surface ------------------------------------------------ */
-html[data-retroweb='google'] body {
-  background-color: var(--rw-bg);
-  color: var(--rw-text);
-}
-
+/* ---- Typography (any scheme) ---------------------------------------------------- */
 html[data-retroweb='google'][data-retroweb-mode='authentic'] body {
   font-family: var(--rw-font);
 }
 
 /* ---- Search box ------------------------------------------------------------------ */
-html[data-retroweb='google'] textarea[name='q'],
-html[data-retroweb='google'] input[name='q'] {
+html[data-retroweb='google'][data-retroweb-scheme='light'] textarea[name='q'],
+html[data-retroweb='google'][data-retroweb-scheme='light'] input[name='q'] {
   border: 1px solid var(--rw-input-border);
   border-top-color: var(--rw-input-border-top);
   border-radius: 1px;
@@ -26,16 +27,16 @@ html[data-retroweb='google'] input[name='q'] {
   background-color: #fff;
 }
 
-html[data-retroweb='google'] textarea[name='q']:focus,
-html[data-retroweb='google'] input[name='q']:focus {
+html[data-retroweb='google'][data-retroweb-scheme='light'] textarea[name='q']:focus,
+html[data-retroweb='google'][data-retroweb-scheme='light'] input[name='q']:focus {
   border-color: #4d90fe;
 }
 
 /* Search submit button on the results page: the 2012 blue gradient button. */
-html[data-retroweb='google'][data-retroweb-route='results']
+html[data-retroweb='google'][data-retroweb-scheme='light'][data-retroweb-route='results']
   form[action='/search']
   button[type='submit'],
-html[data-retroweb='google'][data-retroweb-route='images']
+html[data-retroweb='google'][data-retroweb-scheme='light'][data-retroweb-route='images']
   form[action='/search']
   button[type='submit'] {
   background-image: linear-gradient(to bottom, var(--rw-btn-top), var(--rw-btn-bottom));
@@ -47,11 +48,7 @@ html[data-retroweb='google'][data-retroweb-route='images']
 /* ---- Home buttons (Google Search / I'm Feeling Lucky) ----------------------------- */
 html[data-retroweb='google'][data-retroweb-route='home'] input[name='btnK'],
 html[data-retroweb='google'][data-retroweb-route='home'] input[name='btnI'] {
-  background-image: linear-gradient(to bottom, #f5f5f5, #f1f1f1);
-  background-color: #f2f2f2;
-  border: 1px solid #f2f2f2;
   border-radius: 2px;
-  color: #444;
   font-family: var(--rw-font);
   font-size: 11px;
   font-weight: bold;
@@ -59,14 +56,26 @@ html[data-retroweb='google'][data-retroweb-route='home'] input[name='btnI'] {
   padding: 0 16px;
 }
 
-html[data-retroweb='google'][data-retroweb-route='home'] input[name='btnK']:hover,
-html[data-retroweb='google'][data-retroweb-route='home'] input[name='btnI']:hover {
+html[data-retroweb='google'][data-retroweb-scheme='light'][data-retroweb-route='home']
+  input[name='btnK'],
+html[data-retroweb='google'][data-retroweb-scheme='light'][data-retroweb-route='home']
+  input[name='btnI'] {
+  background-image: linear-gradient(to bottom, #f5f5f5, #f1f1f1);
+  background-color: #f2f2f2;
+  border: 1px solid #f2f2f2;
+  color: #444;
+}
+
+html[data-retroweb='google'][data-retroweb-scheme='light'][data-retroweb-route='home']
+  input[name='btnK']:hover,
+html[data-retroweb='google'][data-retroweb-scheme='light'][data-retroweb-route='home']
+  input[name='btnI']:hover {
   border-color: #c6c6c6;
   box-shadow: 0 1px 1px rgb(0 0 0 / 10%);
   color: #222;
 }
 
-/* ---- Results --------------------------------------------------------------------- */
+/* ---- Results: shape and typography (any scheme) ---------------------------------- */
 html[data-retroweb='google'][data-retroweb-route='results']
   #search
   a
@@ -75,7 +84,6 @@ html[data-retroweb='google'][data-retroweb-route='results']
   #rso
   a
   h3:not(#tads *, #tadsb *, #bottomads *) {
-  color: var(--rw-title);
   font-family: var(--rw-font);
   font-size: var(--rw-size-title);
   font-weight: normal;
@@ -95,36 +103,60 @@ html[data-retroweb='google'][data-retroweb-route='results']
 
 html[data-retroweb='google'][data-retroweb-route='results']
   #search
+  cite:not(#tads *, #tadsb *, #bottomads *),
+html[data-retroweb='google'][data-retroweb-route='results']
+  #rso
+  cite:not(#tads *, #tadsb *, #bottomads *) {
+  font-size: var(--rw-size-url);
+  font-style: normal;
+}
+
+/* ---- Results: colours (light pages only) ------------------------------------------ */
+html[data-retroweb='google'][data-retroweb-scheme='light'][data-retroweb-route='results']
+  #search
+  a
+  h3:not(#tads *, #tadsb *, #bottomads *),
+html[data-retroweb='google'][data-retroweb-scheme='light'][data-retroweb-route='results']
+  #rso
+  a
+  h3:not(#tads *, #tadsb *, #bottomads *) {
+  color: var(--rw-title);
+}
+
+html[data-retroweb='google'][data-retroweb-scheme='light'][data-retroweb-route='results']
+  #search
   a:visited
   h3:not(#tads *, #tadsb *, #bottomads *) {
   color: var(--rw-title-visited);
 }
 
-html[data-retroweb='google'][data-retroweb-route='results']
+html[data-retroweb='google'][data-retroweb-scheme='light'][data-retroweb-route='results']
   #search
   cite:not(#tads *, #tadsb *, #bottomads *),
-html[data-retroweb='google'][data-retroweb-route='results']
+html[data-retroweb='google'][data-retroweb-scheme='light'][data-retroweb-route='results']
   #rso
   cite:not(#tads *, #tadsb *, #bottomads *) {
   color: var(--rw-url);
-  font-size: var(--rw-size-url);
-  font-style: normal;
 }
 
-/* ---- Tools bar & vertical tabs ---------------------------------------------------- */
-html[data-retroweb='google'][data-retroweb-route='results'] #hdtb {
+/* ---- Tools bar & vertical tabs (light pages only) --------------------------------- */
+html[data-retroweb='google'][data-retroweb-scheme='light'][data-retroweb-route='results'] #hdtb {
   background-color: var(--rw-tools-bg);
   border-bottom: 1px solid var(--rw-border);
 }
 
-html[data-retroweb='google'][data-retroweb-route='results'] #hdtb [aria-current='page'],
-html[data-retroweb='google'][data-retroweb-route='results'] #hdtb [aria-selected='true'] {
+html[data-retroweb='google'][data-retroweb-scheme='light'][data-retroweb-route='results']
+  #hdtb
+  [aria-current='page'],
+html[data-retroweb='google'][data-retroweb-scheme='light'][data-retroweb-route='results']
+  #hdtb
+  [aria-selected='true'] {
   border-bottom: 3px solid var(--rw-accent);
   color: var(--rw-accent);
 }
 
 /* ---- Footer ---------------------------------------------------------------------- */
-html[data-retroweb='google'] #foot,
-html[data-retroweb='google'] #footcnt {
+html[data-retroweb='google'][data-retroweb-scheme='light'] #foot,
+html[data-retroweb='google'][data-retroweb-scheme='light'] #footcnt {
   border-top: 1px solid var(--rw-border);
 }

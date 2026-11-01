@@ -1,17 +1,13 @@
+import type { Probe } from '../probe';
 import type { GoogleRoute } from './routes';
 
 /**
- * Probe selectors. UNVERIFIED against the live site: Google's markup changes
- * frequently (R01) and uses hashed class names, so only structural/semantic
- * hooks are used. Each probe has alternatives; a probe passes if ANY matches.
- * A route is "supported" when every *required* probe passes. Optional probes
- * only downgrade health to "degraded".
+ * Probe selectors. Google's markup changes frequently (R01) and uses hashed
+ * class names, so only structural/semantic hooks are used. See ../probe.ts for
+ * the pass/fail semantics. The `home` probes were checked against the live
+ * logged-out site on 2026-10-31. The `results` and `images` probes could NOT be
+ * checked (Google serves a CAPTCHA to automated browsers) and remain unverified.
  */
-export interface Probe {
-  name: string;
-  any: readonly string[];
-  required: boolean;
-}
 
 const SEARCH_BOX: Probe = {
   name: 'search-box',

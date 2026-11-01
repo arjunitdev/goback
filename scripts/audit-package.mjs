@@ -26,7 +26,11 @@ const files = walk(dir).map((f) => relative(dir, f).split('\\').join('/'));
 
 // 1. Permissions are exactly the reviewed set (any change must be a deliberate, reviewed edit).
 const ALLOWED_PERMISSIONS = ['storage', 'scripting'];
-const ALLOWED_OPTIONAL_HOSTS = ['https://www.google.com/*'];
+const ALLOWED_OPTIONAL_HOSTS = [
+  'https://www.google.com/*',
+  'https://www.youtube.com/*',
+  'https://www.facebook.com/*',
+];
 const same = (a = [], b = []) => JSON.stringify([...a].sort()) === JSON.stringify([...b].sort());
 if (!same(manifest.permissions, ALLOWED_PERMISSIONS))
   fail(`permissions changed: ${manifest.permissions}`);

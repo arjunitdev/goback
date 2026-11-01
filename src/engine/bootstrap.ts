@@ -3,7 +3,7 @@ import type { AdapterContext, AdapterStatus, DiagEvent, Prefs, SiteAdapter } fro
 import { HealthMonitor } from './health';
 import { createBatchedObserver, type BatchedObserver } from './observer';
 import { createRouteWatcher, type RouteWatcher } from './router';
-import { applyStyleState, clearStyleState } from './style-manager';
+import { ATTR, applyStyleState, clearStyleState, detectScheme } from './style-manager';
 
 export interface EngineDeps {
   window: Window;
@@ -30,9 +30,16 @@ interface Mounted {
   adapter: SiteAdapter;
   route: string;
   ctx: AdapterContext;
+  /** Attributes are on <html>. False until the first healthy probe for late-style adapters. */
+  styled: boolean;
 }
 
-const DEFAULT_RETRIES = [400, 1200, 3000] as const;
+/**
+ * Probe retry schedule (~20s in total). Single-page apps like YouTube can take
+ * several seconds to render a route on a cold or slow connection; failing open too
+ * early would wrongly drop the theme on healthy pages (observed live, 2026-10-31).
+ */
+const DEFAULT_RETRIES = [400, 1200, 3000, 6000, 10000] as const;
 
 export function createEngine(deps: EngineDeps): Engine {
   const win = deps.window;
@@ -64,6 +71,12 @@ export function createEngine(deps: EngineDeps): Engine {
       : false;
   }
 
+  function systemDark(): boolean {
+    return typeof win.matchMedia === 'function'
+      ? win.matchMedia('(prefers-color-scheme: dark)').matches
+      : false;
+  }
+
   function style(ctx: AdapterContext, adapter: SiteAdapter): void {
     applyStyleState(
       doc.documentElement,
@@ -74,9 +87,20 @@ export function createEngine(deps: EngineDeps): Engine {
         motion: ctx.prefs.motion,
         highContrast: ctx.prefs.highContrast,
         wordmark: deps.wordmark === true,
+        scheme: detectScheme(doc, systemDark()),
       },
       systemReduce(),
     );
+  }
+
+  /** Re-measure the page scheme (theme toggled, late stylesheet) without a full restyle. */
+  function refreshScheme(): void {
+    const m = mounted;
+    if (!m?.styled) return;
+    const next = detectScheme(doc, systemDark());
+    if (doc.documentElement.getAttribute(ATTR.scheme) !== next) {
+      doc.documentElement.setAttribute(ATTR.scheme, next);
+    }
   }
 
   function teardown(): void {
@@ -129,6 +153,10 @@ export function createEngine(deps: EngineDeps): Engine {
       failOpen(m);
       return;
     }
+    if (result.supported && !m.styled) {
+      m.styled = true;
+      style(m.ctx, m.adapter);
+    }
     if (!result.supported) scheduleRetry();
   }
 
@@ -166,7 +194,7 @@ export function createEngine(deps: EngineDeps): Engine {
 
     if (mounted && mounted.adapter === adapter && mounted.route === route) {
       mounted.ctx = ctx;
-      style(ctx, adapter);
+      if (mounted.styled) style(ctx, adapter);
       adapter.refresh(ctx);
       probeNow();
       return;
@@ -175,9 +203,10 @@ export function createEngine(deps: EngineDeps): Engine {
     teardown();
     health.reset();
     retryIndex = 0;
-    const next: Mounted = { adapter, route, ctx };
+    const early = adapter.earlyStyle !== false;
+    const next: Mounted = { adapter, route, ctx, styled: early };
     mounted = next;
-    style(ctx, adapter);
+    if (early) style(ctx, adapter);
     try {
       await adapter.mount(ctx);
     } catch {
@@ -197,6 +226,7 @@ export function createEngine(deps: EngineDeps): Engine {
         if (watcher?.check()) return; // route change triggers a full reconcile
         const m = mounted;
         if (!m) return;
+        refreshScheme();
         m.adapter.refresh(m.ctx);
         probeNow();
       },
@@ -206,17 +236,30 @@ export function createEngine(deps: EngineDeps): Engine {
     observer.observe(root);
   }
 
+  // Document events some sites fire on client-side navigation (e.g. yt-navigate-finish).
+  const navEvents = [...new Set(deps.adapters.flatMap((a) => a.navigationEvents ?? []))];
+  const onNavEvent = () => {
+    watcher?.check();
+  };
+
+  const schemeQuery =
+    typeof win.matchMedia === 'function' ? win.matchMedia('(prefers-color-scheme: dark)') : null;
+
   return {
     async start() {
       watcher = createRouteWatcher(win, () => {
         deps.report('route-change');
         void reconcile('nav');
       });
+      for (const ev of navEvents) doc.addEventListener(ev, onNavEvent);
+      schemeQuery?.addEventListener('change', refreshScheme);
       await reconcile('start');
     },
     reconcile: () => reconcile('prefs'),
     stop() {
       generation += 1;
+      schemeQuery?.removeEventListener('change', refreshScheme);
+      for (const ev of navEvents) doc.removeEventListener(ev, onNavEvent);
       watcher?.dispose();
       watcher = null;
       teardown();

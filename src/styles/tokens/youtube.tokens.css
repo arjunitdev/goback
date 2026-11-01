@@ -1,0 +1,22 @@
+/*
+ * YouTube early-2012 design tokens. Confidence for EVERY value: inferred.
+ * Basis: recollection of the post-December-2011 redesign (docs/04 §4.1). Not
+ * measured from dated captures; G2 must verify before any fidelity claim.
+ * Whether the 2012 masthead was light or dark is an open question (ADR-001), so
+ * the light variant is used: it keeps every native icon and label readable.
+ */
+html[data-retroweb='youtube'] {
+  --rw-yt-font: arial, sans-serif;
+  --rw-yt-page: #f1f1f1;
+  --rw-yt-masthead-top: #fcfcfc;
+  --rw-yt-masthead-bottom: #f1f1f1;
+  --rw-yt-border: #d3d3d3;
+  --rw-yt-radius: 2px;
+}
+
+html[data-retroweb='youtube'][data-retroweb-contrast='high'] {
+  --rw-yt-page: #fff;
+  --rw-yt-masthead-top: #fff;
+  --rw-yt-masthead-bottom: #fff;
+  --rw-yt-border: #606060;
+}

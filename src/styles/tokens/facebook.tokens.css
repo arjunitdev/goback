@@ -1,0 +1,20 @@
+/*
+ * Facebook early-2012 (Timeline era) design tokens. Confidence for EVERY value: inferred.
+ * Basis: recollection of the 2012 desktop site. Not measured from dated captures;
+ * G2 must verify before any fidelity claim.
+ */
+html[data-retroweb='facebook'] {
+  --rw-fb-font: 'lucida grande', tahoma, verdana, arial, sans-serif;
+  --rw-fb-page: #e9eaed;
+  --rw-fb-header: #3b5998;
+  --rw-fb-header-border: #29447e;
+  --rw-fb-card-border: #dddfe2;
+  --rw-fb-radius: 3px;
+}
+
+html[data-retroweb='facebook'][data-retroweb-contrast='high'] {
+  --rw-fb-page: #fff;
+  --rw-fb-header: #1d3a7a;
+  --rw-fb-header-border: #000;
+  --rw-fb-card-border: #606060;
+}

@@ -15,8 +15,12 @@ const url = new URL(location.href);
 const adapter = ADAPTERS.find((a) => a.matches(url));
 const route = adapter?.detectRoute(document, url) ?? null;
 
-if (adapter && route) {
+// Late-style adapters (e.g. Facebook, whose first paint may be a login wall) wait for the engine.
+if (adapter && route && adapter.earlyStyle !== false) {
   const systemReduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // <body> does not exist yet, so guess the page scheme from the system; the engine
+  // measures the real page background after load and corrects it.
+  const scheme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   applyStyleState(
     root,
     {
@@ -26,6 +30,7 @@ if (adapter && route) {
       motion: 'system',
       highContrast: false,
       wordmark: __WORDMARK__,
+      scheme,
     },
     systemReduce,
   );
@@ -45,6 +50,7 @@ if (adapter && route) {
           motion: prefs.motion,
           highContrast: prefs.highContrast,
           wordmark: __WORDMARK__,
+          scheme,
         },
         systemReduce,
       );

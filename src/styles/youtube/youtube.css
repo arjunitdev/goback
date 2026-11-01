@@ -1,0 +1,60 @@
+/*
+ * YouTube pilot styles. Everything is scoped to html[data-retroweb='youtube'].
+ *
+ * Colour rules apply only on LIGHT pages (data-retroweb-scheme='light'); dark
+ * pages keep the user's theme and get only shape/typography changes.
+ * The player, ads, consent and dialogs are never targeted (see
+ * EXCLUDED_SELECTOR_FRAGMENTS); the stylesheet-safety test enforces it.
+ * Selectors are custom-element tag names, checked on the live logged-out home
+ * page on 2026-10-31.
+ */
+
+/*
+ * YouTube sets its own typography under html[typography] and via hashed classes, so
+ * font and radius overrides need !important to win. They are fenced away from the
+ * player, ads and dialogs, and never hide or resize anything.
+ */
+
+/* ---- Typography (any scheme, authentic mode) ------------------------------------- */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  ytd-app
+  :not(svg, svg *, #movie_player, #movie_player *, ytd-player, ytd-player *, ytd-popup-container *),
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-app,
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] body {
+  font-family: var(--rw-yt-font) !important;
+}
+
+/* ---- Shape: square thumbnails, small radii (any scheme) --------------------------- */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-thumbnail,
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-thumbnail a,
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-thumbnail img,
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-thumbnail yt-image,
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] yt-thumbnail-view-model,
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] yt-thumbnail-view-model *,
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytm-shorts-lockup-view-model,
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytm-shorts-lockup-view-model * {
+  border-radius: 0 !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] yt-button-shape button,
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-masthead yt-searchbox div,
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-masthead yt-searchbox input,
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-masthead yt-searchbox button {
+  border-radius: var(--rw-yt-radius) !important;
+}
+
+/* ---- Colours (light pages only) --------------------------------------------------- */
+html[data-retroweb='youtube'][data-retroweb-scheme='light'],
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-app {
+  background-color: var(--rw-yt-page);
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-masthead #background {
+  background-color: var(--rw-yt-masthead-bottom);
+  background-image: linear-gradient(
+    to bottom,
+    var(--rw-yt-masthead-top),
+    var(--rw-yt-masthead-bottom)
+  );
+  border-bottom: 1px solid var(--rw-yt-border);
+}

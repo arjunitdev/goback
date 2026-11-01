@@ -19,6 +19,7 @@
     "verify": "npm run typecheck && npm run lint && npm test && npm run build && npm run build:store && npm run audit:package"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
     "@eslint/js": "10.0.1",
     "@playwright/test": "1.64.1",
     "@types/chrome": "0.3.7",

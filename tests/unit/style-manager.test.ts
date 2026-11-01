@@ -3,6 +3,7 @@ import {
   ATTR,
   applyStyleState,
   clearStyleState,
+  detectScheme,
   effectiveReducedMotion,
 } from '../../src/engine/style-manager';
 
@@ -13,6 +14,7 @@ const base = {
   motion: 'system' as const,
   highContrast: false,
   wordmark: false,
+  scheme: 'light' as const,
 };
 
 describe('style manager', () => {
@@ -22,6 +24,7 @@ describe('style manager', () => {
     expect(root.getAttribute(ATTR.site)).toBe('google');
     expect(root.getAttribute(ATTR.route)).toBe('results');
     expect(root.getAttribute(ATTR.mode)).toBe('authentic');
+    expect(root.getAttribute(ATTR.scheme)).toBe('light');
     expect(root.getAttribute(ATTR.motion)).toBe('reduce');
     expect(root.getAttribute(ATTR.contrast)).toBe('high');
     expect(root.getAttribute(ATTR.wordmark)).toBe('on');
@@ -41,5 +44,33 @@ describe('style manager', () => {
     expect(effectiveReducedMotion('system', true)).toBe(true);
     expect(effectiveReducedMotion('system', false)).toBe(false);
     expect(effectiveReducedMotion('reduce', false)).toBe(true);
+  });
+});
+
+describe('detectScheme', () => {
+  const page = (bodyBg: string, htmlBg = '') => {
+    document.documentElement.style.backgroundColor = htmlBg;
+    document.body.style.backgroundColor = bodyBg;
+    return detectScheme(document, false);
+  };
+
+  it('classifies the page background, not the system preference', () => {
+    expect(page('rgb(32, 33, 36)')).toBe('dark'); // Google dark
+    expect(page('rgb(255, 255, 255)')).toBe('light');
+    expect(page('rgb(241, 241, 241)')).toBe('light'); // YouTube 2012 grey
+    expect(page('rgb(15, 15, 15)')).toBe('dark'); // YouTube dark
+    expect(page('#18191a')).toBe('dark'); // Facebook dark
+  });
+
+  it('falls through transparent body to <html>', () => {
+    expect(page('transparent', 'rgb(30, 30, 30)')).toBe('dark');
+    expect(page('rgba(0, 0, 0, 0)', 'rgb(250, 250, 250)')).toBe('light');
+  });
+
+  it('uses the system scheme only when the page paints no background', () => {
+    document.documentElement.style.backgroundColor = '';
+    document.body.style.backgroundColor = '';
+    expect(detectScheme(document, true)).toBe('dark');
+    expect(detectScheme(document, false)).toBe('light');
   });
 });
