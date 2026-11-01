@@ -34,6 +34,8 @@
 
 | ADR-017 | Authentic mode renders YouTube in its LIGHT theme even for dark-theme accounts, by pinning YouTube's ~380 colour variables to their light values (`scripts/gen-youtube-theme.mjs`, regenerated on demand) and holding the `dark` attribute off <html> and the masthead. Compatibility mode keeps the user's theme. If the pin goes stale the engine measures the page as dark and withholds the 2012 palette, so text stays readable. | The 2012 site had no dark theme and the owner's account is dark. Found live: removing the `dark` attribute alone does nothing, because YouTube serves the dark values straight on <html>. |
 
+| ADR-018 | YouTube Authentic mode fills the window instead of reproducing the 970px column: the masthead spans the screen, the 200px dark guide is fixed to the left edge for the full window height, and the home/results content and the watch player use the remaining width. The home feed keeps YouTube's own grid. Colours, fonts, button shapes, logo and the dark guide stay 2012. | The owner found the 970px column wasted most of a modern screen and preferred the full-width grid layout. Layout fidelity to the 2012 column is traded for usability; typography and palette fidelity are unchanged. |
+
 Still pending: ADR-001 (exact reference month per route), ADR-002 (original vs reconstructed icon licensing), ADR-007 (labeling modern-only components), ADR-009 (compatibility break thresholds), ADR-010 (trademark review outcome).
 
 ## Decisions pending

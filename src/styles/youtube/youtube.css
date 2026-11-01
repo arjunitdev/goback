@@ -7,7 +7,8 @@
  * The player, ads, consent and dialogs are never targeted (EXCLUDED_SELECTOR_FRAGMENTS);
  * the stylesheet-safety test enforces it. Nothing is hidden, collapsed or removed.
  *
- * Layout targets the 970px column of the 2012 site. Modern YouTube has no equivalent
+ * Layout fills the window (fixed 200px guide, full-width content); only the typography,
+ * colours and component shapes are 2012. Modern YouTube has no equivalent
  * of some 2012 elements (e.g. the Browse/Movies/Upload links), which are not faked.
  */
 
@@ -22,22 +23,21 @@ html[data-retroweb='youtube'][data-retroweb-mode='authentic'] body {
   font-family: var(--rw-yt-font) !important;
 }
 
-/* ===== Masthead: 970px column, 60px tall (10px padding + 40px row) ===================== */
+/* ===== Masthead: full screen width, 60px tall (10px padding + 40px row) ==================
+ * The 2012 bar was a 970px column; it now spans the window so the page fits the screen. */
 html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-masthead #container {
   position: relative;
   box-sizing: border-box;
-  width: 970px;
+  width: 100%;
   max-width: 100%;
   height: 60px;
-  margin: 0 auto;
-  padding: 10px 0;
+  margin: 0;
+  padding: 10px 16px;
 }
 
-/* The hamburger has no 2012 equivalent but stays fully usable: parked beside the column. */
+/* The hamburger has no 2012 equivalent but stays fully usable: first item in the bar. */
 html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-masthead #guide-button {
-  position: absolute;
-  top: 10px;
-  right: 100%;
+  flex: none;
   margin-right: 8px;
 }
 
@@ -291,22 +291,20 @@ html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-watch-metadata #
   color: var(--rw-yt-text) !important;
 }
 
-/* ===== Watch page: 970px column = 640px player + 20px gap + 310px sidebar (measured) ===== */
+/* ===== Watch page: fills the window; 2012 310px sidebar, player takes the remaining width ===
+ * The measured 2012 player was 640x390 in a 970px column. On a modern screen that leaves
+ * most of the window empty, so the player scales with the window instead. */
 html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-watch-flexy {
   --ytd-watch-flexy-sidebar-width: 310px !important;
   --ytd-watch-flexy-sidebar-min-width: 310px !important;
-  --ytd-watch-flexy-horizontal-page-margin: 0px !important;
-  --ytd-watch-flexy-min-player-width: 640px !important;
-  --ytd-watch-flexy-min-player-height: 390px !important; /* measured: 640x390 player */
-  --ytd-watch-flexy-max-player-width: 640px !important;
-  --ytd-watch-flexy-max-player-width-wide-screen: 640px !important;
+  --ytd-watch-flexy-horizontal-page-margin: 24px !important;
 }
 
 html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-watch-flexy #columns {
   box-sizing: border-box;
-  width: 970px;
+  width: 100%;
   max-width: 100%;
-  margin: 0 auto;
+  margin: 0;
 }
 
 /* Related videos: 120x90 thumbnails, as measured in the 2012 sidebar. */
@@ -522,15 +520,19 @@ html[data-retroweb='youtube'][data-retroweb-mode='authentic']
   transform: none !important;
 }
 
-/* ===== Browse pages (home, results, channels): guide + feed inside the 970px column ======
- * 2012: a 200px dark guide on the left, a 465px white feed beside it. Measured from the
+/* ===== Browse pages (home, results, channels): fixed guide + full-width content ==========
+ * The 200px dark guide is pinned to the left edge, below the masthead, for the full window
+ * height (scrolls inside itself); the page fills the rest of the screen. Measured from the
  * archived stylesheet: .guide #272727, .guide-item 11px #999 with a 4px right border,
- * selected #1c1c1c / #c4302b, .feed-item-container border-bottom #ededed. */
+ * selected #1c1c1c / #c4302b. */
 html[data-retroweb='youtube'][data-retroweb-mode='authentic']:not([data-retroweb-route='watch'])
   ytd-app[guide-persistent-and-visible]
   tp-yt-app-drawer#guide {
-  left: calc(50% - 485px) !important;
+  position: fixed !important;
+  left: 0 !important;
   top: 60px !important;
+  bottom: 0 !important;
+  height: calc(100vh - 60px) !important;
   width: 200px !important;
 }
 
@@ -539,14 +541,16 @@ html[data-retroweb='youtube'][data-retroweb-mode='authentic']:not([data-retroweb
   tp-yt-app-drawer#guide
   #contentContainer {
   width: 200px !important;
+  height: 100% !important;
+  overflow-y: auto !important;
 }
 
 html[data-retroweb='youtube'][data-retroweb-mode='authentic']:not([data-retroweb-route='watch'])
   ytd-app[guide-persistent-and-visible]
   ytd-page-manager {
-  margin-left: calc(50% - 485px + 200px) !important;
+  margin-left: 200px !important;
   margin-top: 60px !important;
-  width: 770px !important;
+  width: calc(100% - 200px) !important;
 }
 
 /* Guide items: 11px, #999, 36px rows (measured in the 2012 template screenshot). */
@@ -630,92 +634,8 @@ html[data-retroweb='youtube'][data-retroweb-scheme='light']
   font-weight: bold !important;
 }
 
-/* ===== Feed rows: thumbnail left, text right, #ededed dividers (2012 .feed-item-main) ===== */
-html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-rich-grid-renderer #contents {
-  display: block !important;
-  width: 100% !important;
-  padding: 0 !important;
-}
-
-html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-rich-item-renderer {
-  display: block !important;
-  width: 100% !important;
-  margin: 0 !important;
-  padding: 15px;
-  box-sizing: border-box;
-}
-
-html[data-retroweb='youtube'][data-retroweb-mode='authentic']
-  ytd-rich-item-renderer
-  [class*='LockupViewModelVertical'] {
-  flex-direction: row !important;
-  align-items: flex-start !important;
-  gap: 14px;
-}
-
-html[data-retroweb='youtube'][data-retroweb-mode='authentic']
-  ytd-rich-item-renderer
-  [class*='LockupViewModelContentImage'] {
-  flex: none;
-  width: 106px !important;
-  height: 80px !important;
-}
-
-html[data-retroweb='youtube'][data-retroweb-mode='authentic']
-  ytd-rich-item-renderer
-  yt-thumbnail-view-model {
-  padding-top: 0 !important;
-  width: 106px !important;
-  height: 80px !important;
-}
-
-html[data-retroweb='youtube'][data-retroweb-mode='authentic']
-  ytd-rich-item-renderer
-  [class*='ThumbnailViewModelImage'] {
-  top: 0 !important;
-  left: 0 !important;
-  width: 106px !important;
-  height: 80px !important;
-  transform: none !important;
-  object-fit: contain;
-}
-
-html[data-retroweb='youtube'][data-retroweb-mode='authentic']
-  ytd-rich-item-renderer
-  [class*='LockupViewModelMetadata'] {
-  flex: 1;
-  min-width: 0;
-}
-
-html[data-retroweb='youtube'][data-retroweb-mode='authentic']
-  ytd-rich-item-renderer
-  a[class*='LockupMetadataViewModelTitle'] {
-  font-size: 15px !important;
-  font-weight: bold !important;
-  line-height: 1.2em !important;
-  max-height: 2.4em;
-}
-
-html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-rich-item-renderer {
-  background-color: #fff;
-  border-bottom: 1px solid #ededed;
-}
-
-html[data-retroweb='youtube'][data-retroweb-scheme='light']
-  ytd-rich-item-renderer
-  a[class*='LockupMetadataViewModelTitle'] {
-  color: var(--rw-yt-text) !important;
-}
-
-html[data-retroweb='youtube'][data-retroweb-scheme='light']
-  ytd-rich-item-renderer
-  [class*='ContentMetadataViewModel'] {
-  color: var(--rw-yt-meta) !important;
-  font-size: 11px !important;
-}
-
-/* The page containers carry fixed widths sized for the modern 1200px area; make them fill the
- * 770px area so nothing is centred underneath the guide. */
+/* The page containers carry fixed widths sized for the modern area; make them fill the space
+ * right of the guide so nothing is centred underneath it. */
 html[data-retroweb='youtube'][data-retroweb-mode='authentic']:not([data-retroweb-route='watch'])
   ytd-app[guide-persistent-and-visible]
   :is(
