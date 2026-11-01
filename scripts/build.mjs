@@ -34,6 +34,9 @@ const youtubePrivate =
   existsSync(join(privYoutube, 'sprite.png')) &&
   existsSync(join(privYoutube, 'bg.png'));
 
+const privGoogle = join(root, 'src', 'assets', 'private', 'google');
+const googlePrivate = flavor !== 'store' && existsSync(join(privGoogle, 'logo.png'));
+
 rmSync(outDir, { recursive: true, force: true });
 mkdirSync(outDir, { recursive: true });
 
@@ -47,6 +50,7 @@ const common = {
     __FLAVOR__: JSON.stringify(flavor),
     __WORDMARK__: String(wordmark),
     __YT_PRIVATE__: String(youtubePrivate),
+    __G_PRIVATE__: String(googlePrivate),
     __FAST_RETRIES__: String(flavor === 'test' && process.argv.includes('--fast')),
   },
 };
@@ -77,7 +81,7 @@ const manifestModule = await import(
 );
 writeFileSync(
   join(outDir, 'manifest.json'),
-  JSON.stringify(manifestModule.buildManifest(flavor, version, { youtubePrivate }), null, 2) + '\n',
+  JSON.stringify(manifestModule.buildManifest(flavor, version, { youtubePrivate, googlePrivate }), null, 2) + '\n',
 );
 
 // Styles: tokens + base + site rules, concatenated per implemented site.
@@ -85,7 +89,7 @@ const sites = manifestModule.IMPLEMENTED_SITES;
 mkdirSync(join(outDir, 'styles'), { recursive: true });
 const cat = (...files) => files.map((f) => readFileSync(src(f), 'utf8')).join('\n');
 for (const site of sites) {
-  // Optional generated light-theme pin (YouTube only today); see scripts/gen-youtube-theme.mjs.
+  // Optional generated light-theme pin (YouTube, Google); see scripts/gen-*-theme.mjs.
   const generated = `styles/${site}/theme-light.generated.css`;
   writeFileSync(
     join(outDir, `styles/${site}.css`),
@@ -133,6 +137,14 @@ if (youtubePrivate) {
   crop('search.png', 163, 102, 14, 14); // search button magnifier
   cpSync(join(privYoutube, 'bg.png'), join(outAssets, 'bg.png'));
   cpSync(src('styles/youtube/private.css'), join(outDir, 'styles/youtube-private.css'));
+}
+
+// Private Google asset: the March-2013 home logo (275x95), used by styles/google/private.css.
+if (googlePrivate) {
+  const outAssets = join(outDir, 'assets', 'google-private');
+  mkdirSync(outAssets, { recursive: true });
+  cpSync(join(privGoogle, 'logo.png'), join(outAssets, 'logo.png'));
+  cpSync(src('styles/google/private.css'), join(outDir, 'styles/google-private.css'));
 }
 
 function listFiles(dir) {

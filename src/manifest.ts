@@ -52,6 +52,12 @@ export function buildManifest(flavor: Flavor, version: string, assets: BuildAsse
         matches: [...SITE_ORIGINS.youtube],
       });
     }
+    if (privateAllowed(flavor, assets).googlePrivate) {
+      war.push({
+        resources: ['assets/google-private/*'],
+        matches: [...SITE_ORIGINS.google],
+      });
+    }
     manifest.web_accessible_resources = war;
   }
   return manifest;

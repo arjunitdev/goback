@@ -126,7 +126,8 @@ test('dev/test flavor swaps in the recreated wordmark via CSS only', async () =>
     .locator('img[alt="Google"]')
     .evaluate((el) => getComputedStyle(el).content);
   expect(content).toContain('chrome-extension://');
-  expect(content).toContain('google-2012.svg');
+  // The look-alike, or (on a machine with the private archive logo) the real one, which wins.
+  expect(content).toMatch(/google-2012\.svg|google-private\/logo\.png/);
   // The original <img> and its alt text remain in the DOM.
   await expect(page.locator('img[alt="Google"]')).toHaveCount(1);
   await page.close();

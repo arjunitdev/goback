@@ -15,6 +15,7 @@ export function includesWordmark(flavor: Flavor): boolean {
  */
 export interface BuildAssets {
   youtubePrivate?: boolean;
+  googlePrivate?: boolean;
 }
 
 /** Private assets are limited to non-store flavors, whatever the caller asks for. */
@@ -28,6 +29,9 @@ export function siteCss(site: SiteId, flavor: Flavor, assets: BuildAssets = {}):
   if (includesWordmark(flavor)) css.push(`styles/${site}-wordmark.css`);
   if (site === 'youtube' && privateAllowed(flavor, assets).youtubePrivate) {
     css.push('styles/youtube-private.css');
+  }
+  if (site === 'google' && privateAllowed(flavor, assets).googlePrivate) {
+    css.push('styles/google-private.css');
   }
   return css;
 }

@@ -42,12 +42,30 @@ describe('private (archive-derived) assets', () => {
     expect(priv[0]?.matches).toEqual(['https://www.youtube.com/*']);
   });
 
+  it('cover Google too: never in store, registered last and only for Google in dev', () => {
+    expect(privateAllowed('store', { googlePrivate: true })).toEqual({});
+    expect(siteCss('google', 'store', { googlePrivate: true })).toEqual(['styles/google.css']);
+    const css = siteCss('google', 'dev', { googlePrivate: true });
+    expect(css.at(-1)).toBe('styles/google-private.css');
+    expect(siteCss('youtube', 'dev', { googlePrivate: true })).not.toContain(
+      'styles/google-private.css',
+    );
+    expect(buildManifest('store', '1.0.0', { googlePrivate: true }).web_accessible_resources).toBeUndefined();
+    const war = buildManifest('dev', '1.0.0', { googlePrivate: true })
+      .web_accessible_resources as { resources: string[]; matches: string[] }[];
+    const priv = war.filter((w) => w.resources.some((r) => r.includes('google-private')));
+    expect(priv).toHaveLength(1);
+    expect(priv[0]?.matches).toEqual(['https://www.google.com/*']);
+  });
+
   it('are ignored by git, and nothing under them is tracked', () => {
     const git = (...args: string[]) => execFileSync('git', args, { encoding: 'utf8' });
     // check-ignore exits non-zero (throws) if the path is NOT ignored.
     for (const p of [
       'src/assets/private/youtube/sprite.png',
       'src/assets/private/youtube/bg.png',
+      'src/assets/private/google/logo.png',
+      'evidence-vault/google/home-20130301.html',
       'evidence-vault/youtube/anything.png',
     ]) {
       expect(() => git('check-ignore', '-q', p), `${p} must be git-ignored`).not.toThrow();

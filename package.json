@@ -17,7 +17,8 @@
     "test": "vitest run",
     "test:e2e": "npm run build:test && playwright test",
     "audit:package": "node scripts/audit-package.mjs",
-    "verify": "npm run typecheck && npm run lint && npm test && npm run build && npm run build:store && npm run audit:package"
+    "verify": "npm run typecheck && npm run lint && npm test && npm run build && npm run build:store && npm run audit:package",
+    "gen:google-theme": "node scripts/gen-google-theme.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.14.0",

@@ -51,6 +51,11 @@ export interface SiteAdapter {
    * Compatibility mode and teardown restore it.
    */
   forceLightAttr?: string;
+  /**
+   * The site's theme is held light in Authentic mode by a generated variable pin alone (no attribute
+   * to hold off, e.g. Google). The early script then assumes a light page until the engine measures it.
+   */
+  pinsLight?: boolean;
   /** Document events that signal a client-side navigation (e.g. YouTube's yt-navigate-finish). */
   navigationEvents?: readonly string[];
   /**

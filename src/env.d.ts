@@ -5,3 +5,4 @@ declare const __FLAVOR__: 'dev' | 'store' | 'test';
 declare const __FAST_RETRIES__: boolean;
 /** True only when private YouTube assets were found at build time AND the flavor is not `store`. */
 declare const __YT_PRIVATE__: boolean;
+declare const __G_PRIVATE__: boolean;

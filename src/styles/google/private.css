@@ -1,0 +1,26 @@
+/*
+ * PRIVATE ASSET STYLES. Registered only when private archive-derived assets were found at build
+ * time AND the flavor is not `store` (scripts/build.mjs, src/shared/registration.ts).
+ * It references image files that are NOT in the repository (src/assets/private/ is git-ignored).
+ * Size is from the archived March-2013 page: <img id="hplogo" width="275" height="95">.
+ * Loaded after google.css and wordmark.css, so equal-specificity rules here win.
+ */
+
+/* The 2013 home logo replaces the displayed image (the default logo AND a day's doodle image);
+ * the <img>, its link and alt text stay in the DOM, so a click still goes where it did. */
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-route='home']
+  img[alt='Google'],
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-route='home']
+  img[src*='/logos/'],
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-route='home']
+  img[src*='googlelogo'] {
+  content: url('chrome-extension://__MSG_@@extension_id__/assets/google-private/logo.png');
+  box-sizing: border-box;
+  width: 275px;
+  height: 95px;
+  max-width: none;
+  max-height: none;
+  padding: 0;
+  margin: 42px 0 0; /* the 2013 logo sat ~45px below the bar */
+  object-fit: contain;
+}

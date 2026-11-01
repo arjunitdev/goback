@@ -20,7 +20,7 @@ async function syncRegistrations(): Promise<void> {
     if (!isSiteActive(prefs, site)) continue;
     const granted = await chrome.permissions.contains({ origins: [...SITE_ORIGINS[site]] });
     if (granted) {
-      desired.push(...registrationsFor(site, __FLAVOR__, { youtubePrivate: __YT_PRIVATE__ }));
+      desired.push(...registrationsFor(site, __FLAVOR__, { youtubePrivate: __YT_PRIVATE__, googlePrivate: __G_PRIVATE__ }));
     }
   }
 

@@ -213,6 +213,40 @@ describe('youtube adapter on fixtures', () => {
   });
 });
 
+describe('google adapter: home chrome follows route and mode', () => {
+  it('adds the 2012 bar on the home route in Authentic mode and removes it when the site is switched off', async () => {
+    const h = setup('google-home.html', 'https://www.google.com/', 'google');
+    await h.engine.start();
+    expect(h.doc.getElementById('rw-gbar')).not.toBeNull();
+    h.engine.stop();
+    expect(h.doc.getElementById('rw-gbar')).toBeNull();
+  });
+
+  it('adds nothing on the results route', async () => {
+    const h = setup('google-results.html', 'https://www.google.com/search?q=x', 'google');
+    await h.engine.start();
+    expect(h.doc.querySelector('[data-retroweb-injected]')).toBeNull();
+  });
+
+  it('adds nothing in Compatibility mode', async () => {
+    const dom = loadPage('google-home.html', 'https://www.google.com/');
+    const win = dom.window as unknown as Window;
+    const p = enabled('google');
+    p.sites.google.mode = 'compatibility';
+    const engine = createEngine({
+      window: win,
+      adapters: ADAPTERS,
+      loadPrefs: async () => p,
+      report: () => undefined,
+      retryDelaysMs: [1, 1, 1],
+      schedule: (f) => queueMicrotask(f),
+    });
+    engines.push(engine);
+    await engine.start();
+    expect(win.document.querySelector('[data-retroweb-injected]')).toBeNull();
+  });
+});
+
 describe('facebook adapter on fixtures', () => {
   it('styles a signed-in shell only after the probe passes (no early style)', async () => {
     const h = setup('facebook-feed.html', 'https://www.facebook.com/', 'facebook');

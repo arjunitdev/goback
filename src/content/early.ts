@@ -23,7 +23,8 @@ if (adapter && route && adapter.earlyStyle !== false) {
   // Authentic mode on a site that supports the light pin (YouTube) optimistically assumes light;
   // the engine measures the real page and corrects it if the pin did not take.
   const scheme =
-    !adapter.forceLightAttr && matchMedia('(prefers-color-scheme: dark)').matches
+    !(adapter.forceLightAttr || adapter.pinsLight) &&
+    matchMedia('(prefers-color-scheme: dark)').matches
       ? 'dark'
       : 'light';
   applyStyleState(
