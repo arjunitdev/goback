@@ -41,9 +41,11 @@ html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-masthead #guid
   margin-right: 8px;
 }
 
+/* #start holds the hamburger AND the logo: 40px + 8px gap + 100px, so it must not be capped at 100. */
 html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-masthead #start {
   flex: none;
-  width: 100px;
+  width: auto;
+  min-width: 148px;
   height: 40px;
   margin: 0;
   padding: 0;
@@ -60,6 +62,7 @@ html[data-retroweb='youtube'][data-retroweb-mode='authentic']
   a#logo
   > div {
   box-sizing: border-box;
+  flex: none;
   width: 100px;
   height: 40px;
   margin: 0;
@@ -305,6 +308,13 @@ html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-watch-flexy #c
   width: 100%;
   max-width: 100%;
   margin: 0;
+}
+
+/* YouTube centres a height-limited player inside the wider column (auto side margins), which
+ * leaves it floating away from the title. The 2012 player sat flush left under the title. */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-watch-flexy #player-container-outer {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
 }
 
 /* Related videos: 120x90 thumbnails, as measured in the 2012 sidebar. */
