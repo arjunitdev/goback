@@ -1,6 +1,6 @@
 # Asset ledger
 
-Every asset in the package, its provenance and rights status (docs/07 §7.2, docs/08 §8.4).
+Every asset in the package, its provenance and rights status (look-alike wordmarks and any private images).
 
 | ID    | File                          | Used in                        | Provenance                                                                                                                                                          | Rights status                                                                                                                   | Flavors          | Reviewer   |
 | ----- | ----------------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ---------------- | ---------- |

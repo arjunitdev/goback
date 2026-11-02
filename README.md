@@ -1,45 +1,44 @@
-# RetroWeb 2012 — Engineering documentation
+# RetroWeb 2012
 
-**Status:** engine plus Google, YouTube and Facebook adapters implemented and tested on fixtures; partly verified against the live logged-out sites (see docs/04 §4.7.2, docs/05 §5.5.3, docs/06 §6.6.1). **Not releasable:** no signed-in verification, no archival evidence, legal/trademark review and all ten review gates are outstanding (see docs/14).  
-**Targets:** YouTube, Google Search, Facebook desktop experiences as seen during 2012.  
-**Product goal:** reproduce historical presentation while preserving current first-party website features and authentication.  
-**Release target:** Chrome Manifest V3 first; Chromium compatibility subsequently.
+An **unofficial** Chrome (Manifest V3) extension that restyles Google Search, YouTube and Facebook to an early-2010s look while keeping every site feature working. It changes how pages look, on your device only.
 
-## Quick start
+Not affiliated with, endorsed by or sponsored by Google, YouTube or Meta. Their names and logos belong to their owners.
+
+## Install (Chrome, Brave, Edge)
+
 ```
 npm install
-npm run verify        # typecheck, lint, unit+integration tests, dev and store builds, package audit
-npm run test:e2e      # builds the test flavor and runs Playwright against synthetic fixtures
+npm run build
 ```
-Load `dist/` as an unpacked extension in Chrome (`chrome://extensions` → Developer mode → Load unpacked), open the popup, enable a site (**Google Search**, **YouTube** or **Facebook**), grant access, then reload that site. The `dist/` (dev) build includes the recreated look-alike wordmark; `dist-store/` does not (ADR-011). Selectors are unverified against the live site: if the page does not change, or reverts to native after a few seconds, the health monitor failed open by design (see popup → This tab, and Settings → Local diagnostics).
 
-To check selectors against a real, public, logged-out page (manual only, never CI): `npm run build:test`, then `node scripts/live-check.mjs <outDir> <url>`. It prints health and attributes and saves a screenshot. Do not point it at signed-in profiles or use it to automate searches (Google will show a CAPTCHA; the extension leaves that page alone).
+1. Open `chrome://extensions` (or `brave://extensions`) and turn on **Developer mode**.
+2. **Load unpacked** and choose the `dist` folder.
+3. Pin the extension, open its popup, switch on the sites you want and accept the access prompt.
+4. Reload those sites once or twice.
 
-Layout: `src/engine` (router, observer, style manager, health, bootstrap), `src/adapters/<site>`, `src/styles`, `src/background`, `src/popup`, `src/options`, `tests/{unit,integration,e2e,fixtures}`, `reviews/` (gate templates, all NOT REVIEWED).
+After rebuilding, press the reload arrow on the extension's card, then reload the site.
 
-## Reading order
-1. [Product requirements](docs/01-product-requirements.md)
-2. [Historical evidence and archive protocol](docs/02-historical-research.md)
-3. [Architecture](docs/03-architecture.md)
-4. [YouTube specification](docs/04-youtube.md)
-5. [Google specification](docs/05-google.md)
-6. [Facebook specification](docs/06-facebook.md)
-7. [Design assets and animation](docs/07-design-system.md)
-8. [Security, privacy, legal](docs/08-security-legal.md)
-9. [Testing and quality](docs/09-testing.md)
-10. [Delivery, deployment, maintenance](docs/10-delivery.md)
-11. [Independent engineer review gates](docs/11-review-gates.md)
-12. [Risk register and decisions](docs/12-risks-decisions.md)
-13. [Sources](docs/13-sources.md)
+If a page looks native, open the popup on that tab: **Health** says why. The extension fails open by design: if a site changes its markup, it switches itself off for that page instead of breaking it.
 
-## Non-negotiable engineering rules
-- Do not proxy or replace the websites, steal cookies, read private data, or intercept credentials.
-- Do not inject remotely hosted executable code; bundle reviewed extension code.
-- Do not claim endorsement by Google, YouTube, or Meta.
-- No original archived logos, icons, sprites, or proprietary fonts are distributed without rights clearance. Preserve visual fidelity through documented, independently produced equivalents where required.
-- No release gate can pass solely because the UI looks good: core workflows must remain functional.
-- Every phase ends with an independent reviewer sign-off; failures reopen the phase.
-- Historical references must be dated and evidence-backed; '2012' is not a single universal interface.
+## Logos
 
-## Definition of complete
-A Chrome Web Store release is approved only after the reviewer has signed all gates, permission and privacy disclosures are accurate, legal review is complete, and the three target-site compatibility suites pass on supported configurations. No guarantee of perfect equivalence across future site updates is made.
+`npm run build` makes the **personal build** in `dist/`. It paints look-alike wordmarks and, if you place your own image files under `src/assets/private/` (git-ignored, never committed), those as well. `npm run build:store` makes `dist-store/`, which contains no logos at all. Do not publish or share a build that contains logos you do not have rights to.
+
+## Develop
+
+```
+npm run verify      # typecheck, lint, unit + integration tests, both builds, package audit
+npm run test:e2e    # Playwright against synthetic fixtures (never the live sites)
+```
+
+Layout: `src/engine` (router, observer, style manager, health), `src/adapters/<site>`, `src/styles`, `src/background`, `src/popup`, `src/options`, `tests/{unit,integration,e2e,fixtures}`, `scripts/`.
+
+## Privacy and safety
+
+- Stores only your on/off choices and display settings locally; see [PRIVACY.md](PRIVACY.md).
+- No network requests, no remote code, no analytics, no cookies or account data read.
+- Login, payment, CAPTCHA and security pages are left native (the one exception is a decorative bar on Facebook's logged-out page; the login form is never touched).
+
+## Status
+
+Tested against synthetic fixtures and partly against the live logged-out sites. Signed-in pages could not be verified with a test account, so expect rough edges there.

@@ -1,6 +1,6 @@
 # Privacy policy — RetroWeb 2012 (unofficial)
 
-_Draft for legal review (docs/08 §8.3). Describes what the code in this repository actually does as of 2026-10-31. Not yet reviewed by counsel._
+_Draft, not yet reviewed by counsel. Describes what the code in this repository actually does as of 2026-10-31. Not yet reviewed by counsel._
 
 RetroWeb 2012 is an unofficial browser extension. It is **not affiliated with, endorsed by or sponsored by Google, YouTube or Meta**. It changes only how supported pages look, on your device.
 
@@ -28,4 +28,4 @@ Only these settings, in your browser's local extension storage (`chrome.storage.
 Turn a site off, use the pause switch, withdraw site access in Settings, or uninstall the extension. Uninstalling removes all stored settings.
 
 ## Contact
-TODO before publication: name and a support/incident contact (docs/10 §10.4).
+TODO before publication: name and a support/incident contact.

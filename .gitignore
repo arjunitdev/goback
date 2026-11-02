@@ -9,3 +9,4 @@ test-results/
 # Evidence vault and user-supplied assets are never committed or packaged
 evidence-vault/
 src/assets/private/
+*.sha256
