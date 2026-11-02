@@ -69,32 +69,15 @@ html[data-retroweb='youtube'][data-retroweb-mode='authentic']
   padding: 0;
 }
 
-/* Search sits 16px right of the logo: x=271 in the 970px column (logo ends at 255). */
+/* Search sits 16px right of the logo; its width is YouTube's own. */
 html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-masthead #center {
-  flex: none;
-  width: auto;
-  max-width: none;
-  margin: 0 0 0 16px;
-  padding: 0;
+  margin-left: 16px;
 }
 
+/* The search box keeps YouTube's own size and inner layout (it varies between YouTube's test
+ * variants: some add an "Ask YouTube" button), so only its shape is changed here. */
 html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-masthead yt-searchbox {
-  width: 414px; /* measured: 379px field + 35px button */
   max-width: none;
-  height: 32px;
-  margin: 0;
-}
-
-html[data-retroweb='youtube'][data-retroweb-mode='authentic']
-  ytd-masthead
-  yt-searchbox
-  [class*='SearchboxComponentInputWrapper'],
-html[data-retroweb='youtube'][data-retroweb-mode='authentic']
-  ytd-masthead
-  yt-searchbox
-  [class*='SearchboxComponentInputContainer'] {
-  width: 414px;
-  height: 32px;
   margin: 0;
 }
 
@@ -102,29 +85,13 @@ html[data-retroweb='youtube'][data-retroweb-mode='authentic']
   ytd-masthead
   yt-searchbox
   [class*='SearchboxComponentInputBox'] {
-  box-sizing: border-box;
-  width: 379px;
-  height: 32px;
   border-radius: 3px 0 0 3px !important;
 }
 
 html[data-retroweb='youtube'][data-retroweb-mode='authentic']
   ytd-masthead
   yt-searchbox
-  input:not([type='file']) {
-  font-size: 13px;
-  height: 30px;
-  padding: 2px 4px 3px;
-}
-
-html[data-retroweb='youtube'][data-retroweb-mode='authentic']
-  ytd-masthead
-  yt-searchbox
   [class*='SearchboxComponentSearchButton'] {
-  box-sizing: border-box;
-  width: 35px; /* measured */
-  height: 32px;
-  padding: 0;
   border-radius: 0 3px 3px 0 !important;
 }
 
@@ -910,10 +877,6 @@ html[data-retroweb='youtube'][data-retroweb-scheme='light'], html[data-retroweb=
 html[data-retroweb='youtube'][data-retroweb-scheme='light'] #masthead-container {
   background-color: #fff !important; border-bottom: 1px solid #e8e8e8;
 }
-html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-masthead yt-searchbox { width: clamp(280px, 52vw, 650px); }
-html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-masthead yt-searchbox :is([class*='SearchboxComponentInputWrapper'], [class*='SearchboxComponentInputContainer']) { width: 100%; }
-html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-masthead yt-searchbox [class*='SearchboxComponentInputBox'] { width: calc(100% - 65px); }
-html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-masthead yt-searchbox [class*='SearchboxComponentSearchButton'] { width: 65px; }
 html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-masthead yt-searchbox [class*='SearchboxComponentSearchButton'] {
   background-color: #f8f8f8 !important; background-image: none !important; border: 1px solid #d3d3d3 !important; border-left: 0 !important; box-shadow: none !important;
 }
@@ -1030,4 +993,23 @@ html[data-retroweb='youtube'][data-retroweb-scheme='light']
   * {
   color: #333 !important;
   fill: #333 !important;
+}
+
+/* ===== Search box focus ring ==============================================================
+ * The shared keyboard-focus ring (base.css) drew a blue frame around just the text field inside
+ * the box, and the field sat taller than the box. The ring now goes around the whole box, as
+ * on YouTube itself, so keyboard focus stays visible without the stray frame. */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  ytd-masthead
+  yt-searchbox
+  input:focus-visible {
+  outline: none;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  ytd-masthead
+  yt-searchbox
+  [class*='SearchboxComponentInputBox']:focus-within {
+  border-color: #4d90fe !important;
+  box-shadow: 0 0 0 1px #4d90fe !important;
 }

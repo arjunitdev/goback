@@ -503,3 +503,26 @@ html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-schem
 html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light'][data-retroweb-route='results'] #main div:not(#tads *, #tadsb *, #bottomads *, :has(> img), :has(> a > img), :has(> div > img)) {
   border-radius: 2px;
 }
+
+/* Results and Images search box: one frame, not two. The text field inside the box carried its own
+ * border and focus ring, drawing a frame inside the frame; the ring now surrounds the whole box. */
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light']:is([data-retroweb-route='results'], [data-retroweb-route='images'])
+  #searchform
+  textarea[name='q'] {
+  border-color: transparent;
+}
+
+html[data-retroweb='google'][data-retroweb-mode='authentic']:is([data-retroweb-route='results'], [data-retroweb-route='images'])
+  #searchform
+  textarea[name='q']:focus-visible {
+  outline: none;
+}
+
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light']:is([data-retroweb-route='results'], [data-retroweb-route='images'])
+  #searchform
+  form[role='search']
+  > div
+  > div:focus-within {
+  border-color: #4d90fe;
+  box-shadow: 0 0 0 1px #4d90fe !important;
+}
