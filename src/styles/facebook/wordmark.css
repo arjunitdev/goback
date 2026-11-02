@@ -25,7 +25,7 @@ html[data-retroweb='facebook'][data-retroweb-wordmark='on']:not([data-retroweb-b
 html[data-retroweb='facebook'][data-retroweb-wordmark='on']:not([data-retroweb-bare])
   [role='banner']
   [data-rw-fb='search'] {
-  margin-left: 96px;
+  transform: translateX(96px);
 }
 
 html[data-retroweb='facebook'][data-retroweb-wordmark='on'] #rw-fbbar {

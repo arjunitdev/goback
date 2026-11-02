@@ -207,7 +207,7 @@ describe('site-specific fences', () => {
     // users never get unreadable combinations. Shape/typography rules are exempt, and so are
     // Facebook's header bar (`[role='banner']`) and the landing bar (`#rw-fbbar`): those rules set
     // the bar's own background and its text/icon colours together, so they read on either theme (ADR-026).
-    const ownColours = /\[role='banner'\]|#rw-fbbar|\[data-rw-fb='bar'\]/;
+    const ownColours = /\[role='banner'\]|#rw-fbbar|\[data-rw-fb='(bar|search)'\]/;
     const colour = /(^|;|\s)(color|background(-color|-image)?|border(-bottom|-top)?)\s*:/i;
     for (const site of Object.keys(EXCLUDED)) {
       const f = siteFile(site);

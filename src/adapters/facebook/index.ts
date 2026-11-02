@@ -2,6 +2,7 @@ import type { AdapterContext, SiteAdapter } from '../../shared/types';
 import { evaluateProbes } from '../probe';
 import { hasLandingBar, isLoginLanding, mountLandingBar, unmountLandingBar } from './chrome';
 import { clearHeader, markHeaderNow } from './header';
+import { FB_HINT_KEY, rememberSignedIn } from './hint';
 import { matchesFacebook, routeFromUrl, type FacebookRoute } from './routes';
 import { FORBIDDEN, PROBES } from './selectors';
 
@@ -35,12 +36,17 @@ export const facebookAdapter: SiteAdapter = {
   probe(doc, route) {
     // Landing page: supported once the bar is in place. The stylesheet then leaves the form alone.
     if (route === 'feed' && isLoginLanding(doc)) {
+      rememberSignedIn(false);
       const ready = hasLandingBar(doc);
       return { supported: ready, missing: ready ? [] : ['landing-bar'] };
     }
-    return evaluateProbes(doc, PROBES[route as FacebookRoute], FORBIDDEN);
+    const outcome = evaluateProbes(doc, PROBES[route as FacebookRoute], FORBIDDEN);
+    if (outcome.supported) rememberSignedIn(true);
+    else if (outcome.missing.some((m) => m.startsWith('blocked:'))) rememberSignedIn(false);
+    return outcome;
   },
   earlyStyle: false,
+  earlyHintKey: FB_HINT_KEY,
   mount: syncLandingBar,
   refresh: syncLandingBar,
   unmount(ctx) {

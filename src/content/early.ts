@@ -15,7 +15,40 @@ const url = new URL(location.href);
 const adapter = ADAPTERS.find((a) => a.matches(url));
 const route = adapter?.detectRoute(document, url) ?? null;
 
-// Late-style adapters (e.g. Facebook, whose first paint may be a login wall) wait for the engine.
+// Late-style adapters (e.g. Facebook, whose first paint may be a login wall) wait for the engine,
+// unless their last visit left a "this was a safe, signed-in page" hint: then they style from the
+// first paint too. If the hint is stale the engine corrects it as soon as it has probed the page.
+const hintKey = adapter?.earlyStyle === false ? adapter.earlyHintKey : undefined;
+if (adapter && route && hintKey) {
+  const systemReduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const scheme =
+    !(adapter.forceLightAttr || adapter.pinsLight) &&
+    matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light';
+  const area = chromeLocalArea();
+  Promise.all([loadPrefs(area), area.get(hintKey)])
+    .then(([prefs, hint]) => {
+      if (hint[hintKey] !== true || !isSiteActive(prefs, adapter.id)) return;
+      applyStyleState(
+        root,
+        {
+          site: adapter.id,
+          route,
+          mode: prefs.sites[adapter.id].mode,
+          motion: prefs.motion,
+          highContrast: prefs.highContrast,
+          wordmark: __WORDMARK__,
+          scheme,
+          lockLightAttr:
+            prefs.sites[adapter.id].mode === 'authentic' ? adapter.forceLightAttr : undefined,
+        },
+        systemReduce,
+      );
+    })
+    .catch(() => undefined);
+}
+
 if (adapter && route && adapter.earlyStyle !== false) {
   const systemReduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   // <body> does not exist yet, so guess the page scheme from the system; the engine

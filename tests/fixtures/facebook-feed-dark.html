@@ -5,14 +5,18 @@
     <title>Synthetic dark feed - Facebook (fixture, no real content)</title>
   </head>
   <body style="background: #18191a; color: #e4e6eb">
-    <!-- The dark colour sits on an inner row, not on the banner itself, as on the real site. -->
-    <div role="banner">
-      <div id="hdr-row" style="background: #242526; display: flex; align-items: center; height: 56px">
-        <a href="/" aria-label="Facebook"><svg width="40" height="40"></svg></a>
-        <label id="hdr-pill" style="background: #3a3b3c; border-radius: 20px; padding: 6px 12px; width: 240px; display: block">
-          <input type="search" aria-label="Search" />
-        </label>
-      </div>
+    <!-- The dark colour is painted by a wrapper several levels above the banner, as on the real site. -->
+    <div id="hdr-paint" style="background: #242526; height: 56px">
+      <div><div><div><div>
+        <div role="banner">
+          <div id="hdr-row" style="display: flex; align-items: center; height: 56px">
+            <a href="/" aria-label="Facebook"><svg width="40" height="40"></svg></a>
+            <label id="hdr-pill" style="background: #3a3b3c; border-radius: 20px; padding: 6px 12px; width: 240px; display: block">
+              <input type="search" aria-label="Search" />
+            </label>
+          </div>
+        </div>
+      </div></div></div></div>
     </div>
     <div role="navigation">nav</div>
     <div role="main">

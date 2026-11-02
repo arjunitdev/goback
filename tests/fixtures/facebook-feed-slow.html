@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Synthetic slow feed - Facebook (fixture, no real content)</title>
+  </head>
+  <body style="background: #18191a; color: #e4e6eb">
+    <!-- A blocking script keeps the document in the "loading" state, so the test can tell a first-paint
+         style from one applied after load. The test serves /slow.js after a delay. -->
+    <script src="/slow.js"></script>
+    <div role="banner"><a href="/" aria-label="Facebook"><svg width="40" height="40"></svg></a></div>
+    <div role="main"><div role="feed"><div role="article">synthetic post</div></div></div>
+  </body>
+</html>

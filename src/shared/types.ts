@@ -46,6 +46,13 @@ export interface SiteAdapter {
    */
   earlyStyle?: boolean;
   /**
+   * With `earlyStyle: false`: the `chrome.storage.local` key of a boolean the adapter writes when its
+   * last visit confirmed a safe (signed-in) page. When it is true, the early script styles from the
+   * first paint, so the page does not load native and then switch. A wrong hint is harmless: the
+   * engine still probes, and fails open or switches to the right state as soon as it runs.
+   */
+  earlyHintKey?: string;
+  /**
    * Name of the <html> attribute the site uses to switch to its dark theme (YouTube: `dark`).
    * In Authentic mode the engine holds it off, because the 2012 sites had no dark theme;
    * Compatibility mode and teardown restore it.

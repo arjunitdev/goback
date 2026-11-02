@@ -38,6 +38,31 @@ html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retrowe
   border-bottom: 1px solid var(--rw-fb-header-border);
 }
 
+/* The search pill (marked by header.ts) becomes the 2012 search field: a white box with square-ish corners and a
+ * thin dark-blue edge, dark text. Its own icon keeps its colour (not the white header icons). */
+html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [role='banner'] [data-rw-fb='search'] {
+  background-color: #fff !important;
+  border: 1px solid #1d4088;
+  border-radius: 2px !important;
+}
+
+html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [role='banner'] [data-rw-fb='search'] :not(input, textarea) {
+  color: #4b4f56;
+}
+
+html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [role='banner'] [data-rw-fb='search'] input {
+  color: #000 !important;
+}
+
+html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [role='banner'] [data-rw-fb='search'] input::placeholder {
+  color: #6b6f76 !important;
+  opacity: 1;
+}
+
+html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [role='banner'] [data-rw-fb='search'] svg {
+  filter: none;
+}
+
 /* White icons and text on the blue header; inputs keep their own colours. Pictures (an avatar is an
  * <svg> holding an <image>) are not icons and keep their own colours. */
 html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [role='banner'] svg:not(:has(image)),

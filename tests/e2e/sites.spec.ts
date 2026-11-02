@@ -150,17 +150,47 @@ test.describe('Facebook', () => {
     await expect(page.locator('html')).toHaveAttribute('data-retroweb', 'facebook');
     await expect(page.locator('html')).toHaveAttribute('data-retroweb-scheme', 'dark');
     expect(await color(page, '[role="banner"]', 'background-color')).toBe('rgb(59, 89, 152)');
-    // The dark colour is on an inner row: the extension finds it by measuring and paints it blue too.
-    await expect(page.locator('#hdr-row')).toHaveAttribute('data-rw-fb', 'bar');
-    expect(await color(page, '#hdr-row', 'background-color')).toBe('rgb(59, 89, 152)');
-    // The search pill is found and moved clear of the wider wordmark; the pill keeps its own colour.
+    // The dark colour is painted by a wrapper several levels above the banner: found by hit-testing the bar.
+    await expect(page.locator('#hdr-paint')).toHaveAttribute('data-rw-fb', 'bar');
+    expect(await color(page, '#hdr-paint', 'background-color')).toBe('rgb(59, 89, 152)');
+    // The search pill is found, restyled as the white 2012 field and moved clear of the wider wordmark.
     await expect(page.locator('#hdr-pill')).toHaveAttribute('data-rw-fb', 'search');
-    expect(await color(page, '#hdr-pill', 'margin-left')).toBe('96px');
-    expect(await color(page, '#hdr-pill', 'background-color')).toBe('rgb(58, 59, 60)');
+    expect(await color(page, '#hdr-pill', 'background-color')).toBe('rgb(255, 255, 255)');
+    expect(await color(page, '#hdr-pill', 'transform')).toBe('matrix(1, 0, 0, 1, 96, 0)');
     await page.close();
   });
 
+  test('styles from the first paint when the last visit was a signed-in page, and not otherwise', async () => {
+    await enable(['facebook']);
+    // True when the page was already styled at DOMContentLoaded, i.e. before the engine (which runs at idle) had a say.
+    const styledBeforeEngine = async (hint: boolean) => {
+      await h.sw.evaluate(async (v) => chrome.storage.local.set({ 'rw-hint-facebook': v }), hint);
+      const page = await h.ctx.newPage();
+      await stub(page, FB, () => 'facebook-feed-slow.html');
+      // A blocking script holds the parser for a while, so the early script has long finished by then.
+      await page.route(`${FB}/slow.js`, async (route) => {
+        await new Promise((r) => setTimeout(r, 800));
+        await route.fulfill({ contentType: 'application/javascript', body: '' });
+      });
+      await page.addInitScript(() => {
+        document.addEventListener('DOMContentLoaded', () => {
+          (window as unknown as { __atDcl: boolean }).__atDcl =
+            document.documentElement.hasAttribute('data-retroweb');
+        });
+      });
+      await page.goto(`${FB}/`);
+      await expect(page.locator('html')).toHaveAttribute('data-retroweb', 'facebook');
+      const atDcl = await page.evaluate(() => (window as unknown as { __atDcl: boolean }).__atDcl);
+      await page.close();
+      return atDcl;
+    };
+    expect(await styledBeforeEngine(true)).toBe(true);
+    expect(await styledBeforeEngine(false)).toBe(false);
+  });
+
   test('never styles a login page, not even for one frame', async () => {
+    // A fresh profile (or one whose last visit was not signed in): there is no early hint.
+    await h.sw.evaluate(async () => chrome.storage.local.set({ 'rw-hint-facebook': false }));
     const page = await h.ctx.newPage();
     await stub(page, FB, () => 'facebook-login.html');
     await page.addInitScript(() => {
