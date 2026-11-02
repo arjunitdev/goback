@@ -26,10 +26,3 @@ html[data-retroweb='youtube'][data-retroweb-mode][data-retroweb-route]
   padding: 0;
   margin: 0;
 }
-
-/* ---- Page paper texture over the measured #ebebeb base (light pages only) ------------ */
-html[data-retroweb='youtube'][data-retroweb-scheme='light'],
-html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-app {
-  background-image: url('chrome-extension://__MSG_@@extension_id__/assets/youtube-private/bg.png');
-  background-repeat: repeat;
-}

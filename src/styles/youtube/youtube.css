@@ -901,3 +901,99 @@ html[data-retroweb='youtube'][data-retroweb-scheme='light']
   .metadata-snippet-text {
   color: #999 !important;
 }
+
+/* ===== 2014 look (owner reference: the "Shake It Off" watch page and guide, docs/12 ADR-025) =====
+ * Layered after the 2012 rules above; where both set a property, these win. */
+html[data-retroweb='youtube'][data-retroweb-scheme='light'], html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-app {
+  --rw-yt-page: #f1f1f1; background-color: #f1f1f1 !important; background-image: none !important;
+}
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] #masthead-container {
+  background-color: #fff !important; border-bottom: 1px solid #e8e8e8;
+}
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-masthead yt-searchbox { width: clamp(280px, 52vw, 650px); }
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-masthead yt-searchbox :is([class*='SearchboxComponentInputWrapper'], [class*='SearchboxComponentInputContainer']) { width: 100%; }
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-masthead yt-searchbox [class*='SearchboxComponentInputBox'] { width: calc(100% - 65px); }
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-masthead yt-searchbox [class*='SearchboxComponentSearchButton'] { width: 65px; }
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-masthead yt-searchbox [class*='SearchboxComponentSearchButton'] {
+  background-color: #f8f8f8 !important; background-image: none !important; border: 1px solid #d3d3d3 !important; border-left: 0 !important; box-shadow: none !important;
+}
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-masthead yt-searchbox [class*='SearchboxComponentInputBox'] { box-shadow: inset 0 1px 2px #eee !important; border-color: #ccc !important; }
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-masthead #end ytd-button-renderer a {
+  background: #357ae8 !important; color: #fff !important; font-weight: bold; border-radius: 2px !important; padding: 0 12px; height: 28px; display: inline-flex; align-items: center;
+}
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-masthead #end ytd-button-renderer a * { color: #fff !important; }
+
+/* watch: video first, then one white card (title, channel, actions), then the description card */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch'] ytd-watch-flexy #player { order: 0; }
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch'] ytd-watch-flexy #title-row { order: 1; margin: 10px 0 0; padding: 14px 16px 0; }
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch'] ytd-watch-flexy #owner { order: 2; margin: 0; padding: 8px 16px; }
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch'] ytd-watch-flexy #actions { margin: 0; padding: 0 16px 8px; }
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch'] ytd-watch-flexy #description-inner > ytd-watch-info-text { margin: 0; padding: 0 16px 8px; }
+html[data-retroweb='youtube'][data-retroweb-scheme='light'][data-retroweb-route='watch'] ytd-watch-flexy :is(#title-row, #owner, #actions, #description-inner > ytd-watch-info-text) {
+  background: #fff; box-shadow: 0 1px 0 rgb(0 0 0 / 8%);
+}
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-watch-metadata #title h1 { font-size: 24px !important; font-weight: normal !important; line-height: 28px !important; }
+html[data-retroweb='youtube'][data-retroweb-scheme='light'][data-retroweb-route='watch'] ytd-watch-flexy ytd-watch-info-text #info > span:first-child { color: #333 !important; font-weight: normal; }
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-watch-metadata ytd-text-inline-expander { background: #fff; padding: 14px 16px; margin-top: 10px; box-sizing: border-box; box-shadow: 0 1px 0 rgb(0 0 0 / 8%); }
+/* Subscribe: the red button */
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-watch-metadata #subscribe-button button:not(ytd-popup-container *) {
+  background: #cc181e !important; background-image: none !important; border: 0 !important; box-shadow: none !important; text-shadow: none !important;
+  color: #fff !important; border-radius: 2px !important; font-size: 13px !important; font-weight: bold !important; height: 28px; padding: 0 12px;
+}
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-watch-metadata #subscribe-button button * { color: #fff !important; }
+/* Action buttons: flat, grey, no frame */
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-watch-metadata #actions button:not(ytd-popup-container *) {
+  background: transparent !important; background-image: none !important; border: 0 !important; box-shadow: none !important; text-shadow: none !important;
+  color: #767676 !important; font-size: 12px !important; font-weight: bold !important;
+}
+/* Related list: 120x68 thumbnails in a white card */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] yt-lockup-view-model [class*='LockupViewModelHorizontal'] :is(yt-thumbnail-view-model, [class*='ThumbnailViewModelImage'], [class*='ThumbnailViewModelImage'] img),
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] yt-lockup-view-model [class*='LockupViewModelHorizontal'] yt-thumbnail-view-model { height: 68px !important; }
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] yt-lockup-view-model [class*='LockupViewModelHorizontal'] [class*='LockupViewModelContentImage'] { height: 68px !important; }
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] yt-lockup-view-model, html[data-retroweb='youtube'][data-retroweb-mode='authentic'] yt-lockup-view-model [class*='LockupViewModelHorizontal'], html[data-retroweb='youtube'][data-retroweb-mode='authentic'] yt-lockup-view-model [class*='LockupViewModelHorizontal'] [class*='LockupViewModelMetadata'] { min-height: 68px; }
+html[data-retroweb='youtube'][data-retroweb-scheme='light'][data-retroweb-route='watch'] #secondary-inner { background: #fff; padding: 12px 16px; box-shadow: 0 1px 0 rgb(0 0 0 / 8%); }
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch'] ytd-watch-flexy :is(#title-row, #owner, #actions, #description-inner > ytd-watch-info-text, ytd-text-inline-expander) { box-sizing: border-box; width: 100%; max-width: 100%; }
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch'] ytd-watch-flexy { --ytd-watch-flexy-sidebar-width: clamp(260px, calc(100vw - 760px), 402px) !important; --ytd-watch-flexy-sidebar-min-width: clamp(260px, calc(100vw - 760px), 402px) !important; }
+/* ---- Guide, 2014: white panel, red icon tiles, red uppercase section heading ---- */
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] tp-yt-app-drawer#guide #contentContainer,
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-guide-renderer #guide-inner-content,
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-guide-renderer ytd-guide-section-renderer { background-color: #fff !important; }
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-guide-renderer :is(yt-formatted-string, .title, #guide-section-title, h3, span) { color: #333 !important; }
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-guide-renderer ytd-guide-entry-renderer a#endpoint { background-image: none; background: transparent; }
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-guide-renderer ytd-guide-entry-renderer a#endpoint:hover { background: #f1f1f1; border-right-color: transparent; }
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-guide-renderer ytd-guide-entry-renderer:is([active], [selected]) a#endpoint { background: #f1f1f1; border-right-color: transparent; }
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-guide-renderer ytd-guide-entry-renderer:is([active], [selected]) :is(yt-formatted-string, .title, span) { color: #000 !important; }
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-guide-renderer ytd-guide-section-renderer :is(h3, #guide-section-title, #header) :is(yt-formatted-string, a, span) { color: #cc181e !important; text-transform: uppercase; font-size: 11px !important; }
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-guide-renderer ytd-guide-entry-renderer yt-icon { color: #333 !important; fill: #333 !important; }
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-guide-renderer ytd-guide-section-renderer:not(:first-of-type) ytd-guide-entry-renderer yt-icon { background: #e62117; color: #fff !important; fill: #fff !important; border-radius: 2px; padding: 3px; box-sizing: border-box; }
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-guide-signin-promo-renderer { background-color: transparent; }
+html[data-retroweb='youtube'][data-retroweb-scheme='light'] ytd-guide-signin-promo-renderer :is(yt-formatted-string, span, #message) { color: #333 !important; font-weight: normal !important; }
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-guide-entry-renderer :is(.title, yt-formatted-string) { font-size: 14px !important; }
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'] ytd-guide-entry-renderer tp-yt-paper-item { min-height: 40px; }
+
+/* Subscribe is the red 2014 button on every page (channel headers too), not the grey 2012 default. */
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  :is(ytd-subscribe-button-renderer, yt-subscribe-button-view-model)
+  button:not(ytd-popup-container *, ytd-masthead *) {
+  background: #cc181e !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  color: #fff !important;
+  border-radius: 2px !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  :is(ytd-subscribe-button-renderer, yt-subscribe-button-view-model)
+  button
+  * {
+  color: #fff !important;
+}
+
+/* Filter chips and pills lose their rounding: 2014 had square 2px controls. */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic']
+  :is(yt-chip-cloud-chip-renderer, ytd-feed-filter-chip-bar-renderer chip-shape, chip-shape)
+  :is(div, button, a) {
+  border-radius: 2px !important;
+}

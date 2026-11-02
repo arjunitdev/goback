@@ -6,8 +6,8 @@
  * `extrapolated` = not in the captures, derived from measured neighbours.
  */
 html[data-retroweb='youtube'] {
-  --rw-yt-font: arial, sans-serif; /* measured */
-  --rw-yt-page: #ebebeb; /* measured: body background-color */
+  --rw-yt-font: Roboto, Arial, sans-serif; /* 2014 reference: YouTube's own Roboto */
+  --rw-yt-page: #f1f1f1; /* 2014 reference page grey */
   --rw-yt-text: #333; /* measured */
   --rw-yt-meta: #666; /* measured: .stat, .yt-user-name, uploader line */
   --rw-yt-link: #1c62b9; /* measured: a */
