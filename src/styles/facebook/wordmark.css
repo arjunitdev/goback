@@ -25,5 +25,5 @@ html[data-retroweb='facebook'][data-retroweb-wordmark='on'] #rw-fbbar {
   background-image: url('chrome-extension://__MSG_@@extension_id__/assets/facebook-2012.svg');
   background-repeat: no-repeat;
   background-position: max(16px, calc(50% - 490px)) center;
-  background-size: 170px 42px;
+  background-size: 128px 32px;
 }

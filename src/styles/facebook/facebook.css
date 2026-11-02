@@ -55,7 +55,7 @@ html[data-retroweb='facebook'][data-retroweb-mode='authentic'] #rw-fbbar {
   right: 0;
   z-index: 2147483000;
   box-sizing: border-box;
-  height: 82px;
+  height: 48px;
   background-color: var(--rw-fb-header);
   border-bottom: 1px solid var(--rw-fb-header-border);
 }
