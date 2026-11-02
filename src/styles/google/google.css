@@ -526,3 +526,30 @@ html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-schem
   border-color: #4d90fe;
   box-shadow: 0 0 0 1px #4d90fe !important;
 }
+
+/* ===== Dark-account leaks on Results and Images =====
+ * Google picks its theme on the server; on a dark account some classes hard-code pale text, icon fills
+ * and fade-out gradients that our variable pin cannot reach. src/adapters/google/repair.ts measures the
+ * page and marks those nodes with data-rw-fix; marked nodes get the 2013 light-page colours. */
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light']:is([data-retroweb-route='results'], [data-retroweb-route='images']) [data-rw-fix='text'] {
+  color: #222 !important;
+  -webkit-text-fill-color: #222 !important;
+}
+
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light']:is([data-retroweb-route='results'], [data-retroweb-route='images']) [data-rw-fix='muted'] {
+  color: #70757a !important;
+  -webkit-text-fill-color: #70757a !important;
+}
+
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light']:is([data-retroweb-route='results'], [data-retroweb-route='images']) [data-rw-fix='link'] {
+  color: #1122cc !important;
+  -webkit-text-fill-color: #1122cc !important;
+}
+
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light']:is([data-retroweb-route='results'], [data-retroweb-route='images']) [data-rw-fix='icon'] {
+  fill: #5f6368 !important;
+}
+
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light']:is([data-retroweb-route='results'], [data-retroweb-route='images']) [data-rw-fix='fade'] {
+  background-image: linear-gradient(rgb(255 255 255 / 0%), #fff 60%) !important;
+}

@@ -38,3 +38,21 @@ html[data-retroweb='google'][data-retroweb-mode='authentic']:is([data-retroweb-r
   padding: 0;
   object-fit: contain;
 }
+
+/* Dark accounts get the header logo as an inline white SVG inside a#logo, not an <img>. The 2013 logo is
+ * painted as the link's background and the SVG's fills go transparent; the link, its label and the click
+ * target are untouched. */
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light']:is([data-retroweb-route='results'], [data-retroweb-route='images'])
+  a#logo {
+  display: block;
+  box-sizing: border-box;
+  width: 92px;
+  height: 33px;
+  background: url('chrome-extension://__MSG_@@extension_id__/assets/google-private/logo.png') no-repeat left center / contain;
+}
+
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light']:is([data-retroweb-route='results'], [data-retroweb-route='images'])
+  a#logo
+  :is(svg, svg *) {
+  fill: transparent !important;
+}

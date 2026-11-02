@@ -2,6 +2,7 @@ import type { AdapterContext, SiteAdapter } from '../../shared/types';
 import { GTOOLS_ID, mountHomeChrome, mountServicesBar, unmountHomeChrome } from './chrome';
 import { runProbes } from './features';
 import { legibleNow } from './legibility';
+import { clearRepairs, repairNow } from './repair';
 import { matchesGoogle, routeFromUrl, type GoogleRoute } from './routes';
 
 export const GOOGLE_ADAPTER_VERSION = '0.1.0';
@@ -16,7 +17,10 @@ function syncHomeChrome(ctx: AdapterContext): void {
   if (ctx.route === 'home') return mountHomeChrome(doc);
   if (ctx.route === 'results' || ctx.route === 'images') {
     doc.getElementById(GTOOLS_ID)?.remove(); // the tools belong to the home page only
-    return mountServicesBar(doc, ctx.route === 'images' ? 'Images' : 'Search');
+    mountServicesBar(doc, ctx.route === 'images' ? 'Images' : 'Search');
+    // Dark accounts leave pale text and icons on the white page: mark them for the stylesheet.
+    repairNow(doc, ctx.url.href);
+    return;
   }
   unmountHomeChrome(doc);
 }
@@ -44,5 +48,8 @@ export const googleAdapter: SiteAdapter = {
   pinsLight: true,
   mount: syncHomeChrome,
   refresh: syncHomeChrome,
-  unmount: (ctx) => unmountHomeChrome(ctx.document),
+  unmount(ctx) {
+    clearRepairs(ctx.document);
+    unmountHomeChrome(ctx.document);
+  },
 };
