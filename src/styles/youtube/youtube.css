@@ -1013,3 +1013,17 @@ html[data-retroweb='youtube'][data-retroweb-scheme='light']
   border-color: #4d90fe !important;
   box-shadow: 0 0 0 1px #4d90fe !important;
 }
+
+/* ===== Watch page, two columns: the sidebar hugs the main column ============================
+ * #primary-inner is capped to the player's width, but its parent #primary still filled the row, so on a
+ * wide window an empty band opened between the column and the sidebar. The cap moves up to #primary
+ * (same formula; it still shrinks when the row is tight) and the free space is split at the page edges. */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch'] ytd-watch-flexy[is-two-columns_] #primary {
+  box-sizing: content-box;
+  flex: 0 1 auto;
+  min-width: 0;
+  width: max(640px, calc((100vh - 250px) * var(--ytd-watch-flexy-width-ratio) / var(--ytd-watch-flexy-height-ratio)));
+}
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch'] ytd-watch-flexy[is-two-columns_] #primary-inner {
+  width: 100%;
+}
