@@ -56,3 +56,20 @@ html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-schem
   :is(svg, svg *) {
   fill: transparent !important;
 }
+
+/* Dark accounts get the home logo as an inline SVG with a hard-coded white path, not an <img>: white on the
+ * white 2013 page. The 2013 logo is painted as the SVG's own background and its path goes transparent; the
+ * element, its label and its link are untouched. Keeps the SVG's own box height and position (no extra top margin, which would push it over the search box). */
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light'][data-retroweb-route='home']
+  svg[aria-label='Google'] {
+  box-sizing: border-box;
+  width: 275px;
+  height: 92px;
+  background: url('chrome-extension://__MSG_@@extension_id__/assets/google-private/logo.png') no-repeat center / contain;
+}
+
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light'][data-retroweb-route='home']
+  svg[aria-label='Google']
+  * {
+  fill: transparent !important;
+}

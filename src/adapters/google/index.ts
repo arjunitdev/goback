@@ -14,7 +14,12 @@ export const GOOGLE_ADAPTER_VERSION = '0.1.0';
 function syncHomeChrome(ctx: AdapterContext): void {
   const doc = ctx.document;
   if (ctx.site.mode !== 'authentic') return unmountHomeChrome(doc);
-  if (ctx.route === 'home') return mountHomeChrome(doc);
+  if (ctx.route === 'home') {
+    mountHomeChrome(doc);
+    // Dark accounts get a white inline-SVG logo and pale controls: mark them for the stylesheet.
+    repairNow(doc, ctx.url.href);
+    return;
+  }
   if (ctx.route === 'results' || ctx.route === 'images') {
     doc.getElementById(GTOOLS_ID)?.remove(); // the tools belong to the home page only
     mountServicesBar(doc, ctx.route === 'images' ? 'Images' : 'Search');
