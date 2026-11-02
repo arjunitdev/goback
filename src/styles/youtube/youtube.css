@@ -1027,3 +1027,38 @@ html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-rout
 html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-route='watch'] ytd-watch-flexy[is-two-columns_] #primary-inner {
   width: 100%;
 }
+
+/* ===== Home page: the 2016 two-tab strip drawn over the chip bar =====
+ * src/adapters/youtube/home-tabs.ts adds #rw-ytnav (two real links) and sizes it to the chip bar's own box;
+ * the chips stay in the page underneath, covered. */
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-scheme='light'] #rw-ytnav {
+  align-items: center;
+  background: #fff;
+  border-bottom: 1px solid #e2e2e2;
+  box-sizing: border-box;
+  display: flex;
+  font: 500 14px/1 Roboto, Arial, sans-serif;
+  gap: 30px;
+  justify-content: center;
+  position: fixed;
+  z-index: 1900;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-scheme='light'] #rw-ytnav a {
+  align-items: center;
+  border-bottom: 3px solid transparent;
+  color: #606060;
+  display: flex;
+  height: 40px;
+  padding: 0 4px;
+  text-decoration: none;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-scheme='light'] #rw-ytnav a:hover {
+  color: #222;
+}
+
+html[data-retroweb='youtube'][data-retroweb-mode='authentic'][data-retroweb-scheme='light'] #rw-ytnav a[aria-current='page'] {
+  border-bottom-color: #cc181e;
+  color: #222;
+}

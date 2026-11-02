@@ -12,7 +12,15 @@
       </ytd-masthead>
       <ytd-mini-guide-renderer>guide</ytd-mini-guide-renderer>
       <ytd-page-manager>
-        <ytd-browse><ytd-rich-grid-renderer>grid</ytd-rich-grid-renderer></ytd-browse>
+        <ytd-browse>
+          <ytd-rich-grid-renderer>
+            <!-- A chip bar like the real one: a sticky host with a 48px wrapper holding the chips. -->
+            <ytd-feed-filter-chip-bar-renderer style="display: block; position: sticky; top: 56px; margin-left: 72px; height: 48px">
+              <div id="chips-wrapper" style="height: 48px"><button>All</button><button>Podcasts</button></div>
+            </ytd-feed-filter-chip-bar-renderer>
+            grid
+          </ytd-rich-grid-renderer>
+        </ytd-browse>
       </ytd-page-manager>
     </ytd-app>
   </body>

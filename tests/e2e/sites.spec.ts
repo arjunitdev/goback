@@ -61,6 +61,34 @@ test.describe('YouTube', () => {
     await page.close();
   });
 
+  test('home page: a Home / Trending strip sits exactly over the chip bar', async () => {
+    await enable(['youtube']);
+    const page = await h.ctx.newPage();
+    await stub(page, YT, pick);
+    await page.goto(`${YT}/`);
+    const nav = page.locator('#rw-ytnav');
+    await expect(nav).toBeVisible();
+    const strip = await nav.boundingBox();
+    const bar = await page.locator('#chips-wrapper').boundingBox();
+    expect(strip && bar).toBeTruthy();
+    for (const k of ['x', 'y', 'width', 'height'] as const) {
+      expect(Math.abs((strip?.[k] ?? -99) - (bar?.[k] ?? 99)), k).toBeLessThanOrEqual(1);
+    }
+    expect(await nav.locator('a').allTextContents()).toEqual(['Home', 'Trending']);
+    expect(await nav.locator('a[aria-current="page"]').getAttribute('href')).toBe(
+      'https://www.youtube.com/',
+    );
+    expect(await color(page, '#rw-ytnav a[aria-current="page"]', 'border-bottom-color')).toBe(
+      'rgb(204, 24, 30)',
+    );
+    expect(await color(page, '#rw-ytnav', 'background-color')).toBe('rgb(255, 255, 255)');
+    // Other pages have no strip.
+    await page.goto(`${YT}/watch?v=abc`);
+    await expect(page.locator('html')).toHaveAttribute('data-retroweb-route', 'watch');
+    await expect(page.locator('#rw-ytnav')).toHaveCount(0);
+    await page.close();
+  });
+
   test('follows a single-page navigation signalled by the page-world event', async () => {
     const page = await h.ctx.newPage();
     await stub(page, YT, pick);

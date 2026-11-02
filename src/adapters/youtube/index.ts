@@ -1,5 +1,6 @@
 import type { SiteAdapter } from '../../shared/types';
 import { evaluateProbes } from '../probe';
+import { syncHomeTabs, unmountHomeTabs, watchHomeTabs } from './home-tabs';
 import { matchesYoutube, routeFromUrl, type YoutubeRoute } from './routes';
 import { PROBES } from './selectors';
 
@@ -62,14 +63,19 @@ export const youtubeAdapter: SiteAdapter = {
   // Page swaps happen in <ytd-page-manager> and are also announced by yt-navigate-finish.
   observeRoot: (doc) => doc.querySelector('ytd-page-manager') ?? doc.body ?? doc.documentElement,
   observeShallow: true,
+  // The home page gets the two-tab strip over the chip bar; the early script starts the watcher.
+  earlyWatch: watchHomeTabs,
   mount(ctx) {
     if (ctx.route === 'watch') holdScrollAtTop(ctx.document, ctx.url.href);
+    syncHomeTabs(ctx.document);
   },
   // Route changes keep the adapter mounted, so a new watch page is noticed here.
   refresh(ctx) {
     if (ctx.route === 'watch') holdScrollAtTop(ctx.document, ctx.url.href);
+    syncHomeTabs(ctx.document);
   },
-  unmount() {
+  unmount(ctx) {
     stopHolding?.();
+    unmountHomeTabs(ctx.document);
   },
 };

@@ -99,6 +99,7 @@ if (adapter && route && adapter.earlyStyle !== false) {
         },
         systemReduce,
       );
+      adapter.earlyWatch?.(document);
     })
     .catch(() => undefined);
 }
