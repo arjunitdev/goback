@@ -80,14 +80,14 @@ export function effectiveReducedMotion(pref: MotionPref, systemPrefersReduce: bo
   return pref === 'reduce' || systemPrefersReduce;
 }
 
-interface Rgba {
+export interface Rgba {
   r: number;
   g: number;
   b: number;
   a: number;
 }
 
-function parseColor(value: string): Rgba | null {
+export function parseColor(value: string): Rgba | null {
   const m =
     /^rgba?\(\s*(\d+(?:\.\d+)?)[ ,]+(\d+(?:\.\d+)?)[ ,]+(\d+(?:\.\d+)?)(?:[ ,/]+(\d*\.?\d+%?))?\s*\)$/.exec(
       value.trim(),
@@ -101,7 +101,7 @@ function parseColor(value: string): Rgba | null {
 }
 
 /** Relative luminance, 0 (black) to 1 (white). */
-function luminance({ r, g, b }: Rgba): number {
+export function luminance({ r, g, b }: Rgba): number {
   const lin = (c: number) => {
     const s = c / 255;
     return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;

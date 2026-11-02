@@ -19,7 +19,8 @@ export function routeFromUrl(url: URL): GoogleRoute | null {
     if (url.searchParams.get('udm') === '50') return null;
     // tbm=isch is the Images vertical; other verticals (news, shopping, video) use
     // the results layout until they are researched separately.
-    return url.searchParams.get('tbm') === 'isch' ? 'images' : 'results';
+    const vertical = url.searchParams.get('tbm') === 'isch' || url.searchParams.get('udm') === '2';
+    return vertical ? 'images' : 'results';
   }
   // Auth, consent, settings, maps and every other path stay native (FR-012).
   return null;

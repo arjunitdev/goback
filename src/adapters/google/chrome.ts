@@ -65,12 +65,22 @@ function findSearchBox(doc: Document): Element | null {
   return null;
 }
 
+/** The bar alone (results and Images pages): which tab is "current" follows the page. */
+export function mountServicesBar(doc: Document, current = 'Search'): void {
+  if (!doc.body) return;
+  const bar =
+    doc.getElementById(GBAR_ID) ?? build(doc, 'nav', GBAR_ID, 'Google services', GBAR_LINKS);
+  for (const a of bar.querySelectorAll('a')) {
+    if (a.textContent === current) a.setAttribute('aria-current', 'page');
+    else a.removeAttribute('aria-current');
+  }
+  if (!bar.isConnected) doc.body.prepend(bar);
+}
+
 /** Idempotent: adds whatever is missing, so it is safe to call on every refresh. */
 export function mountHomeChrome(doc: Document): void {
   if (!doc.body) return;
-  if (!doc.getElementById(GBAR_ID)) {
-    doc.body.prepend(build(doc, 'nav', GBAR_ID, 'Google services', GBAR_LINKS));
-  }
+  mountServicesBar(doc);
   if (!doc.getElementById(GTOOLS_ID)) {
     const box = findSearchBox(doc);
     if (box) box.append(build(doc, 'div', GTOOLS_ID, 'Search tools', GTOOLS_LINKS));

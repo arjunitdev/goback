@@ -24,3 +24,17 @@ html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-route
   margin: 42px 0 0; /* the 2013 logo sat ~45px below the bar */
   object-fit: contain;
 }
+
+/* On results and Images pages the logo is small (92x33, the 2013 header size); a day's doodle is
+ * replaced the same way as on the home page. */
+html[data-retroweb='google'][data-retroweb-mode='authentic']:is([data-retroweb-route='results'], [data-retroweb-route='images'])
+  #searchform :is(img[alt='Google'], img[src*='/logos/'], img[src*='googlelogo']) {
+  content: url('chrome-extension://__MSG_@@extension_id__/assets/google-private/logo.png');
+  box-sizing: border-box;
+  width: 92px;
+  height: 33px;
+  max-width: none;
+  max-height: none;
+  padding: 0;
+  object-fit: contain;
+}

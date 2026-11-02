@@ -136,7 +136,7 @@ html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-schem
 }
 
 /* -- Added services list (see src/adapters/google/chrome.ts) -- */
-html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-route='home'] #rw-gbar {
+html[data-retroweb='google'][data-retroweb-mode='authentic'] #rw-gbar {
   position: absolute;
   top: 0;
   left: 0;
@@ -148,7 +148,7 @@ html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-route
   font: 13px/25px arial, sans-serif;
 }
 
-html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-route='home'] #rw-gbar a {
+html[data-retroweb='google'][data-retroweb-mode='authentic'] #rw-gbar a {
   display: block;
   box-sizing: border-box;
   height: 29px;
@@ -159,23 +159,23 @@ html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-route
   text-decoration: none;
 }
 
-html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-route='home'] #rw-gbar a:first-child {
+html[data-retroweb='google'][data-retroweb-mode='authentic'] #rw-gbar a:first-child {
   padding-left: 11px;
 }
 
-html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-route='home'] #rw-gbar a[aria-current='page'] {
+html[data-retroweb='google'][data-retroweb-mode='authentic'] #rw-gbar a[aria-current='page'] {
   font-weight: bold;
 }
 
-html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light'][data-retroweb-route='home'] #rw-gbar a {
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light'] #rw-gbar a {
   color: #ccc;
 }
 
-html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light'][data-retroweb-route='home'] #rw-gbar a:hover {
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light'] #rw-gbar a:hover {
   color: #fff;
 }
 
-html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light'][data-retroweb-route='home'] #rw-gbar a[aria-current='page'] {
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light'] #rw-gbar a[aria-current='page'] {
   color: #fff;
   border-top-color: #dd4b39;
 }
@@ -418,4 +418,88 @@ html[data-retroweb='google'][data-retroweb-scheme='light'][data-retroweb-route='
 html[data-retroweb='google'][data-retroweb-scheme='light'] #foot,
 html[data-retroweb='google'][data-retroweb-scheme='light'] #footcnt {
   border-top: 1px solid var(--rw-border);
+}
+
+/* ===== Results and Images pages, early 2013 ===== */
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light']:is([data-retroweb-route='results'], [data-retroweb-route='images']) body {
+  position: relative;
+  margin-top: 29px;
+  background: #fff;
+  font: 13px arial, sans-serif;
+  color: #222;
+}
+
+/* services bar: black, full width, back at the very top (body is shifted 29px) */
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light']:is([data-retroweb-route='results'], [data-retroweb-route='images']) #rw-gbar {
+  top: -29px;
+  right: 0;
+  background: #2d2d2d;
+  border-bottom: 1px solid #000;
+  z-index: 2147483000;
+}
+
+/* Arial everywhere except icon fonts and SVG */
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light']:is([data-retroweb-route='results'], [data-retroweb-route='images']) #main *:not(svg, svg *, [class*='symbol' i], [class*='material' i], [class*='icon' i]) {
+  font-family: arial, sans-serif !important;
+}
+
+/* search box: square, 1px border, no pill, no shadow */
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light']:is([data-retroweb-route='results'], [data-retroweb-route='images']) #searchform form[role='search'] > div > div {
+  border: 1px solid #d9d9d9;
+  border-top-color: #c0c0c0;
+  border-radius: 2px;
+  box-shadow: none;
+  background: #fff;
+}
+
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light']:is([data-retroweb-route='results'], [data-retroweb-route='images']) #searchform textarea[name='q'] {
+  font-size: 16px;
+  color: #000;
+}
+
+/* buttons, chips, cards: square-ish */
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light'][data-retroweb-route='results'] #main :is([role='button'], button):not(#searchform *, #tads *, #tadsb *, #bottomads *) {
+  border-radius: 2px;
+}
+
+/* tabs: Arial 13px, current tab red with a 3px underline */
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light']:is([data-retroweb-route='results'], [data-retroweb-route='images']) #main [role='navigation'] a,
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light']:is([data-retroweb-route='results'], [data-retroweb-route='images']) #main [role='navigation'] a div {
+  font-size: 13px;
+  color: #222;
+}
+
+/* results */
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light'][data-retroweb-route='results'] #rso h3:not(#tads *, #tadsb *, #bottomads *) {
+  font-size: 18px;
+  line-height: 1.2;
+  color: #1122cc;
+}
+
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light'][data-retroweb-route='results'] #rso cite:not(#tads *, #tadsb *, #bottomads *) {
+  font-size: 14px;
+  color: #009933;
+}
+
+/* footer */
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light']:is([data-retroweb-route='results'], [data-retroweb-route='images']) #sfooter {
+  background: #f2f2f2;
+  border-top: 1px solid #e4e4e4;
+  font-size: 13px;
+}
+
+/* cards and pills: square corners, thin grey edge */
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light'][data-retroweb-route='results'] #main :is([role='button'], button, [role='listitem'], [data-hveid] > div):not(#searchform *, #tads *, #tadsb *, #bottomads *, :has(img), svg) {
+  border-radius: 2px;
+}
+
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light']:is([data-retroweb-route='results'], [data-retroweb-route='images']) #searchform form[role='search'] div {
+  border-radius: 2px !important;
+  box-shadow: none !important;
+}
+
+
+/* every rounded panel (AI Overview card, answer boxes, chips) goes back to square corners */
+html[data-retroweb='google'][data-retroweb-mode='authentic'][data-retroweb-scheme='light'][data-retroweb-route='results'] #main div:not(#tads *, #tadsb *, #bottomads *, :has(> img), :has(> a > img), :has(> div > img)) {
+  border-radius: 2px;
 }

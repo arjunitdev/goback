@@ -222,9 +222,12 @@ describe('google adapter: home chrome follows route and mode', () => {
     expect(h.doc.getElementById('rw-gbar')).toBeNull();
   });
 
-  it('adds nothing on the results route', async () => {
+  it('adds only the services bar on the results route', async () => {
     const h = setup('google-results.html', 'https://www.google.com/search?q=x', 'google');
     await h.engine.start();
+    expect(h.doc.getElementById('rw-gbar')).not.toBeNull();
+    expect(h.doc.getElementById('rw-gtools')).toBeNull();
+    h.engine.stop();
     expect(h.doc.querySelector('[data-retroweb-injected]')).toBeNull();
   });
 
