@@ -997,3 +997,37 @@ html[data-retroweb='youtube'][data-retroweb-mode='authentic']
   :is(div, button, a) {
   border-radius: 2px !important;
 }
+
+/* ===== Search box legibility ===========================================================
+ * The search component takes its text and icon colour from YouTube's theme. For a dark-theme
+ * account that is white, on the white box this file paints: typed letters, the focus icon and
+ * the magnifier all vanished. Found by typing into the box with a dark-theme account. */
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  ytd-masthead
+  yt-searchbox
+  [class*='SearchboxComponentInputBox']
+  :is(input, form, div, span, button) {
+  color: #000 !important;
+  caret-color: #000;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  ytd-masthead
+  yt-searchbox
+  [class*='SearchboxComponentInputBox']
+  input::placeholder {
+  color: #767676 !important;
+}
+
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  ytd-masthead
+  yt-searchbox
+  [class*='SearchboxComponentSearchButton'],
+html[data-retroweb='youtube'][data-retroweb-scheme='light']
+  ytd-masthead
+  yt-searchbox
+  [class*='SearchboxComponentSearchButton']
+  * {
+  color: #333 !important;
+  fill: #333 !important;
+}
