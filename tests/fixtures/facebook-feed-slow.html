@@ -3,12 +3,27 @@
   <head>
     <meta charset="utf-8" />
     <title>Synthetic slow feed - Facebook (fixture, no real content)</title>
+    <script>
+      // Facebook builds its header with script after the first byte. Here the header is inserted at
+      // DOMContentLoaded, and the frame in which it first appears is checked: was it already marked?
+      document.addEventListener('DOMContentLoaded', async () => {
+        window.__atDcl = document.documentElement.hasAttribute('data-retroweb');
+        const paint = document.createElement('div');
+        paint.id = 'late-paint';
+        paint.style.cssText = 'background:#242526;height:56px';
+        paint.innerHTML =
+          '<div role="banner"><a href="/" aria-label="Facebook"><svg width="40" height="40"></svg></a></div>';
+        document.body.prepend(paint);
+        await Promise.resolve(); // let the extension's MutationObserver run first
+        await new Promise((r) => requestAnimationFrame(() => r()));
+        window.__markedInFirstFrame = paint.getAttribute('data-rw-fb');
+      });
+    </script>
   </head>
   <body style="background: #18191a; color: #e4e6eb">
-    <!-- A blocking script keeps the document in the "loading" state, so the test can tell a first-paint
-         style from one applied after load. The test serves /slow.js after a delay. -->
+    <!-- A blocking script holds the parser for a while, so a first-paint style is distinguishable from one
+         applied after load. The test serves /slow.js after a delay. -->
     <script src="/slow.js"></script>
-    <div role="banner"><a href="/" aria-label="Facebook"><svg width="40" height="40"></svg></a></div>
     <div role="main"><div role="feed"><div role="article">synthetic post</div></div></div>
   </body>
 </html>

@@ -45,6 +45,8 @@ if (adapter && route && hintKey) {
         },
         systemReduce,
       );
+      // Keep the adapter's own markers current while the page builds itself (before each frame paints).
+      adapter.earlyWatch?.(document);
     })
     .catch(() => undefined);
 }

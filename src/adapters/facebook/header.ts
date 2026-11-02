@@ -158,3 +158,40 @@ export function clearHeader(doc: Document): void {
   trailing = null;
   for (const el of Array.from(doc.querySelectorAll(`[${HEADER_ATTR}]`))) el.removeAttribute(HEADER_ATTR);
 }
+
+/**
+ * Early watcher, started by the document_start script when the last visit was a signed-in page. Facebook
+ * builds its header with script after the first byte, so marking it once at idle left the original dark bar
+ * on screen until then. Here every DOM change schedules one measurement in requestAnimationFrame, which runs
+ * before the frame is painted: the header is marked, and so blue, in the very frame it first appears.
+ * It stops once the header is marked (and keeps a cheap, throttled check afterwards in case Facebook
+ * rebuilds the header), so it never adds a lasting cost.
+ */
+export function watchHeader(doc: Document): void {
+  const view = doc.defaultView;
+  const root = doc.documentElement;
+  if (!view || typeof view.MutationObserver !== 'function') return;
+  const started = Date.now();
+  const SETTLE_MS = 10_000;
+  let scheduled = false;
+  let lastLate = 0;
+
+  const run = () => {
+    scheduled = false;
+    if (!root.hasAttribute('data-retroweb')) return; // the site was switched off or failed open
+    const hasBar = doc.querySelector(`[${HEADER_ATTR}="bar"]`) !== null;
+    const hasPill = doc.querySelector(`[${HEADER_ATTR}="search"]`) !== null;
+    if (Date.now() - started < SETTLE_MS) {
+      if (!hasBar || !hasPill) markHeader(doc);
+    } else if (!hasBar && Date.now() - lastLate > 500) {
+      lastLate = Date.now();
+      markHeader(doc);
+    }
+  };
+
+  new view.MutationObserver(() => {
+    if (scheduled) return;
+    scheduled = true;
+    view.requestAnimationFrame(run);
+  }).observe(root, { childList: true, subtree: true });
+}

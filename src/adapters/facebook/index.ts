@@ -1,7 +1,7 @@
 import type { AdapterContext, SiteAdapter } from '../../shared/types';
 import { evaluateProbes } from '../probe';
 import { hasLandingBar, isLoginLanding, mountLandingBar, unmountLandingBar } from './chrome';
-import { clearHeader, markHeaderNow } from './header';
+import { clearHeader, markHeaderNow, watchHeader } from './header';
 import { FB_HINT_KEY, rememberSignedIn } from './hint';
 import { matchesFacebook, routeFromUrl, type FacebookRoute } from './routes';
 import { FORBIDDEN, PROBES } from './selectors';
@@ -47,6 +47,7 @@ export const facebookAdapter: SiteAdapter = {
   },
   earlyStyle: false,
   earlyHintKey: FB_HINT_KEY,
+  earlyWatch: watchHeader,
   mount: syncLandingBar,
   refresh: syncLandingBar,
   unmount(ctx) {

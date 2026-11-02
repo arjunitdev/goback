@@ -154,7 +154,7 @@ describe('youtube adapter on fixtures', () => {
       report: () => undefined,
       retryDelaysMs: [1, 1, 1],
       schedule: (f) => queueMicrotask(f),
-      healthyThrottleMs: 40,
+      healthyThrottleMs: 600, // wide margins: a busy machine must not push the timings across the window
     });
     engines.push(engine);
     await engine.start();
@@ -165,14 +165,14 @@ describe('youtube adapter on fixtures', () => {
     const pm = win.document.querySelector('ytd-page-manager')!;
     // The first batch after mount runs straight away and opens the throttle window.
     pm.append(win.document.createElement('div'));
-    await sleep(5);
+    await sleep(20);
     // A change inside the window is not measured yet; once the window passes, the deferred
     // check catches it.
     win.document.body.style.backgroundColor = 'rgb(20, 20, 20)';
     pm.append(win.document.createElement('div'));
-    await sleep(5);
+    await sleep(20);
     expect(root.getAttribute(ATTR.scheme)).toBe('light');
-    await sleep(80);
+    await sleep(1000);
     expect(root.getAttribute(ATTR.scheme)).toBe('dark');
   });
 

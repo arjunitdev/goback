@@ -160,6 +160,41 @@ test.describe('Facebook', () => {
     await page.close();
   });
 
+  test('search field: restyled when idle, left to Facebook while you are typing in it', async () => {
+    const page = await h.ctx.newPage();
+    await stub(page, FB, () => 'facebook-feed-dark.html');
+    await page.goto(`${FB}/`);
+    await expect(page.locator('#hdr-pill')).toHaveAttribute('data-rw-fb', 'search');
+    expect(await color(page, '#hdr-pill', 'background-color')).toBe('rgb(255, 255, 255)');
+    await page.locator('#hdr-pill input').focus();
+    // Facebook's own expanded panel lives inside this box: no restyling, no shifting, no recoloured text.
+    expect(await color(page, '#hdr-pill', 'background-color')).toBe('rgb(58, 59, 60)');
+    expect(await color(page, '#hdr-pill', 'transform')).toBe('none');
+    await page.close();
+  });
+
+  test('the header is already blue in the frame it first appears (no native bar first)', async () => {
+    await enable(['facebook']);
+    const result = async (hint: boolean) => {
+      await h.sw.evaluate(async (v) => chrome.storage.local.set({ 'rw-hint-facebook': v }), hint);
+      const page = await h.ctx.newPage();
+      await stub(page, FB, () => 'facebook-feed-slow.html');
+      await page.route(`${FB}/slow.js`, async (route) => {
+        await new Promise((r) => setTimeout(r, 600));
+        await route.fulfill({ contentType: 'application/javascript', body: '' });
+      });
+      await page.goto(`${FB}/`);
+      await page.waitForFunction(() => '__markedInFirstFrame' in window);
+      const marked = await page.evaluate(
+        () => (window as unknown as { __markedInFirstFrame: string | null }).__markedInFirstFrame,
+      );
+      await page.close();
+      return marked;
+    };
+    expect(await result(true)).toBe('bar');
+    expect(await result(false)).toBeNull();
+  });
+
   test('styles from the first paint when the last visit was a signed-in page, and not otherwise', async () => {
     await enable(['facebook']);
     // True when the page was already styled at DOMContentLoaded, i.e. before the engine (which runs at idle) had a say.

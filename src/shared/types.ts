@@ -53,6 +53,11 @@ export interface SiteAdapter {
    */
   earlyHintKey?: string;
   /**
+   * Started by the document_start script right after it styles from the hint: lets an adapter keep its
+   * own markers current as the page builds itself, before each frame is painted.
+   */
+  earlyWatch?(document: Document): void;
+  /**
    * Name of the <html> attribute the site uses to switch to its dark theme (YouTube: `dark`).
    * In Authentic mode the engine holds it off, because the 2012 sites had no dark theme;
    * Compatibility mode and teardown restore it.

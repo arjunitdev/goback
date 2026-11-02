@@ -38,28 +38,31 @@ html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retrowe
   border-bottom: 1px solid var(--rw-fb-header-border);
 }
 
-/* The search pill (marked by header.ts) becomes the 2012 search field: a white box with square-ish corners and a
+/* While the person is typing in the search, Facebook swaps the pill for its own panel (back arrow, recent
+ * searches), which sits inside the marked box: every pill rule below stands down then (:not(:focus-within)),
+ * so that panel keeps its own colours and position.
+ * The search pill (marked by header.ts) becomes the 2012 search field: a white box with square-ish corners and a
  * thin dark-blue edge, dark text. Its own icon keeps its colour (not the white header icons). */
-html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [data-rw-fb='search'][data-rw-fb] {
+html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [data-rw-fb='search'][data-rw-fb]:not(:focus-within) {
   background-color: #fff !important;
   border: 1px solid #1d4088;
   border-radius: 2px !important;
 }
 
-html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [data-rw-fb='search'][data-rw-fb] :not(input, textarea) {
+html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [data-rw-fb='search'][data-rw-fb]:not(:focus-within) :not(input, textarea) {
   color: #4b4f56;
 }
 
-html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [data-rw-fb='search'][data-rw-fb] input {
+html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [data-rw-fb='search'][data-rw-fb]:not(:focus-within) input {
   color: #000 !important;
 }
 
-html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [data-rw-fb='search'][data-rw-fb] input::placeholder {
+html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [data-rw-fb='search'][data-rw-fb]:not(:focus-within) input::placeholder {
   color: #6b6f76 !important;
   opacity: 1;
 }
 
-html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [data-rw-fb='search'][data-rw-fb] svg {
+html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [data-rw-fb='search'][data-rw-fb]:not(:focus-within) svg {
   filter: none;
 }
 
