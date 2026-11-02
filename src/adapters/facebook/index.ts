@@ -1,6 +1,7 @@
 import type { AdapterContext, SiteAdapter } from '../../shared/types';
 import { evaluateProbes } from '../probe';
 import { hasLandingBar, isLoginLanding, mountLandingBar, unmountLandingBar } from './chrome';
+import { clearHeader, markHeaderNow } from './header';
 import { matchesFacebook, routeFromUrl, type FacebookRoute } from './routes';
 import { FORBIDDEN, PROBES } from './selectors';
 
@@ -17,8 +18,12 @@ export const FACEBOOK_ADAPTER_VERSION = '0.1.0';
 function syncLandingBar(ctx: AdapterContext): void {
   if (ctx.route === 'feed' && ctx.site.mode === 'authentic' && isLoginLanding(ctx.document)) {
     mountLandingBar(ctx.document);
+    clearHeader(ctx.document);
   } else {
     unmountLandingBar(ctx.document);
+    // Signed-in pages: find the real header layers so the stylesheet can paint them (see ./header.ts).
+    if (ctx.site.mode === 'authentic') markHeaderNow(ctx.document);
+    else clearHeader(ctx.document);
   }
 }
 
@@ -38,5 +43,8 @@ export const facebookAdapter: SiteAdapter = {
   earlyStyle: false,
   mount: syncLandingBar,
   refresh: syncLandingBar,
-  unmount: (ctx) => unmountLandingBar(ctx.document),
+  unmount(ctx) {
+    clearHeader(ctx.document);
+    unmountLandingBar(ctx.document);
+  },
 };

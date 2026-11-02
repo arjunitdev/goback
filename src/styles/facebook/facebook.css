@@ -32,6 +32,12 @@ html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retrowe
   border-bottom: 1px solid var(--rw-fb-header-border);
 }
 
+/* The layer that really paints the header (marked by src/adapters/facebook/header.ts) gets the blue too. */
+html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [data-rw-fb='bar'] {
+  background-color: var(--rw-fb-header) !important;
+  border-bottom: 1px solid var(--rw-fb-header-border);
+}
+
 /* White icons and text on the blue header; inputs keep their own colours. Pictures (an avatar is an
  * <svg> holding an <image>) are not icons and keep their own colours. */
 html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [role='banner'] svg:not(:has(image)),

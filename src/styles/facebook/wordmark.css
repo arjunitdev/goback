@@ -21,6 +21,13 @@ html[data-retroweb='facebook'][data-retroweb-wordmark='on']:not([data-retroweb-b
   fill: transparent !important;
 }
 
+/* The wordmark is wider than the round logo it replaces: move the search pill clear of it (pill marked by header.ts). */
+html[data-retroweb='facebook'][data-retroweb-wordmark='on']:not([data-retroweb-bare])
+  [role='banner']
+  [data-rw-fb='search'] {
+  margin-left: 96px;
+}
+
 html[data-retroweb='facebook'][data-retroweb-wordmark='on'] #rw-fbbar {
   background-image: url('chrome-extension://__MSG_@@extension_id__/assets/facebook-2012.svg');
   background-repeat: no-repeat;

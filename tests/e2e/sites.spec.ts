@@ -150,6 +150,13 @@ test.describe('Facebook', () => {
     await expect(page.locator('html')).toHaveAttribute('data-retroweb', 'facebook');
     await expect(page.locator('html')).toHaveAttribute('data-retroweb-scheme', 'dark');
     expect(await color(page, '[role="banner"]', 'background-color')).toBe('rgb(59, 89, 152)');
+    // The dark colour is on an inner row: the extension finds it by measuring and paints it blue too.
+    await expect(page.locator('#hdr-row')).toHaveAttribute('data-rw-fb', 'bar');
+    expect(await color(page, '#hdr-row', 'background-color')).toBe('rgb(59, 89, 152)');
+    // The search pill is found and moved clear of the wider wordmark; the pill keeps its own colour.
+    await expect(page.locator('#hdr-pill')).toHaveAttribute('data-rw-fb', 'search');
+    expect(await color(page, '#hdr-pill', 'margin-left')).toBe('96px');
+    expect(await color(page, '#hdr-pill', 'background-color')).toBe('rgb(58, 59, 60)');
     await page.close();
   });
 
