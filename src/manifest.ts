@@ -25,7 +25,7 @@ export function buildManifest(flavor: Flavor, version: string, assets: BuildAsse
   const manifest: Manifest = {
     manifest_version: 3,
     name:
-      flavor === 'store' ? 'RetroWeb 2012 (unofficial)' : `RetroWeb 2012 (unofficial, ${flavor})`,
+      flavor === 'store' ? 'Retro 2K (unofficial)' : `Retro 2K (unofficial, ${flavor})`,
     version,
     description:
       'Unofficial. Restyles supported sites to a researched 2012-era look. Not affiliated with or endorsed by Google, YouTube or Meta.',
@@ -35,7 +35,7 @@ export function buildManifest(flavor: Flavor, version: string, assets: BuildAsse
     // Site access is requested on activation, never at install (ADR-003).
     optional_host_permissions: originsOf(),
     background: { service_worker: 'background.js' },
-    action: { default_title: 'RetroWeb 2012', default_popup: 'popup.html' },
+    action: { default_title: 'Retro 2K', default_popup: 'popup.html' },
     options_ui: { page: 'options.html', open_in_tab: true },
   };
 

@@ -1,6 +1,6 @@
 import { IMPLEMENTED_SITES, SITE_IDS, SITE_LABELS, SITE_ORIGINS } from '../shared/flags';
 import { chromeLocalArea, loadPrefs, updatePrefs } from '../shared/storage';
-import type { AdapterStatus, DisplayMode, Prefs, SiteId } from '../shared/types';
+import type { AdapterStatus, Prefs, SiteId } from '../shared/types';
 import { byId, h } from '../ui/dom';
 
 const area = chromeLocalArea();
@@ -30,23 +30,6 @@ function renderSites(prefs: Prefs): void {
     });
     toggle.addEventListener('change', () => void onToggle(id, toggle));
 
-    const mode = h('select', {
-      id: `mode-${id}`,
-      disabled: !implemented,
-      'aria-label': `${SITE_LABELS[id]} display mode`,
-    });
-    for (const [value, label] of [
-      ['authentic', 'Authentic'],
-      ['compatibility', 'Compatibility'],
-    ] as const) {
-      mode.append(h('option', { value, selected: prefs.sites[id].mode === value }, label));
-    }
-    mode.addEventListener('change', () => {
-      void updatePrefs(area, (p) => {
-        p.sites[id].mode = mode.value as DisplayMode;
-      });
-    });
-
     host.append(
       h(
         'div',
@@ -56,7 +39,6 @@ function renderSites(prefs: Prefs): void {
           { for: `site-${id}` },
           implemented ? SITE_LABELS[id] : `${SITE_LABELS[id]} (coming later)`,
         ),
-        mode,
         toggle,
       ),
     );

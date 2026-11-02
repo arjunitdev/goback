@@ -1,7 +1,7 @@
 import { loadCounters, resetCounters } from '../shared/diagnostics';
 import { IMPLEMENTED_SITES, SITE_LABELS, SITE_ORIGINS } from '../shared/flags';
 import { chromeLocalArea, loadPrefs, updatePrefs } from '../shared/storage';
-import { DIAG_EVENTS, type MotionPref, type SiteId } from '../shared/types';
+import { DIAG_EVENTS, type DisplayMode, type MotionPref, type SiteId } from '../shared/types';
 import { byId, h } from '../ui/dom';
 
 const area = chromeLocalArea();
@@ -11,8 +11,30 @@ async function render(): Promise<void> {
   const prefs = await loadPrefs(area);
   byId<HTMLSelectElement>('motion').value = prefs.motion;
   byId<HTMLInputElement>('contrast').checked = prefs.highContrast;
+  renderModes(prefs.sites);
   await renderAccess();
   await renderDiagnostics();
+}
+
+/** Per-site display mode (moved here from the popup, which now holds only the on/off switches). */
+function renderModes(sites: Record<SiteId, { mode: DisplayMode }>): void {
+  const host = byId<HTMLElement>('modes');
+  host.replaceChildren();
+  for (const id of IMPLEMENTED_SITES) {
+    const select = h('select', { id: `mode-${id}`, 'aria-label': `${SITE_LABELS[id]} display mode` });
+    for (const [value, label] of [
+      ['authentic', 'Authentic'],
+      ['compatibility', 'Compatibility'],
+    ] as const) {
+      select.append(h('option', { value, selected: sites[id].mode === value }, label));
+    }
+    select.addEventListener('change', () => {
+      void updatePrefs(area, (p) => {
+        p.sites[id].mode = select.value as DisplayMode;
+      });
+    });
+    host.append(h('div', { class: 'row' }, h('span', {}, SITE_LABELS[id]), select));
+  }
 }
 
 async function renderAccess(): Promise<void> {

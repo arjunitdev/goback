@@ -3,36 +3,39 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>RetroWeb 2012</title>
+    <title>Retro 2K</title>
     <link rel="stylesheet" href="ui.css" />
     <style>
       body {
-        width: 320px;
+        width: 360px;
       }
     </style>
   </head>
   <body>
-    <div class="head">
-      <h1>RetroWeb 2012</h1>
-      <span class="badge">Unofficial</span>
-    </div>
-    <p class="muted">Not affiliated with or endorsed by Google, YouTube or Meta.</p>
+    <main class="card">
+      <div class="head">
+        <h1>Retro 2K</h1>
+        <span class="badge">Unofficial</span>
+      </div>
+      <p class="muted lead">Not affiliated with or endorsed by Google, YouTube or Meta.</p>
 
-    <div class="row">
-      <label for="kill">Pause everywhere (kill switch)</label>
-      <input id="kill" type="checkbox" />
-    </div>
+      <div class="rows">
+        <div class="row">
+          <label for="kill">Pause everywhere (kill switch)</label>
+          <input id="kill" type="checkbox" />
+        </div>
+        <div id="sites"></div>
+      </div>
 
-    <div id="sites"></div>
+      <div id="notice" class="notice" role="status" aria-live="polite"></div>
 
-    <div id="notice" class="notice" role="status" aria-live="polite"></div>
+      <h2>This tab</h2>
+      <dl id="status"></dl>
 
-    <h2>This tab</h2>
-    <dl id="status"></dl>
+      <button id="settings" class="outline" type="button">Settings</button>
 
-    <div class="row">
-      <button id="settings" type="button">Settings</button>
-    </div>
+      <p class="credit">By Arjun Selvam</p>
+    </main>
     <script src="popup.js"></script>
   </body>
 </html>

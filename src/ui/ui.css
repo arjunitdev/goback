@@ -1,24 +1,21 @@
+/*
+ * Look of the popup and the settings page: a dark navy card with a blue glow, switch toggles and a
+ * blue credit bar. System fonts only (no remote fonts, no remote code). Text colours keep at least
+ * 4.5:1 contrast on the navy background (checked by the accessibility test).
+ */
 :root {
-  --bg: #fff;
-  --fg: #202124;
-  --muted: #5f6368;
-  --line: #dadce0;
-  --accent: #1a56c4;
-  --warn-bg: #fef7e0;
-  --warn-fg: #5f4b00;
-  color-scheme: light dark;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #202124;
-    --fg: #e8eaed;
-    --muted: #9aa0a6;
-    --line: #3c4043;
-    --accent: #8ab4f8;
-    --warn-bg: #3b3320;
-    --warn-fg: #f5dc8a;
-  }
+  --page: #070b1d;
+  --bg: #0c1230;
+  --fg: #ffffff;
+  --muted: #a8b2da;
+  --line: #212a52;
+  --accent: #3d52ff;
+  --accent-deep: #2a3df0;
+  --focus: #9fb0ff;
+  --glow: rgb(61 82 255 / 40%);
+  --warn-bg: #1f2347;
+  --warn-fg: #f5dc8a;
+  color-scheme: dark;
 }
 
 * {
@@ -26,21 +23,27 @@
 }
 
 body {
-  background: var(--bg);
+  background: var(--page);
   color: var(--fg);
   font:
-    14px/1.45 system-ui,
+    15px/1.45 'Segoe UI Variable Display',
+    'Segoe UI',
+    system-ui,
     sans-serif;
   margin: 0;
-  padding: 16px;
+  padding: 10px;
 }
 
 h1 {
-  font-size: 16px;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  line-height: 1.1;
   margin: 0;
 }
 h2 {
-  font-size: 14px;
+  font-size: 19px;
+  font-weight: 800;
   margin: 20px 0 8px;
 }
 p {
@@ -48,62 +51,151 @@ p {
 }
 .muted {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
 }
-.row {
-  align-items: center;
-  display: flex;
-  gap: 10px;
-  justify-content: space-between;
-  margin: 8px 0;
+.lead {
+  font-size: 15px;
+  margin: 10px 0 14px;
 }
+
+/* The popup is one glowing card. */
+.card {
+  background: linear-gradient(180deg, #0e1536 0%, #0a0f26 100%);
+  border: 2px solid var(--accent);
+  border-radius: 24px;
+  box-shadow:
+    0 0 0 1px rgb(61 82 255 / 25%),
+    0 0 22px var(--glow);
+  padding: 20px 20px 18px;
+}
+
 .head {
   align-items: center;
   display: flex;
-  gap: 8px;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 .badge {
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  color: var(--muted);
-  font-size: 11px;
-  padding: 1px 8px;
+  border: 1.5px solid #5a6696;
+  border-radius: 999px;
+  color: #d3d9ff;
+  font-size: 14px;
+  padding: 3px 14px;
 }
+
+.row {
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  min-height: 52px;
+  padding: 10px 0;
+}
+.row label {
+  font-size: 17px;
+}
+
 .notice {
   background: var(--warn-bg);
-  border-radius: 6px;
+  border-radius: 10px;
   color: var(--warn-fg);
-  font-size: 12px;
-  margin: 10px 0;
-  padding: 8px 10px;
+  font-size: 13px;
+  margin: 12px 0;
+  padding: 8px 12px;
 }
 .notice:empty {
   display: none;
 }
+
+/* Switches: the real checkbox, drawn as a toggle (still keyboard- and screen-reader-accessible). */
+input[type='checkbox'] {
+  appearance: none;
+  background: #3b4058;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  flex: none;
+  height: 30px;
+  margin: 0;
+  position: relative;
+  transition: background 0.15s;
+  width: 54px;
+}
+input[type='checkbox']::after {
+  background: #fff;
+  border-radius: 50%;
+  content: '';
+  height: 24px;
+  left: 3px;
+  position: absolute;
+  top: 3px;
+  transition: transform 0.15s;
+  width: 24px;
+}
+input[type='checkbox']:checked {
+  background: linear-gradient(180deg, #4a5fff, var(--accent-deep));
+  box-shadow: 0 0 12px var(--glow);
+}
+input[type='checkbox']:checked::after {
+  transform: translateX(24px);
+}
+input[type='checkbox']:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
 select,
 button {
-  background: var(--bg);
-  border: 1px solid var(--line);
-  border-radius: 4px;
+  background: #0a0f26;
+  border: 1.5px solid #3a4680;
+  border-radius: 12px;
   color: var(--fg);
   font: inherit;
-  padding: 4px 8px;
+  padding: 6px 12px;
 }
 button {
   cursor: pointer;
 }
-button:hover {
+button:hover,
+select:hover {
   border-color: var(--accent);
 }
+button.outline {
+  background: linear-gradient(180deg, #0f1740, #090d22);
+  border: 2px solid var(--accent);
+  border-radius: 16px;
+  font-size: 18px;
+  margin-top: 6px;
+  padding: 10px 24px;
+}
+button.outline:hover {
+  box-shadow: 0 0 14px var(--glow);
+}
+
+.credit {
+  background: linear-gradient(180deg, #4a5fff, var(--accent-deep));
+  border-radius: 18px;
+  box-shadow: 0 0 20px var(--glow);
+  color: #fff;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  margin: 22px 0 0;
+  padding: 14px 12px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--focus);
   outline-offset: 2px;
 }
 dl {
   display: grid;
-  gap: 4px 12px;
+  gap: 4px 14px;
   grid-template-columns: max-content 1fr;
-  margin: 6px 0;
+  margin: 6px 0 12px;
 }
 dt {
   color: var(--muted);
