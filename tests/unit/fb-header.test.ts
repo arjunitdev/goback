@@ -56,6 +56,16 @@ describe('facebook header measurement', () => {
     expect(doc.querySelector('button')?.hasAttribute(HEADER_ATTR)).toBe(false);
   });
 
+  it('finds a search pill painted as a translucent overlay, and one that only has rounded corners', () => {
+    for (const style of ['background: rgba(255, 255, 255, 0.1)', 'border-top-left-radius: 20px']) {
+      const { doc, rectOf, stackAt } = page();
+      doc.getElementById('pill')?.setAttribute('style', style);
+      markHeader(doc, { rectOf, stackAt, viewportWidth: 1800 });
+      expect(doc.getElementById('pill')?.getAttribute(HEADER_ATTR), style).toBe('search');
+      clearHeader(doc);
+    }
+  });
+
   it('marks nothing without a banner and clears its marks', () => {
     const { doc, rectOf, stackAt } = page();
     markHeader(doc, { rectOf, stackAt, viewportWidth: 1800 });

@@ -44,6 +44,18 @@ function opaque(el: Element, view: Window): boolean {
   return c !== null && c.a >= 0.5;
 }
 
+/**
+ * The search pill is a box with any background at all (Facebook paints it as a translucent overlay, which
+ * is not "opaque") or clearly rounded corners.
+ */
+function pillLike(el: Element, view: Window): boolean {
+  const s = view.getComputedStyle(el);
+  const c = parseColor(s.backgroundColor);
+  if (c !== null && c.a > 0.02) return true;
+  const radius = parseFloat(s.borderTopLeftRadius);
+  return Number.isFinite(radius) && radius >= 8;
+}
+
 /** Marks the header's background layers and search pill; returns how many nodes were newly marked. */
 export function markHeader(doc: Document, options: HeaderOptions = {}): number {
   const view = doc.defaultView;
@@ -95,7 +107,7 @@ export function markHeader(doc: Document, options: HeaderOptions = {}): number {
   if (field && fieldTop < barTop + barHeight) {
     for (let el: Element | null = field.parentElement, i = 0; el && el !== doc.body && i < 6; el = el.parentElement, i += 1) {
       const r = rectOf(el);
-      if (r.width > 0 && r.width < vw * 0.5 && r.height <= barHeight && opaque(el, view)) {
+      if (r.width > 0 && r.width < vw * 0.5 && r.height <= barHeight && pillLike(el, view)) {
         if (mark(el, 'search')) marked += 1;
         break;
       }
