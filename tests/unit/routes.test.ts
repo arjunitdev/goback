@@ -25,6 +25,8 @@ describe('google routes', () => {
     expect(routeFromUrl(u('https://www.google.com/search?q=cats'))).toBe('results');
     expect(routeFromUrl(u('https://www.google.com/search?q=cats&tbm=isch'))).toBe('images');
     expect(routeFromUrl(u('https://www.google.com/search/?q=cats'))).toBe('results');
+    // AI Mode is a chat page with no 2013 equivalent: native.
+    expect(routeFromUrl(u('https://www.google.com/search?q=cats&udm=50'))).toBeNull();
   });
 
   it('leaves auth, consent, settings and everything else native (FR-012)', () => {
