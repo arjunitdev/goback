@@ -32,8 +32,9 @@ html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retrowe
   border-bottom: 1px solid var(--rw-fb-header-border);
 }
 
-/* White icons and text on the blue header; inputs keep their own colours. */
-html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [role='banner'] svg,
+/* White icons and text on the blue header; inputs keep their own colours. Pictures (an avatar is an
+ * <svg> holding an <image>) are not icons and keep their own colours. */
+html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [role='banner'] svg:not(:has(image)),
 html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [role='banner'] i {
   filter: brightness(0) invert(1);
 }
