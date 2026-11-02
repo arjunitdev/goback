@@ -1,52 +1,70 @@
 /*
  * Facebook pilot styles. Everything is scoped to html[data-retroweb='facebook'].
- * The engine sets that attribute only after confirming a signed-in shell, so
- * login and checkpoint pages never match. Colour rules apply on LIGHT pages only.
- * Authentication, dialogs, alerts, privacy-audience controls and chat are never
+ * The engine sets that attribute only after confirming a signed-in shell, or the logged-out landing
+ * page where the only change is the decorative #rw-fbbar (ADR-026). Colour rules apply on LIGHT pages
+ * only, except the header bar rules, which set their own background and text colours together and so
+ * read on either theme. Authentication, dialogs, alerts, privacy-audience controls and chat are never
  * targeted (see EXCLUDED_SELECTOR_FRAGMENTS). Selectors use ARIA landmark roles.
+ *
+ * Rules that restyle the page are fenced with :not([data-retroweb-bare]) (set while #rw-fbbar is up): on the landing page nothing but
+ * the bar is drawn, so the login form keeps Facebook's own fonts, colours and layout.
  *
  * UNVERIFIED on a signed-in account: no approved test account was available, so
  * this stylesheet has only been exercised against synthetic fixtures.
  */
 
 /* ---- Typography (any scheme, authentic mode) ------------------------------------- */
-html[data-retroweb='facebook'][data-retroweb-mode='authentic']
+html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare])
   body
   :not(svg, svg *, [role='dialog'] *, [aria-modal] *, [role='alertdialog'] *, [role='alert'] *),
-html[data-retroweb='facebook'][data-retroweb-mode='authentic'] body {
+html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) body {
   font-family: var(--rw-fb-font) !important;
 }
 
 /* ---- Shape (any scheme, authentic mode) ------------------------------------------- */
-html[data-retroweb='facebook'][data-retroweb-mode='authentic'] [role='article'] {
+html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [role='article'] {
   border-radius: var(--rw-fb-radius) !important;
 }
 
-/* ---- Colours (light pages only) --------------------------------------------------- */
-html[data-retroweb='facebook'][data-retroweb-scheme='light'] body {
-  background-color: var(--rw-fb-page);
-}
-
-html[data-retroweb='facebook'][data-retroweb-scheme='light'] [role='banner'] {
+/* ---- Header bar (any scheme): blue, with white text and icons ---------------------- */
+html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [role='banner'] {
   background-color: var(--rw-fb-header) !important;
   border-bottom: 1px solid var(--rw-fb-header-border);
 }
 
 /* White icons and text on the blue header; inputs keep their own colours. */
-html[data-retroweb='facebook'][data-retroweb-scheme='light'] [role='banner'] svg,
-html[data-retroweb='facebook'][data-retroweb-scheme='light'] [role='banner'] i {
+html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [role='banner'] svg,
+html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [role='banner'] i {
   filter: brightness(0) invert(1);
 }
 
-html[data-retroweb='facebook'][data-retroweb-scheme='light'] [role='banner'] [role='search'] svg,
-html[data-retroweb='facebook'][data-retroweb-scheme='light'] [role='banner'] [role='search'] i {
+html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [role='banner'] [role='search'] svg,
+html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [role='banner'] [role='search'] i {
   filter: none;
 }
 
-html[data-retroweb='facebook'][data-retroweb-scheme='light'] [role='banner'] :not(input, textarea) {
+html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [role='banner'] :not(input, textarea) {
   color: #fff;
 }
 
-html[data-retroweb='facebook'][data-retroweb-scheme='light'] [role='article'] {
+/* ---- Logged-out landing page: one empty decorative bar (ADR-026) ------------------- */
+html[data-retroweb='facebook'][data-retroweb-mode='authentic'] #rw-fbbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2147483000;
+  box-sizing: border-box;
+  height: 82px;
+  background-color: var(--rw-fb-header);
+  border-bottom: 1px solid var(--rw-fb-header-border);
+}
+
+/* ---- Colours (light pages only) --------------------------------------------------- */
+html[data-retroweb='facebook'][data-retroweb-scheme='light']:not([data-retroweb-bare]) body {
+  background-color: var(--rw-fb-page);
+}
+
+html[data-retroweb='facebook'][data-retroweb-scheme='light']:not([data-retroweb-bare]) [role='article'] {
   border: 1px solid var(--rw-fb-card-border);
 }

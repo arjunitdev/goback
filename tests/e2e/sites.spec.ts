@@ -123,6 +123,36 @@ test.describe('Facebook', () => {
     await page.close();
   });
 
+  test('landing page: a blue bar is added and the login form is left exactly as Facebook draws it', async () => {
+    await enable(['facebook']);
+    const page = await h.ctx.newPage();
+    await stub(page, FB, () => 'facebook-landing.html');
+    await page.goto(`${FB}/`);
+    await expect(page.locator('#rw-fbbar')).toBeVisible();
+    expect(await color(page, '#rw-fbbar', 'background-color')).toBe('rgb(59, 89, 152)');
+    expect(await color(page, '#rw-fbbar', 'position')).toBe('fixed');
+    // None of the page-restyling rules apply here: fonts and form controls keep their own look.
+    expect(await color(page, 'body', 'font-family')).not.toContain('lucida');
+    expect(await color(page, 'input[type="password"]', 'font-family')).not.toContain('lucida');
+    expect(await color(page, 'body', 'background-color')).not.toBe('rgb(233, 234, 237)');
+    expect(await page.locator('[data-keep]').count()).toBe(2);
+    await expect(page.locator('input[type="password"]')).toBeVisible();
+    // The shared keyboard-focus ring must not be drawn on the login fields either.
+    await page.locator('input[type="password"]').focus();
+    expect(await color(page, 'input[type="password"]', 'outline-color')).not.toBe('rgb(77, 144, 254)');
+    await page.close();
+  });
+
+  test('dark signed-in shell: the header is still blue', async () => {
+    const page = await h.ctx.newPage();
+    await stub(page, FB, () => 'facebook-feed-dark.html');
+    await page.goto(`${FB}/`);
+    await expect(page.locator('html')).toHaveAttribute('data-retroweb', 'facebook');
+    await expect(page.locator('html')).toHaveAttribute('data-retroweb-scheme', 'dark');
+    expect(await color(page, '[role="banner"]', 'background-color')).toBe('rgb(59, 89, 152)');
+    await page.close();
+  });
+
   test('never styles a login page, not even for one frame', async () => {
     const page = await h.ctx.newPage();
     await stub(page, FB, () => 'facebook-login.html');

@@ -1,15 +1,29 @@
 /*
- * DEV FLAVOR ONLY (ADR-011). Swaps the displayed image of the site's header logo
- * for a recreated look-alike wordmark via `content: url()`; the link and its
- * accessible name stay in the DOM. Not included in the store build until legal
- * review (ADR-010) passes. UNVERIFIED selector: if it misses, the live logo stays.
+ * DEV FLAVOR ONLY (ADR-011). Paints a recreated look-alike wordmark in the header: as the
+ * background of the site's logo link when signed in, and of the decorative landing bar when
+ * signed out. The logo's own glyph is made transparent (not removed), so the link, its
+ * accessible name and its click target stay in the DOM. Not included in the store build until
+ * legal review (ADR-010) passes. UNVERIFIED selector: if it misses, the live logo stays.
  */
-html[data-retroweb='facebook'][data-retroweb-wordmark='on']
+html[data-retroweb='facebook'][data-retroweb-wordmark='on']:not([data-retroweb-bare])
+  [role='banner']
+  a[aria-label='Facebook'] {
+  box-sizing: border-box;
+  width: 132px;
+  height: 36px;
+  background: url('chrome-extension://__MSG_@@extension_id__/assets/facebook-2012.svg') no-repeat center / contain;
+}
+
+html[data-retroweb='facebook'][data-retroweb-wordmark='on']:not([data-retroweb-bare])
   [role='banner']
   a[aria-label='Facebook']
-  svg {
-  content: url('chrome-extension://__MSG_@@extension_id__/assets/facebook-2012.svg');
-  width: 112px;
-  height: 28px;
-  filter: none;
+  :is(svg, svg *) {
+  fill: transparent !important;
+}
+
+html[data-retroweb='facebook'][data-retroweb-wordmark='on'] #rw-fbbar {
+  background-image: url('chrome-extension://__MSG_@@extension_id__/assets/facebook-2012.svg');
+  background-repeat: no-repeat;
+  background-position: max(16px, calc(50% - 490px)) center;
+  background-size: 170px 42px;
 }

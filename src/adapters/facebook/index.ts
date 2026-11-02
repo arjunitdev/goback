@@ -1,5 +1,6 @@
-import type { SiteAdapter } from '../../shared/types';
+import type { AdapterContext, SiteAdapter } from '../../shared/types';
 import { evaluateProbes } from '../probe';
+import { hasLandingBar, isLoginLanding, mountLandingBar, unmountLandingBar } from './chrome';
 import { matchesFacebook, routeFromUrl, type FacebookRoute } from './routes';
 import { FORBIDDEN, PROBES } from './selectors';
 
@@ -7,19 +8,35 @@ export const FACEBOOK_ADAPTER_VERSION = '0.1.0';
 
 /**
  * Facebook is styled purely by CSS scoped to html[data-retroweb="facebook"].
- * `earlyStyle: false` is deliberate: the first paint at `/` may be the login
- * wall, which must never be restyled. Attributes are therefore set only after a
- * probe confirms a signed-in shell (banner + main landmarks, no password field).
+ * `earlyStyle: false` is deliberate: the first paint at `/` may be the login wall, which must
+ * not be restyled. Attributes are therefore set only after a probe confirms either a signed-in
+ * shell (banner + main landmarks, no password field) or the logged-out landing page, where the
+ * only change is one empty decorative bar above the page (ADR-026); the login form is untouched.
  * The adapter reads element existence only: never posts, messages, names or form values.
  */
+function syncLandingBar(ctx: AdapterContext): void {
+  if (ctx.route === 'feed' && ctx.site.mode === 'authentic' && isLoginLanding(ctx.document)) {
+    mountLandingBar(ctx.document);
+  } else {
+    unmountLandingBar(ctx.document);
+  }
+}
+
 export const facebookAdapter: SiteAdapter = {
   id: 'facebook',
   version: FACEBOOK_ADAPTER_VERSION,
   matches: matchesFacebook,
   detectRoute: (_doc, url) => routeFromUrl(url),
-  probe: (doc, route) => evaluateProbes(doc, PROBES[route as FacebookRoute], FORBIDDEN),
+  probe(doc, route) {
+    // Landing page: supported once the bar is in place. The stylesheet then leaves the form alone.
+    if (route === 'feed' && isLoginLanding(doc)) {
+      const ready = hasLandingBar(doc);
+      return { supported: ready, missing: ready ? [] : ['landing-bar'] };
+    }
+    return evaluateProbes(doc, PROBES[route as FacebookRoute], FORBIDDEN);
+  },
   earlyStyle: false,
-  mount() {},
-  refresh() {},
-  unmount() {},
+  mount: syncLandingBar,
+  refresh: syncLandingBar,
+  unmount: (ctx) => unmountLandingBar(ctx.document),
 };

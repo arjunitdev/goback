@@ -270,6 +270,44 @@ describe('facebook adapter on fixtures', () => {
     expect(h.engine.status().missing).toContain('blocked:password-field');
   });
 
+  it('adds only the decorative bar on the logged-out landing page and never touches the form', async () => {
+    const h = setup('facebook-landing.html', 'https://www.facebook.com/', 'facebook');
+    const keep = () => [...h.doc.querySelectorAll('[data-keep]')].map((e) => e.outerHTML);
+    const before = keep();
+    const formBefore = h.doc.getElementById('login_form')?.outerHTML;
+    await h.engine.start();
+    await sleep(60);
+    expect(h.root.getAttribute(ATTR.site)).toBe('facebook');
+    const bar = h.doc.getElementById('rw-fbbar');
+    expect(bar).not.toBeNull();
+    expect(bar?.hasAttribute('data-retroweb-injected')).toBe(true);
+    expect(bar?.getAttribute('aria-hidden')).toBe('true');
+    expect(bar?.children).toHaveLength(0);
+    expect(bar?.textContent).toBe('');
+    expect(h.root.hasAttribute('data-retroweb-bare')).toBe(true);
+    expect(keep()).toEqual(before);
+    expect(h.doc.getElementById('login_form')?.outerHTML).toBe(formBefore);
+    expect(h.engine.status()).toMatchObject({ adapter: 'facebook', health: 'healthy' });
+  });
+
+  it('removes the landing bar when the site is switched off', async () => {
+    const h = setup('facebook-landing.html', 'https://www.facebook.com/', 'facebook');
+    await h.engine.start();
+    await sleep(60);
+    expect(h.doc.getElementById('rw-fbbar')).not.toBeNull();
+    h.engine.stop();
+    expect(h.doc.getElementById('rw-fbbar')).toBeNull();
+    expect(h.root.hasAttribute('data-retroweb-bare')).toBe(false);
+  });
+
+  it('styles a dark signed-in shell too (the header bar reads on either theme)', async () => {
+    const h = setup('facebook-feed-dark.html', 'https://www.facebook.com/', 'facebook');
+    await h.engine.start();
+    expect(h.root.getAttribute(ATTR.site)).toBe('facebook');
+    expect(h.root.getAttribute(ATTR.scheme)).toBe('dark');
+    expect(h.doc.getElementById('rw-fbbar')).toBeNull();
+  });
+
   it('drops the theme if a login form appears later (e.g. session expiry)', async () => {
     const h = setup('facebook-feed.html', 'https://www.facebook.com/', 'facebook');
     await h.engine.start();

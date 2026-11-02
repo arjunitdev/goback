@@ -204,7 +204,10 @@ describe('site-specific fences', () => {
 
   it('colour palettes only apply on light pages', () => {
     // Every rule that sets a colour/background must be gated on scheme=light, so dark-theme
-    // users never get unreadable combinations. Shape/typography rules are exempt.
+    // users never get unreadable combinations. Shape/typography rules are exempt, and so are
+    // Facebook's header bar (`[role='banner']`) and the landing bar (`#rw-fbbar`): those rules set
+    // the bar's own background and its text/icon colours together, so they read on either theme (ADR-026).
+    const ownColours = /[role='banner']|#rw-fbbar/;
     const colour = /(^|;|\s)(color|background(-color|-image)?|border(-bottom|-top)?)\s*:/i;
     for (const site of Object.keys(EXCLUDED)) {
       const f = siteFile(site);
@@ -212,6 +215,7 @@ describe('site-specific fences', () => {
         if (!colour.test(body)) continue;
         // Border-only rules for shape (none today) would need an explicit exemption here.
         for (const part of splitSelectors(selector)) {
+          if (site === 'facebook' && ownColours.test(part)) continue;
           expect(part, `${site}: ${part}`).toContain("[data-retroweb-scheme='light']");
         }
       }

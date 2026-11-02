@@ -43,7 +43,7 @@ Status is what is actually covered by automated tests today; "gap" means not imp
 | FR-009 reduced motion | Engine | P1 | `style-manager.test`, e2e (system emulation and forced pref) | covered |
 | FR-010 authentic/compatibility | Adapter | P2 | `engine.test` mode attribute | partial (compatibility styling minimal) |
 | FR-011 never change search/outbound | Security | P0 | `routes.test`, manifest permission tests (no search overrides) | covered |
-| FR-012 skip auth/payment/CAPTCHA | Adapter | P0 | `routes.test`, `routes-sites.test`, `css-safety.test`, `sites.test` (login never styled), e2e (no attribute write on a login fixture), live logged-out facebook.com and Google CAPTCHA page left native | covered |
+| FR-012 skip auth/payment/CAPTCHA | Adapter | P0 | `routes.test`, `routes-sites.test`, `css-safety.test`, `sites.test` (login never styled), e2e (no attribute write on a login fixture), live logged-out facebook.com and Google CAPTCHA page left native; ADR-026 allows one decorative bar on the Facebook landing page (form untouched, `sites.test` and e2e) | covered |
 | NFR perf/memory budgets | QA | P1 | `perf.test` sanity checks only (jsdom, loose thresholds) | **gap**: no Chrome traces, no memory measurement |
 | NFR no network, no analytics | Security | P0 | e2e request log, `audit-package.mjs` | covered |
 | NFR keyboard/a11y of extension UI | QA | P1 | e2e axe scan (WCAG 2.0/2.1 A/AA) of popup and options | covered (themed sites not audited) |
