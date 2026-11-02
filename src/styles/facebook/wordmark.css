@@ -23,7 +23,6 @@ html[data-retroweb='facebook'][data-retroweb-wordmark='on']:not([data-retroweb-b
 
 /* The wordmark is wider than the round logo it replaces: move the search pill clear of it (pill marked by header.ts). */
 html[data-retroweb='facebook'][data-retroweb-wordmark='on']:not([data-retroweb-bare])
-  [role='banner']
   [data-rw-fb='search'] {
   transform: translateX(96px);
 }

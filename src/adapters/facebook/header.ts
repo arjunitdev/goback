@@ -32,6 +32,9 @@ const MAX_ANCESTORS = 4;
 /** Where the bar's empty stretches are, as fractions of the viewport width (between the left cluster, the tabs and the right cluster). */
 const PROBE_X = [0.25, 0.75];
 const FALLBACK_BAR_HEIGHT = 56;
+/** Pixel x positions inside the search pill (it sits right of the logo, left of the tabs). */
+const PILL_PROBE_X = [140, 200, 260];
+const PILL_MIN_WIDTH = 120;
 
 function mark(el: Element, kind: 'bar' | 'search'): boolean {
   if (el.getAttribute(HEADER_ATTR) === kind) return false;
@@ -100,19 +103,34 @@ export function markHeader(doc: Document, options: HeaderOptions = {}): number {
     if (isBarSized(rectOf(el)) && opaque(el, view) && mark(el, 'bar')) marked += 1;
   }
 
-  // 3. The search pill: the nearest box around the top search field that is opaque and clearly narrower than
-  //    the bar. Start above the field itself: an <input> has its own (white) default background.
-  const field = doc.querySelector('input[type="search"]');
-  const fieldTop = field ? rectOf(field).y : Infinity;
-  if (field && fieldTop < barTop + barHeight) {
-    for (let el: Element | null = field.parentElement, i = 0; el && el !== doc.body && i < 6; el = el.parentElement, i += 1) {
-      const r = rectOf(el);
-      if (r.width > 0 && r.width < vw * 0.5 && r.height <= barHeight && pillLike(el, view)) {
-        if (mark(el, 'search')) marked += 1;
+  // 3. The search pill. First by hit-testing where it sits (left of the tabs, right of the logo): the first
+  //    box there that is pill-sized and has a background or rounded corners. This does not depend on the
+  //    field's markup. Then, as a fallback, the nearest such box around the top search field.
+  const isPillSized = (r: Box) =>
+    r.width >= PILL_MIN_WIDTH && r.width < vw * 0.5 && r.height >= 24 && r.height <= barHeight;
+  let pill: Element | null = null;
+  for (const x of PILL_PROBE_X) {
+    for (const el of stackAt(x, midY)) {
+      if (el === doc.documentElement || el === doc.body || el.localName === 'input') continue;
+      if (isPillSized(rectOf(el)) && pillLike(el, view)) {
+        pill = el;
         break;
       }
     }
+    if (pill) break;
   }
+  if (!pill) {
+    const field = doc.querySelector('input[type="search"]');
+    if (field && rectOf(field).y < barTop + barHeight) {
+      for (let el: Element | null = field.parentElement, i = 0; el && el !== doc.body && i < 6; el = el.parentElement, i += 1) {
+        if (isPillSized(rectOf(el)) && pillLike(el, view)) {
+          pill = el;
+          break;
+        }
+      }
+    }
+  }
+  if (pill && mark(pill, 'search')) marked += 1;
   return marked;
 }
 

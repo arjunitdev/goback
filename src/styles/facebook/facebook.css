@@ -40,26 +40,26 @@ html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retrowe
 
 /* The search pill (marked by header.ts) becomes the 2012 search field: a white box with square-ish corners and a
  * thin dark-blue edge, dark text. Its own icon keeps its colour (not the white header icons). */
-html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [role='banner'] [data-rw-fb='search'] {
+html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [data-rw-fb='search'][data-rw-fb] {
   background-color: #fff !important;
   border: 1px solid #1d4088;
   border-radius: 2px !important;
 }
 
-html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [role='banner'] [data-rw-fb='search'] :not(input, textarea) {
+html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [data-rw-fb='search'][data-rw-fb] :not(input, textarea) {
   color: #4b4f56;
 }
 
-html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [role='banner'] [data-rw-fb='search'] input {
+html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [data-rw-fb='search'][data-rw-fb] input {
   color: #000 !important;
 }
 
-html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [role='banner'] [data-rw-fb='search'] input::placeholder {
+html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [data-rw-fb='search'][data-rw-fb] input::placeholder {
   color: #6b6f76 !important;
   opacity: 1;
 }
 
-html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [role='banner'] [data-rw-fb='search'] svg {
+html[data-retroweb='facebook'][data-retroweb-mode='authentic']:not([data-retroweb-bare]) [data-rw-fb='search'][data-rw-fb] svg {
   filter: none;
 }
 

@@ -34,7 +34,13 @@ function page() {
   ]);
   const rectOf = (el: Element): R => rects.get(el) ?? { x: 0, y: 0, width: 24, height: 24 };
   // What is painted at an empty point of the bar, topmost first.
-  const stackAt = () => ['banner', 'w5', 'w4', 'w3', 'w2', 'w1', 'paint', 'app'].map(by);
+  const stackAt = (x = 1000) =>
+    (x < 400
+      ? ['q', 'pill', 'left', 'banner', 'w5', 'w4', 'w3', 'w2', 'w1', 'paint', 'app'] // over the search pill
+      : ['banner', 'w5', 'w4', 'w3', 'w2', 'w1', 'paint', 'app']
+    )
+      .map((id) => document.getElementById(id))
+      .filter((e): e is HTMLElement => e !== null);
   return { doc: document, rects, rectOf, stackAt };
 }
 
@@ -64,6 +70,13 @@ describe('facebook header measurement', () => {
       expect(doc.getElementById('pill')?.getAttribute(HEADER_ATTR), style).toBe('search');
       clearHeader(doc);
     }
+  });
+
+  it('finds the search pill by where it sits even when there is no search input', () => {
+    const { doc, rectOf, stackAt } = page();
+    doc.getElementById('q')?.remove();
+    markHeader(doc, { rectOf, stackAt, viewportWidth: 1800 });
+    expect(doc.getElementById('pill')?.getAttribute(HEADER_ATTR)).toBe('search');
   });
 
   it('marks nothing without a banner and clears its marks', () => {
