@@ -27,7 +27,14 @@ export const FORBIDDEN: readonly Forbidden[] = [
   { name: 'password-field', any: ['input[type="password"]'] },
   {
     name: 'login-form',
-    any: ['form[action*="/login"]', '#login_form', '[data-testid="royal_login_form"]'],
+    // A /login... form only counts when it asks for something typed. Signed-in pages carry forms that
+    // post to /login/save-device/ ("Remember password") and similar, which hold only buttons and hidden
+    // fields; treating those as a login wall switched the whole theme off on a signed-in feed.
+    any: [
+      'form[action*="/login"]:has(input[type="text"], input[type="email"], input[type="tel"], input[type="password"])',
+      '#login_form',
+      '[data-testid="royal_login_form"]',
+    ],
   },
   { name: 'checkpoint', any: ['form[action*="checkpoint"]', '[data-testid="checkpoint_title"]'] },
 ];

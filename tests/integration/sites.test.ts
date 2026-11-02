@@ -306,6 +306,9 @@ describe('facebook adapter on fixtures', () => {
     expect(h.root.getAttribute(ATTR.site)).toBe('facebook');
     expect(h.root.getAttribute(ATTR.scheme)).toBe('dark');
     expect(h.doc.getElementById('rw-fbbar')).toBeNull();
+    // The "Remember password" prompt posts to /login/... but has no typed field: not a login wall.
+    expect(h.doc.querySelector('form[action*="/login/save-device"]')).not.toBeNull();
+    expect(h.engine.status().missing).toEqual([]);
   });
 
   it('drops the theme if a login form appears later (e.g. session expiry)', async () => {

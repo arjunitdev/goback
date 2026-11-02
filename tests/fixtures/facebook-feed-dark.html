@@ -16,5 +16,12 @@
       </div>
     </div>
     <div role="dialog" aria-modal="true" data-keep="1"><button>Privacy audience</button></div>
+    <!-- Facebook's "Remember password" prompt: posts to /login/..., but has no typed field. -->
+    <div data-keep="1">
+      <form action="/login/save-device/?login_source=login" method="post">
+        <input type="hidden" name="jazoest" value="1" />
+        <button type="submit">OK</button>
+      </form>
+    </div>
   </body>
 </html>
