@@ -1,7 +1,8 @@
 import { SITE_ORIGINS } from './flags';
 import type { SiteId } from './types';
 
-export type Flavor = 'dev' | 'store' | 'test';
+/** release = dev plus a clean name: for sharing a build that includes the logos. Only `store` excludes them. */
+export type Flavor = 'dev' | 'store' | 'test' | 'release';
 
 /** Recreated wordmarks ship only outside the store flavor (ADR-011). */
 export function includesWordmark(flavor: Flavor): boolean {

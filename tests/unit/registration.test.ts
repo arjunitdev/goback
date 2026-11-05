@@ -45,7 +45,7 @@ describe('manifest', () => {
   });
 
   it('never requests broad or sensitive permissions in any flavor', () => {
-    for (const flavor of ['dev', 'store', 'test'] as const) {
+    for (const flavor of ['dev', 'store', 'test', 'release'] as const) {
       const text = JSON.stringify(buildManifest(flavor, '1.0.0'));
       for (const banned of [
         '<all_urls>',

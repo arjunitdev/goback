@@ -25,7 +25,9 @@ export function buildManifest(flavor: Flavor, version: string, assets: BuildAsse
   const manifest: Manifest = {
     manifest_version: 3,
     name:
-      flavor === 'store' ? 'Retro 2K (unofficial)' : `Retro 2K (unofficial, ${flavor})`,
+      flavor === 'store' || flavor === 'release'
+        ? 'Retro 2K (unofficial)'
+        : `Retro 2K (unofficial, ${flavor})`,
     version,
     description:
       'Unofficial. Restyles supported sites to a researched 2012-era look. Not affiliated with or endorsed by Google, YouTube or Meta.',

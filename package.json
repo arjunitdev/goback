@@ -11,6 +11,7 @@
     "build:store": "node scripts/build.mjs store",
     "build:test": "node scripts/build.mjs test --fast",
     "package:store": "node scripts/build.mjs store --zip",
+    "package:release": "node scripts/build.mjs release --zip",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "format": "prettier --write .",

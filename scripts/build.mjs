@@ -1,4 +1,4 @@
-// Deterministic build: node scripts/build.mjs <dev|store|test> [--zip]
+// Deterministic build: node scripts/build.mjs <dev|store|test|release> [--zip]
 import { build } from 'esbuild';
 import { zipSync } from 'fflate';
 import { createHash } from 'node:crypto';
@@ -19,7 +19,7 @@ import { PNG } from 'pngjs';
 const root = fileURLToPath(new URL('..', import.meta.url));
 const flavor = process.argv[2] ?? 'dev';
 const wantZip = process.argv.includes('--zip');
-if (!['dev', 'store', 'test'].includes(flavor)) throw new Error(`Unknown flavor: ${flavor}`);
+if (!['dev', 'store', 'test', 'release'].includes(flavor)) throw new Error(`Unknown flavor: ${flavor}`);
 
 const outDir = join(root, flavor === 'dev' ? 'dist' : `dist-${flavor}`);
 const wordmark = flavor !== 'store';
